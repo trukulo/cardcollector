@@ -11,6 +11,8 @@ func _ready() -> void:
 
 	# Update the card appearance based on the effect
 	update_card_appearance()
+	if Global.info == false:
+		$Panel/Picture.position.y = 0
 
 # Setter for the effect variable
 func set_effect(new_effect: String) -> void:
@@ -64,8 +66,15 @@ func update_card_appearance() -> void:
 		$Panel/Picture.material = null  # Remove any existing shader
 		$Panel/Info/Overlay.material = null  # Remove shader from Overlay
 
+	# Hide set and rarity nodes
+	$Panel/Info/set.visible = false
+	$Panel/Info/rarity.visible = false
+
+	if Global.info == false:
+		$Panel/Info.visible = false
+
 	# Adjust Picture position based on overlay visibility
-	if $Panel/Info/Overlay.visible:
+	if $Panel/Info/Overlay.visible and Global.info == true:
 		$Panel/Picture.position.y = 100
 	else:
 		$Panel/Picture.position.y = 0
@@ -76,13 +85,6 @@ func update_card_appearance() -> void:
 	$Panel/Info/blue.add_theme_color_override("font_color", Color8(59, 90, 109))   # Blue: #3b5a6d
 
 	$Panel/Info/yellow.add_theme_color_override("font_color", Color8(197, 197, 56)) # Yellow: #c5c538
-
-	# Hide set and rarity nodes
-	$Panel/Info/set.visible = false
-	$Panel/Info/rarity.visible = false
-
-	if Global.info == false:
-		$Panel/Info.visible = false
 
 	# Update the border color based on stats
 	update_border_color()

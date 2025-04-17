@@ -9,7 +9,7 @@ var money: float = 0.0
 var last_connection: int = 0
 var deck_names: Dictionary = { 0: "Out of deck" }
 var selected_set: int = 1  # Último set seleccionado (por defecto 1)
-var info: bool = true  # Default value is true
+var info: bool = false  # Default value is true
 
 # --------------------
 # SETS, EDITIONS, PRINTS

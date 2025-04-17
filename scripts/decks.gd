@@ -2,7 +2,7 @@ extends Control
 
 const CARDS_PER_PAGE = 18
 
-var card_keys := []
+var card_keys := [] # Will now be an array of dictionaries: [{id_set, effect}]
 var current_page := 0
 var total_pages := 0
 var current_set := 0  # 0 = all sets, otherwise set number
@@ -42,14 +42,26 @@ func _ready():
 		if not btn.is_connected("pressed", Callable(self, "_on_full_card_button_pressed")):
 			btn.connect("pressed", Callable(self, "_on_full_card_button_pressed"))
 
+# NEW: Build card_keys as [{id_set, effect}] for each card owned, including duplicates and effects
 func update_card_keys():
-	if current_set == 0:
-		card_keys = Global.collection.keys()
-	else:
-		card_keys = []
-		for id_set in Global.collection.keys():
-			if Global.cards.has(id_set) and Global.cards[id_set].get("set", 0) == current_set:
-				card_keys.append(id_set)
+	card_keys = []
+	for id_set in Global.collection.keys():
+		var entry = Global.collection[id_set]
+		var card_data = Global.cards.get(id_set, null)
+		if card_data == null:
+			continue
+		if current_set != 0 and card_data.get("set", 0) != current_set:
+			continue
+		# Add normal copies (effect == "")
+		var amount = entry.get("amount", 0)
+		for i in range(amount):
+			card_keys.append({"id_set": id_set, "effect": ""})
+		# Add each owned effect (and their count)
+		if entry.has("effects"):
+			for effect in entry["effects"].keys():
+				var effect_amount = entry["effects"][effect]
+				for j in range(effect_amount):
+					card_keys.append({"id_set": id_set, "effect": effect})
 	total_pages = int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) if card_keys.size() > 0 else 1
 	current_page = 0
 
@@ -71,14 +83,11 @@ func populate_cards():
 		var card_node = get_node(card_node_paths[i]) if has_node(card_node_paths[i]) else null
 		if card_node:
 			if i < cards_on_page:
-				var id_set = card_keys[start_index + i]
+				var card_entry = card_keys[start_index + i]
+				var id_set = card_entry["id_set"]
+				var effect = card_entry["effect"]
 				var card_data = Global.cards.get(id_set, null)
 				if card_data:
-					var effect = ""
-					if Global.collection[id_set].has("effects"):
-						var effects = Global.collection[id_set]["effects"].keys()
-						if effects.size() > 0:
-							effect = effects[0]
 					card_node.set_effect(effect)
 					if card_node.has_node("Panel/Info/name"):
 						card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
@@ -105,19 +114,15 @@ func populate_cards():
 func _on_card_button_pressed(card_index):
 	var start_index = current_page * CARDS_PER_PAGE
 	if card_index >= 0 and (start_index + card_index) < card_keys.size():
-		var id_set = card_keys[start_index + card_index]
-		show_full_card(id_set)
+		var card_entry = card_keys[start_index + card_index]
+		show_full_card(card_entry["id_set"], card_entry["effect"])
 
-func show_full_card(id_set):
+# Show the correct card and effect in the full card view
+func show_full_card(id_set, effect = ""):
 	var card_data = Global.cards.get(id_set, null)
 	if card_data and has_node("FullCard"):
 		var full_card = get_node("FullCard")
 		full_card.visible = true
-		var effect = ""
-		if Global.collection[id_set].has("effects"):
-			var effects = Global.collection[id_set]["effects"].keys()
-			if effects.size() > 0:
-				effect = effects[0]
 		full_card.set_effect(effect)
 		if full_card.has_node("Panel/Info/name"):
 			full_card.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()

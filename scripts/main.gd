@@ -36,12 +36,10 @@ func _ready() -> void:
 
 	reset_dialog.connect("confirmed", _on_reset_confirmed)
 
-	# --- Disable Duels button if less than 4 cards in collection ---
-	if has_node("button_duels"):
-		if Global.collection.size() < 4:
-			$button_duels.disabled = true
-		else:
-			$button_duels.disabled = false
+	if Global.collection.size() < 4 or Global.info == false:
+		$VBoxContainer/ButtonDuels.visible = false
+	else:
+		$VBoxContainer/ButtonDuels.visible = true
 
 func _on_Timer_timeout() -> void:
 	Global.update_money_by_time()

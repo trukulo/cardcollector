@@ -115,7 +115,8 @@ func reveal_card(card_node: Node, card_data: Dictionary) -> void:
 		picture.position.y = 0  # Asegurar que la posición Y sea 0
 	if card_node.has_node("Panel/Info"):
 		var info_panel = card_node.get_node("Panel/Info")
-		info_panel.visible = true  # Mostrar la información
+		if Global.info == true:
+			info_panel.visible = true  # Mostrar la información
 		if info_panel.has_node("name"):
 			info_panel.get_node("name").text = card_data.get("name", "Unknown")
 		if info_panel.has_node("number"):
@@ -144,7 +145,8 @@ func flip_card(card_node: Node, card_data: Dictionary) -> void:
 			picture.texture = load(card_data["image"])  # Mostrar la imagen de la carta
 		if card_node.has_node("Panel/Info"):
 			var info_panel = card_node.get_node("Panel/Info")
-			info_panel.visible = true  # Mostrar la información
+			if Global.info == true:
+				info_panel.visible = true  # Mostrar la información
 	)
 	
 	# Segunda mitad del flip (escala hacia 1 en X)
