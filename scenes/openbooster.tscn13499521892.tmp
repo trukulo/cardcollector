@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=3 uid="uid://c656wt8q4lbp4"]
+
+[ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
+
+[node name="Openbooster" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.66022, 1.66022)
+script = ExtResource("1_g08gs")
+
+[node name="ButtonOk" type="Button" parent="."]
+layout_mode = 0
+offset_left = 511.0
+offset_top = 506.0
+offset_right = 670.0
+offset_bottom = 613.0
+theme_override_font_sizes/font_size = 72
+text = "OK"
+
+[node name="Collection" type="Label" parent="."]
+layout_mode = 0
+offset_left = 701.0
+offset_top = 512.0
+offset_right = 1129.0
+offset_bottom = 611.0
+theme_override_font_sizes/font_size = 72
+text = "Set X: X/X"
+horizontal_alignment = 2
+
+[node name="Collection2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 485.0
+offset_right = 454.0
+offset_bottom = 584.0
+theme_override_font_sizes/font_size = 16
+text = "D: X
+C: X
+B: X
+A: X
+S: X
+X: X"
+
+[node name="Card1" parent="." instance=ExtResource("3_ysxdp")]
+layout_mode = 1
+offset_left = -75.8936
+offset_top = 92.1566
+offset_right = -75.8936
+offset_bottom = 92.1565
+scale = Vector2(0.25, 0.25)
+
+[node name="Card2" parent="." instance=ExtResource("3_ysxdp")]
+layout_mode = 1
+offset_left = 136.127
+offset_top = 92.1566
+offset_right = 136.127
+offset_bottom = 92.1565
+scale = Vector2(0.25, 0.25)
+
+[node name="Card3" parent="." instance=ExtResource("3_ysxdp")]
+layout_mode = 1
+offset_left = 348.147
+offset_top = 92.1566
+offset_right = 348.147
+offset_bottom = 92.1565
+scale = Vector2(0.25, 0.25)
+
+[node name="Card4" parent="." instance=ExtResource("3_ysxdp")]
+layout_mode = 1
+offset_left = 560.167
+offset_top = 92.1566
+offset_right = 560.167
+offset_bottom = 92.1565
+scale = Vector2(0.25, 0.25)
+
+[node name="Card5" parent="." instance=ExtResource("3_ysxdp")]
+layout_mode = 1
+offset_left = 772.188
+offset_top = 92.1566
+offset_right = 772.188
+offset_bottom = 92.1565
+scale = Vector2(0.25, 0.25)
+
+[node name="FullCard" parent="." instance=ExtResource("3_ysxdp")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -373.933
+offset_top = -276.782
+offset_right = -373.933
+offset_bottom = -276.782
+scale = Vector2(0.4, 0.4)
+
+[connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]

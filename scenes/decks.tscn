@@ -1,0 +1,352 @@
+[gd_scene load_steps=8 format=3 uid="uid://djhk2xod75muq"]
+
+[ext_resource type="Script" uid="uid://bq5hofq71vy35" path="res://scripts/decks.gd" id="1_43i6p"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_hcl2w"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="2_ojrkc"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="4_5b8sw"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="5_bvnak"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_73twv"]
+[ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://gui/FlatUI4/kenneyUI-blue.tres" id="7_xkufl"]
+
+[node name="Decks" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_43i6p")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(960, 565)
+texture = ExtResource("1_hcl2w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 26.0
+offset_right = 4945.0
+offset_bottom = 3486.0
+scale = Vector2(0.3, 0.3)
+theme_override_constants/separation = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1498.0
+offset_top = 951.0
+offset_right = 1899.0
+offset_bottom = 1063.0
+
+[node name="ButtonLeft" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_5b8sw")
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "<"
+
+[node name="ButtonHome" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_73twv")
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "x"
+
+[node name="ButtonRight" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_5b8sw")
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = ">"
+
+[node name="Sets" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1498.0
+offset_top = 31.0
+offset_right = 1914.0
+offset_bottom = 143.0
+
+[node name="SetLeft" type="Button" parent="Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "<"
+
+[node name="Set" type="Label" parent="Sets"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 32
+text = "Set #1"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SetRight" type="Button" parent="Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = ">"
+
+[node name="FullCard" parent="." instance=ExtResource("2_ojrkc")]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 461.0
+offset_top = 47.0
+offset_right = 1261.0
+offset_bottom = 1143.0
+scale = Vector2(0.9, 0.9)
+
+[node name="Button" type="Button" parent="FullCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[connection signal="pressed" from="HBoxContainer/ButtonLeft" to="." method="_on_button_left_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonHome" to="." method="_on_button_home_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonRight" to="." method="_on_button_right_pressed"]
+[connection signal="pressed" from="Sets/SetLeft" to="." method="_on_button_left_pressed"]
+[connection signal="pressed" from="Sets/SetRight" to="." method="_on_button_right_pressed"]
