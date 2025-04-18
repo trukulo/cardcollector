@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cag8s1wpqae7v"]
+[gd_scene load_steps=10 format=3 uid="uid://cag8s1wpqae7v"]
 
 [ext_resource type="Script" uid="uid://qg870bocblna" path="res://scripts/collection.gd" id="1_5vqia"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_tdt8g"]
+[ext_resource type="Texture2D" uid="uid://h2req1ywpsss" path="res://cards2/1/0.jpg" id="2_5vqia"]
 [ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="3_p8q5u"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_yhtot"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="5_04f8q"]
@@ -79,11 +80,11 @@ text = ">"
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 12.0
-offset_top = 106.0
-offset_right = 4134.0
-offset_bottom = 2498.0
-scale = Vector2(0.36, 0.36)
-theme_override_constants/separation = 200
+offset_top = 26.0
+offset_right = 4945.0
+offset_bottom = 3486.0
+scale = Vector2(0.3, 0.3)
+theme_override_constants/separation = 64
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -141,6 +142,18 @@ flat = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card6"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,6 +226,94 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
+[node name="Card6" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("5_p8q5u")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
 [node name="Booster" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -227,6 +328,7 @@ offset_bottom = 781.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_5vqia")
 
 [node name="BoosterTemplate" type="TextureRect" parent="."]
 layout_mode = 0
@@ -267,33 +369,24 @@ text = "Set #1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BGFullCards" type="Panel" parent="."]
-visible = false
-modulate = Color(0.229158, 0.187379, 0.176108, 1)
-layout_mode = 0
-offset_left = 6.0
-offset_top = 4.0
-offset_right = 1492.0
-offset_bottom = 1075.0
-theme = ExtResource("6_sgbrj")
-
 [node name="FullCards" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -932.0
-offset_top = -512.0
-offset_right = 2280.0
-offset_bottom = 1728.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 213.0
+offset_top = 26.0
+offset_right = 1505.0
+offset_bottom = 1186.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.45, 0.45)
 theme_override_constants/separation = 24
 alignment = 1
+
+[node name="Panel" type="Panel" parent="FullCards"]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullCards"]
 layout_mode = 2
@@ -328,7 +421,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="HideFull" type="Button" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="3_4k4yi"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="3_a7wdi"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="3_uwart"]
-[ext_resource type="Texture2D" uid="uid://h2req1ywpsss" path="res://cards/1/0.jpg" id="4_htltk"]
+[ext_resource type="Texture2D" uid="uid://h2req1ywpsss" path="res://cards2/1/0.jpg" id="4_uwart"]
 [ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="5_htltk"]
 [ext_resource type="Texture2D" uid="uid://bnwfd2uyb8wi7" path="res://gui/boosterpack_empty.png" id="6_6x3o1"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="7_6o1s3"]
@@ -37,11 +37,11 @@ offset_bottom = 775.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
-texture_normal = ExtResource("4_htltk")
-texture_pressed = ExtResource("4_htltk")
-texture_hover = ExtResource("4_htltk")
-texture_disabled = ExtResource("4_htltk")
-texture_focused = ExtResource("4_htltk")
+texture_normal = ExtResource("4_uwart")
+texture_pressed = ExtResource("4_uwart")
+texture_hover = ExtResource("4_uwart")
+texture_disabled = ExtResource("4_uwart")
+texture_focused = ExtResource("4_uwart")
 stretch_mode = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -126,6 +126,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("3_a7wdi")
 theme_override_font_sizes/font_size = 64
+text = "Set X: X/X"
 horizontal_alignment = 1
 
 [node name="NotMoney" type="Panel" parent="."]

@@ -28,12 +28,15 @@ func _ready() -> void:
 
 	# Seleccionar 9 cartas aleatorias del set
 	var random_cards = get_random_cards_from_set(random_set, 9)
-	
+
 	# Duplicar y mezclar las cartas
 	selected_cards = duplicate_and_shuffle_cards(random_cards)
-	
+
 	# Inicializar las cartas en los slots
 	initialize_cards()
+
+	if Global.info == false:
+		$BoosterTemplate.visible = false
 
 # Obtiene un set aleatorio disponible
 func get_random_set() -> int:
@@ -61,7 +64,7 @@ func initialize_cards() -> void:
 		var container_index = int(i / 3) + 1
 		var card_index = i + 1
 		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index]
-		
+
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
 			initialize_card(card_node, i)
@@ -96,7 +99,7 @@ func _on_card_pressed(card_index: int) -> void:
 	var card_data = selected_cards[card_index]
 	var container_index = int(card_index / 3) + 1
 	var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index + 1]
-	
+
 	if has_node(card_node_path):
 		var card_node = get_node(card_node_path)
 		flip_card(card_node, card_data)  # Usar la animación de flip
@@ -134,10 +137,10 @@ func reveal_card(card_node: Node, card_data: Dictionary) -> void:
 # Realiza la animación de flip para una carta
 func flip_card(card_node: Node, card_data: Dictionary) -> void:
 	var tween = create_tween()
-	
+
 	# Primera mitad del flip (escala hacia 0 en X)
 	tween.tween_property(card_node, "scale:x", 0.1, 0.075)
-	
+
 	# Cambiar la imagen en el medio del flip
 	tween.tween_callback(func():
 		if card_node.has_node("Panel/Picture"):
@@ -148,17 +151,17 @@ func flip_card(card_node: Node, card_data: Dictionary) -> void:
 			if Global.info == true:
 				info_panel.visible = true  # Mostrar la información
 	)
-	
+
 	# Segunda mitad del flip (escala hacia 1 en X)
 	tween.tween_property(card_node, "scale:x", 1.0, 0.075)
 
 # Realiza la animación de flip para volver al reverso
 func flip_to_reverse(card_node: Node) -> void:
 	var tween = create_tween()
-	
+
 	# Primera mitad del flip (escala hacia 0 en X)
 	tween.tween_property(card_node, "scale:x", 0.1, 0.075)
-	
+
 	# Cambiar a la imagen de reverso en el medio del flip
 	tween.tween_callback(func():
 		if card_node.has_node("Panel/Picture"):
@@ -168,7 +171,7 @@ func flip_to_reverse(card_node: Node) -> void:
 			var info_panel = card_node.get_node("Panel/Info")
 			info_panel.visible = false  # Ocultar la información
 	)
-	
+
 	# Segunda mitad del flip (escala hacia 1 en X)
 	tween.tween_property(card_node, "scale:x", 1.0, 0.075)
 
@@ -185,8 +188,8 @@ func check_flipped_cards() -> void:
 
 		# Verificar si todas las parejas están correctas
 		if matched_pairs == 9:
-			Global.money += 5  # Recompensa de dinero
-			Global.save_data()  
+			Global.money += 500  # Recompensa de dinero
+			Global.save_data()
 			if $Win:
 				$Win.text = "Winner!"  # Mostrar mensaje de victoria
 				$Win.visible = true

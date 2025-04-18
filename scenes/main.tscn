@@ -30,15 +30,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -195.5
-offset_right = 350.0
-offset_bottom = 435.5
+offset_left = -694.0
+offset_top = -123.5
+offset_right = 6.0
+offset_bottom = 507.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 64
 
 [node name="OpenBooster" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -47,11 +48,23 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
-text = "Open Booster Pack
+text = "Booster Pack
 "
 
+[node name="ButtonAuction" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("4_tipki")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Auction"
+
 [node name="ButtonCollection" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -63,7 +76,7 @@ theme_override_font_sizes/font_size = 72
 text = "Collection"
 
 [node name="ButtonDecks" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -74,8 +87,23 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Decks"
 
-[node name="ButtonDuels" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.0
+offset_top = -120.0
+offset_right = 608.0
+offset_bottom = 566.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+
+[node name="ButtonDuels" type="Button" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -84,10 +112,10 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
-text = "Duels"
+text = "Duel"
 
-[node name="ButtonPlay" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+[node name="ButtonShortDuel" type="Button" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -96,11 +124,46 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
-text = "Let's Play"
+text = "Training Duel"
 
-[node name="ButtonReset" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+[node name="ButtonPlay" type="Button" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("7_choun")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Memory"
+
+[node name="MoneyLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -99.0
+offset_top = 88.0
+offset_right = 99.0
+offset_bottom = 202.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 96
+text = "99 $"
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="ButtonReset" type="Button" parent="."]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+offset_left = 100.0
+offset_top = 90.0
+offset_right = 600.0
+offset_bottom = 201.251
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("8_ya4ey")
@@ -110,9 +173,13 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Reset"
 
-[node name="ButtonQuit" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(700, 0)
+[node name="ButtonQuit" type="Button" parent="."]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+offset_left = 1330.0
+offset_top = 90.0
+offset_right = 1830.0
+offset_bottom = 201.251
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_sugp2")
@@ -122,29 +189,12 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Quit"
 
-[node name="MoneyLabel" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -99.0
-offset_top = 112.0
-offset_right = 99.0
-offset_bottom = 193.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("2_0wfyh")
-theme_override_font_sizes/font_size = 72
-text = "99 $"
-
-[node name="Timer" type="Timer" parent="."]
-
 [connection signal="pressed" from="VBoxContainer/OpenBooster" to="." method="_on_open_booster_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonAuction" to="." method="_on_button_auction_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonCollection" to="." method="_on_button_collection_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonDecks" to="." method="_on_button_decks_pressed"]
-[connection signal="pressed" from="VBoxContainer/ButtonDuels" to="." method="_on_button_duels_pressed"]
-[connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_button_play_pressed"]
-[connection signal="pressed" from="VBoxContainer/ButtonReset" to="." method="_on_button_reset_pressed"]
-[connection signal="pressed" from="VBoxContainer/ButtonQuit" to="." method="_on_button_quit_pressed"]
+[connection signal="pressed" from="VBoxContainer2/ButtonDuels" to="." method="_on_button_duels_pressed"]
+[connection signal="pressed" from="VBoxContainer2/ButtonShortDuel" to="." method="_on_button_short_duel_pressed"]
+[connection signal="pressed" from="VBoxContainer2/ButtonPlay" to="." method="_on_button_play_pressed"]
+[connection signal="pressed" from="ButtonReset" to="." method="_on_button_reset_pressed"]
+[connection signal="pressed" from="ButtonQuit" to="." method="_on_button_quit_pressed"]

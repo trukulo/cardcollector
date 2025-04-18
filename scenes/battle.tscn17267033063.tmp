@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://brcs5ib6ce7dg"]
+[gd_scene load_steps=9 format=3 uid="uid://brcs5ib6ce7dg"]
 
 [ext_resource type="Script" uid="uid://d4eugq7w7hhq8" path="res://scripts/battle.gd" id="1_4k1nj"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_th188"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="2_p1qf1"]
-[ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="4_lpir7"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_4k1nj"]
+[ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://gui/FlatUI4/kenneyUI-blue.tres" id="5_f4pi3"]
+[ext_resource type="Theme" uid="uid://h1f7iqhh7ycb" path="res://gui/FlatUI4/kenneyUI-yellow.tres" id="6_yahae"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="8_f4pi3"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4k1nj"]
@@ -147,54 +149,48 @@ alignment = 1
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("4_4k1nj")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "+"
 
 [node name="RedDown" type="Button" parent="Panel/Deal"]
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("4_4k1nj")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "-"
 
 [node name="BlueUp" type="Button" parent="Panel/Deal"]
 self_modulate = Color(0.196078, 0.556863, 1, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("5_f4pi3")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "+"
 
 [node name="BlueDown" type="Button" parent="Panel/Deal"]
 self_modulate = Color(0.196078, 0.556863, 1, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("5_f4pi3")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "-"
 
 [node name="YellowUp" type="Button" parent="Panel/Deal"]
 self_modulate = Color(1, 1, 0.443137, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("6_yahae")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "+"
 
 [node name="YellowDown" type="Button" parent="Panel/Deal"]
 self_modulate = Color(1, 1, 0.443137, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme = ExtResource("4_lpir7")
+theme = ExtResource("6_yahae")
 theme_override_font_sizes/font_size = 128
-disabled = true
 text = "-"
 
 [node name="Notif" type="Label" parent="."]
@@ -207,9 +203,9 @@ offset_top = 21.0
 offset_right = 931.0
 offset_bottom = 1050.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("8_f4pi3")
 theme_override_font_sizes/font_size = 96
 text = "Notif"

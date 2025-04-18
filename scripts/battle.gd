@@ -91,7 +91,11 @@ func _update_turn_state():
 	if turn > 4:
 		await _show_end_of_game_results()
 		await get_tree().create_timer(5.0).timeout
-		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		if Global.train == 1 or Global.rounds == 0:
+			get_tree().change_scene_to_file("res://scenes/main.tscn")
+		else:
+			Global.rounds -= 1
+			get_tree().change_scene_to_file("res://scenes/battle.tscn")
 		return
 	if turn == 1 or turn == 3:
 		input_enabled = true
@@ -99,7 +103,7 @@ func _update_turn_state():
 		_set_bet_buttons_enabled(true)
 		_highlight_bet_button(null, null)
 		if has_node("Notif"):
-			$Notif.text = "Your turn: choose a stat and direction!"
+			$Notif.text = "Your turn: choose one!"
 			$Notif.visible = true
 	else:
 		input_enabled = false
@@ -165,7 +169,7 @@ func _rival_turn():
 	else:
 		dir_str = "Lesser"
 	if has_node("Notif"):
-		$Notif.text = "Rival chose stat: %s, direction: %s. Your turn to pick a card!" % [
+		$Notif.text = "Rival chose %s %s. Pick a card!" % [
 			stat.capitalize(),
 			dir_str
 		]
@@ -226,10 +230,10 @@ func _resolve_battle():
 		if outcome == "draw":
 			result_text = "It's a tie!"
 		elif outcome == "player_win":
-			result_text = "You win this round! Rival's card is added to your collection."
+			result_text = "You win the card"
 		else:
-			result_text = "Rival wins this round! Your card is lost."
-		$Notif.text = "Battle result: %s (Your %s: %d, Rival %s: %d, Direction: %s)" % [
+			result_text = "You lose the card"
+		$Notif.text = "%s (Your %s: %d, Rival %s: %d, %ss)" % [
 			result_text, stat.capitalize(), player_value, stat.capitalize(), rival_value, dir_str
 		]
 		$Notif.visible = true
@@ -537,26 +541,25 @@ func _all_cards_gone() -> bool:
 	return true
 
 func _show_end_of_game_results():
-	var msg = "Battle finished!\n"
-	if cards_won.size() > 0:
-		msg += "You WON these cards:\n"
-		for entry in cards_won:
-			var card = entry["card"]
-			var effect = entry["effect"]
-			msg += "· %s - %s\n" % [card.get("name", "Unknown"), effect]
+	$Notif.set_anchors_preset(Control.PRESET_FULL_RECT)
+	$Notif.size = Vector2(1920,1080)
+	$Notif.position = Vector2(0,0)
+	Global.woncards += cards_won.size()
+	Global.lostcards += cards_lost.size()
+	var msg = ""
+	if Global.train == 1 or Global.rounds == 0:
+		msg = "Battle finished!\n"
+		if Global.train == 0:
+			msg += "You have won then duel and ¥500.\n"
+			Global.money += 500
+		msg += "\nYou have won %d cards and lost %d cards.\n" % [Global.woncards, Global.lostcards]
+
 	else:
-		msg += "You did not win any cards.\n"
-	if cards_lost.size() > 0:
-		msg += "\nYou LOST these cards:\n"
-		for entry in cards_lost:
-			var card = entry["card"]
-			var effect = entry["effect"]
-			msg += "· %s - %s\n" % [card.get("name", "Unknown"), effect]
-	else:
-		msg += "\nYou did not lose any cards.\n"
+		msg = "Next turn!\nYou have won %d cards and lost %d cards.\n" % [Global.woncards, Global.lostcards]
+
 	if has_node("Notif"):
 		$Notif.text = msg
 		$Notif.visible = true
 	if has_node("Panel"):
 		$Panel.visible = false
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(2.0).timeout

@@ -5,25 +5,47 @@ var cards: Dictionary = {}
 var prices: Dictionary = {}
 var collection: Dictionary = {}
 
-var money: float = 0.0
+var money: int = 0
 var last_connection: int = 0
 var deck_names: Dictionary = { 0: "Out of deck" }
 var selected_set: int = 1  # Último set seleccionado (por defecto 1)
-var info: bool = false  # Default value is true
+var info: bool = true  # Default value is true
+
+var savegame_name: String = ""
 
 # --------------------
 # SETS, EDITIONS, PRINTS
 # --------------------
 var set_editions: Dictionary = {}
 var available_sets: Dictionary = {}
+var train: int = 0
+var rounds: int = 4
+var woncards: int = 0
+var lostcards: int = 0
 
 func _ready():
+	if info == false:
+		savegame_name = "user://dataS.save"
+	else:
+		savegame_name = "user://data.save"
+
+	collection = {}
+	money = 5000  # Changed reset money to 5000
+	last_connection = Time.get_unix_time_from_system()
+
+	# Reset deck names while preserving the default deck 0
+	deck_names = { 0: "Out of deck" }
+
+	# Reset any closed prints/sets to make all available again
+	for set_id in range(1, 101):
+		available_sets[set_id] = true
+
 	# Generate cards dynamically every time
 	generate_cards_with_seed(42)
-	
+
 	# Load only the player's collection and other saved data
 	load_data()
-	
+
 	# Update money based on time
 	update_money_by_time()
 
@@ -46,8 +68,8 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 
 	var rarity_points = {"D": 9, "C": 11, "B": 13, "A": 15, "S": 17, "X": 19}
 	var base_price = {
-		"D": [0.01, 0.49], "C": [0.50, 0.99], "B": [1.0, 4.99],
-		"A": [5.0, 9.99], "S": [10.0, 49.99], "X": [50.0, 100.0]
+		"D": [1, 49], "C": [50, 99], "B": [100, 499],
+		"A": [500, 999], "S": [1000, 4999], "X": [5000, 10000]
 	}
 
 	# Clear existing data
@@ -61,7 +83,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 	if dir == null:
 		print("Error: No se pudo abrir el directorio res://cards")
 		return
-	
+
 	dir.list_dir_begin()
 	var set_index = 1
 	while true:
@@ -79,7 +101,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 			if card_dir == null:
 				print("Error: No se pudo abrir el directorio res://cards/" + folder_name)
 				continue
-			
+
 			card_dir.list_dir_begin()
 			var card_id = 1
 			var total_cards = 0
@@ -110,7 +132,12 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 			# Fill remaining slots with the most common rarity ("D")
 			while rarities.size() < total_cards:
 				rarities.append("D")
-			rarities.shuffle()
+			# Deterministic shuffle using our rng
+			for i in range(rarities.size() - 1, 0, -1):
+				var j = rng.randi_range(0, i)
+				var tmp = rarities[i]
+				rarities[i] = rarities[j]
+				rarities[j] = tmp
 
 			# Assign rarities and generate cards
 			for file_name in card_files:
@@ -122,7 +149,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 				for i in range(points):
 					stats[rng.randi_range(0, 2)] += 1
 
-				add_card(card_id, set_index, rarity, stats)
+				add_card(card_id, set_index, rarity, stats, rng)
 
 				var base = rng.randf_range(base_price[rarity][0], base_price[rarity][1])
 				var modifier = 1.0 + rng.randf_range(-0.99, 0.99)
@@ -149,7 +176,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 # --------------------
 # ADD CARD
 # --------------------
-func add_card(id: int, set_id: int, rarity: String, stats: Array):
+func add_card(id: int, set_id: int, rarity: String, stats: Array, rng: RandomNumberGenerator):
 	var id_set = "%s_%s" % [id, set_id]
 	cards[id_set] = {
 		"id": id,
@@ -163,17 +190,45 @@ func add_card(id: int, set_id: int, rarity: String, stats: Array):
 		"effect": "",
 		"edition": set_editions.get(set_id, "Unknown Edition"),
 		"image": "res://cards/%s/%s.jpg" % [set_id, id],
-		"name": generate_card_name()  # Generate and assign a name
+		"name": generate_card_name(rng)  # Generate and assign a name deterministically
 	}
 
 # --------------------
-# COLLECTION
+# CARD NAME GENERATION (DETERMINISTIC)
 # --------------------
-func add_to_collection(id_set: String, amount: int = 1, deck: int = 0, effect: String = "") -> void:
+func generate_card_name(rng: RandomNumberGenerator) -> String:
+	var syllables = [
+		"ka", "ki", "ku", "ke", "ko",
+		"sa", "shi", "su", "se", "so",
+		"ta", "chi", "tsu", "te", "to",
+		"na", "ni", "nu", "ne", "no",
+		"ha", "hi", "fu", "he", "ho",
+		"ma", "mi", "mu", "me", "mo",
+		"ya", "yu", "yo",
+		"ra", "ri", "ru", "re", "ro",
+		"wa", "wo", "ga", "gi", "gu", "ge", "go",
+		"za", "ji", "zu", "ze", "zo", "da", "de", "do",
+		"ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po",
+		"ryu", "kyo", "sho", "cho", "jin", "kai", "zan", "mei", "rei", "ken"
+	]
+
+	var name = ""
+	var syllable_count = rng.randi_range(2, 4)  # Generate names with 2 to 4 syllables
+	for i in range(syllable_count):
+		name += syllables[rng.randi() % syllables.size()]
+
+	if info == false:
+		name = ""
+
+	# Capitalize the first letter
+	return name.capitalize()
+
+# --------------------
+# COLLECTION FUNCTIONS (unchanged)
+# --------------------
+func add_to_collection(id_set: String, amount: int, effect: String = "", deck: int = 0):
 	if not collection.has(id_set):
-		collection[id_set] = {"amount": 0, "deck": deck, "effects": {}}
-	
-	# Completely separate base cards and effect variants
+		collection[id_set] = {"amount": 0, "effects": {}, "deck": 0}
 	if effect == "":
 		# Base card without effects
 		collection[id_set]["amount"] += amount
@@ -182,51 +237,45 @@ func add_to_collection(id_set: String, amount: int = 1, deck: int = 0, effect: S
 		if not collection[id_set]["effects"].has(effect):
 			collection[id_set]["effects"][effect] = 0
 		collection[id_set]["effects"][effect] += amount
-	
+
 	collection[id_set]["deck"] = deck
 
-# --------------------
-# GET AMOUNT
-# --------------------
 func get_amount(id_set: String) -> int:
 	if collection.has(id_set):
 		return collection[id_set].get("amount", 0)
 	return 0
 
-# --------------------
-# Has card with effect
-# --------------------
-# Function to check if a card with specific effect exists
 func has_card_with_effect(id_set: String, effect: String) -> bool:
 	if not collection.has(id_set):
 		return false
-	
+
 	if effect == "":
 		return collection[id_set]["amount"] > 0
-	
+
 	if not collection[id_set].has("effects"):
 		return false
-	
+
 	return collection[id_set]["effects"].get(effect, 0) > 0
 
-# Function to get the count of a specific card+effect combination
 func get_effect_count(id_set: String, effect: String) -> int:
 	if not collection.has(id_set):
 		return 0
-	
+
 	if effect == "":
 		return collection[id_set]["amount"]
-	
+
 	if not collection[id_set].has("effects"):
 		return 0
-	
-	return collection[id_set]["effects"].get(effect, 0)	
 
-# Function to get all effects for a card
-func get_card_effects(id_set: String) -> Dictionary:
-	if not collection.has(id_set) or not collection[id_set].has("effects"):
+	return collection[id_set]["effects"].get(effect, 0)
+
+func get_effects(id_set: String) -> Dictionary:
+	if not collection.has(id_set):
 		return {}
-	
+
+	if not collection[id_set].has("effects"):
+		return {}
+
 	return collection[id_set]["effects"]
 
 # --------------------
@@ -234,7 +283,7 @@ func get_card_effects(id_set: String) -> Dictionary:
 # --------------------
 func save_data():
 	# Save only the player's collection and other relevant data
-	var f = FileAccess.open("user://data.save", FileAccess.WRITE)
+	var f = FileAccess.open(savegame_name, FileAccess.WRITE)
 	var data = {
 		"collection": collection,
 		"money": money,
@@ -249,32 +298,36 @@ func save_data():
 
 func load_data():
 	# Load only the player's collection and other relevant data
-	if FileAccess.file_exists("user://data.save"):
-		var f = FileAccess.open("user://data.save", FileAccess.READ)
+	if FileAccess.file_exists(savegame_name):
+		var f = FileAccess.open(savegame_name, FileAccess.READ)
 		var data = f.get_var()
 		f.close()
 		collection = data.get("collection", {})
-		money = data.get("money", 50.0)  # Changed default to 50.0
+		money = data.get("money", 5000)  # Changed default to 5000
 		last_connection = data.get("last_connection", Time.get_unix_time_from_system())
 		deck_names = data.get("deck_names", {0: "Out of deck"})
 		available_sets = data.get("available_sets", {})
 		selected_set = data.get("selected_set", 1)  # Cargar el set seleccionado o usar 1 por defecto
 	else:
-		# Initialize default values if no save file exists
 		collection = {}
-		money = 50.0  # Changed initial money to 50.0
+		money = 5000
 		last_connection = Time.get_unix_time_from_system()
 		deck_names = {0: "Out of deck"}
 		available_sets = {}
 		selected_set = 1
-
+		# Initialize available_sets as in reset_game
+		for set_id in range(1, 101):
+			available_sets[set_id] = true
+		# Optionally, save immediately to create the save file
+		generate_cards_with_seed(42)
+		save_data()
 # --------------------
 # PASSIVE INCOME
 # --------------------
 func update_money_by_time():
 	var now = Time.get_unix_time_from_system()
 	var seconds_passed = now - last_connection
-	var dollars_earned = int(seconds_passed / 1200)  # Earn 1 dollar every 1200 seconds
+	var dollars_earned = int(seconds_passed / 1200)*100  # Earn 1 dollar every 1200 seconds
 	money += dollars_earned
 	last_connection = now
 	save_data()  # Save the updated money and last connection time
@@ -301,16 +354,6 @@ func filter_by_deck(deck: int) -> Array:
 			var card = cards[id_set].duplicate()
 			card["amount"] = entry["amount"]
 			card["deck"] = deck
-			result.append(card)
-	return result
-
-func filter_out_of_deck() -> Array:
-	var result: Array = []
-	for id_set in collection:
-		if collection[id_set]["deck"] == 0 and cards.has(id_set):
-			var card = cards[id_set].duplicate()
-			card["amount"] = collection[id_set]["amount"]
-			card["deck"] = 0
 			result.append(card)
 	return result
 
@@ -358,24 +401,21 @@ func open_print(set_id: int):
 func reset_game():
 	# Clear all player data
 	collection = {}
-	money = 50.0  # Changed reset money to 50.0
+	money = 5000  # Changed reset money to 5000
 	last_connection = Time.get_unix_time_from_system()
-	
+
 	# Reset deck names while preserving the default deck 0
 	deck_names = { 0: "Out of deck" }
-	
+
 	# Reset any closed prints/sets to make all available again
 	for set_id in range(1, 101):
 		available_sets[set_id] = true
-	
+
 	# Re-generate cards with the same seed to ensure consistency
-	generate_cards_with_seed()
-	
+	generate_cards_with_seed(42)
+
 	# Save the reset data
 	save_data()
-	
-	# You might want to add any additional reset functionality here
-	# For example, resetting other game state variables that aren't shown in the code
 
 # --------------------
 # COLLECTION STATS
@@ -384,31 +424,35 @@ func get_collection_rarity_counts() -> Dictionary:
 	var rarity_counts = {
 		"D": 0, "C": 0, "B": 0, "A": 0, "S": 0, "X": 0
 	}
-	
+
 	var unique_counts = {
 		"D": 0, "C": 0, "B": 0, "A": 0, "S": 0, "X": 0
 	}
-	
+
 	for id_set in collection:
 		if cards.has(id_set):
 			var rarity = cards[id_set]["rarity"]
 			var amount = collection[id_set]["amount"]
-			
+
 			if rarity_counts.has(rarity):
 				# Add total count
 				rarity_counts[rarity] += amount
-				
+
 				# Add 1 to unique count (since this is one unique card regardless of amount)
 				unique_counts[rarity] += 1
-	
+
 	# Return both total and unique counts
-	return {"total": rarity_counts, "unique": unique_counts}
-	
-func get_collection_rarity_summary() -> String:
+	var counts = {
+		"total": rarity_counts,
+		"unique": unique_counts
+	}
+	return counts
+
+func get_collection_rarity_counts_string() -> String:
 	var counts = get_collection_rarity_counts()
 	return "D: %s (%s)\nC: %s (%s)\nB: %s (%s)\nA: %s (%s)\nS: %s (%s)\nX: %s (%s)" % [
 		counts["total"]["D"], counts["unique"]["D"],
-		counts["total"]["C"], counts["unique"]["C"], 
+		counts["total"]["C"], counts["unique"]["C"],
 		counts["total"]["B"], counts["unique"]["B"],
 		counts["total"]["A"], counts["unique"]["A"],
 		counts["total"]["S"], counts["unique"]["S"],
@@ -432,31 +476,3 @@ func load_selected_set():
 		f.close()
 	else:
 		selected_set = 1  # Valor por defecto si no existe el archivo
-
-# --------------------
-# CARD NAME GENERATION
-# --------------------
-# Function to generate a random card name
-func generate_card_name() -> String:
-	var syllables = [
-		"ka", "ki", "ku", "ke", "ko",
-		"sa", "shi", "su", "se", "so",
-		"ta", "chi", "tsu", "te", "to",
-		"na", "ni", "nu", "ne", "no",
-		"ha", "hi", "fu", "he", "ho",
-		"ma", "mi", "mu", "me", "mo",
-		"ya", "yu", "yo",
-		"ra", "ri", "ru", "re", "ro",
-		"wa", "wo", "ga", "gi", "gu", "ge", "go",
-		"za", "ji", "zu", "ze", "zo", "da", "de", "do",
-		"ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po",
-		"ryu", "kyo", "sho", "cho", "jin", "kai", "zan", "mei", "rei", "ken"
-	]
-	
-	var name = ""
-	var syllable_count = randi_range(2, 4)  # Generate names with 2 to 4 syllables
-	for i in range(syllable_count):
-		name += syllables[randi() % syllables.size()]
-	
-	# Capitalize the first letter
-	return name.capitalize()

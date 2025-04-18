@@ -1,6 +1,6 @@
 extends Control
 
-const CARDS_PER_PAGE = 18
+const CARDS_PER_PAGE = 10
 
 const EFFECT_TYPES = [
 	"", "Full Art", "Gold", "Silver", "Holo", "Full Silver", "Full Gold", "Full Holo"
@@ -29,6 +29,10 @@ func _ready():
 		var btn = get_node("HideFull")
 		if not btn.is_connected("pressed", Callable(self, "_on_hide_full_pressed")):
 			btn.connect("pressed", Callable(self, "_on_hide_full_pressed"))
+
+	if Global.info == false:
+		$BoosterTemplate.visible = false
+		$FullCards.scale = Vector2(0.90, 0.90)
 
 func load_set(set_id: int):
 	cards_in_set = Global.cards.values().filter(func(card):
@@ -104,18 +108,16 @@ func is_any_effect_owned_for_card(id_set: String) -> bool:
 	return false
 
 func get_card_path(index: int) -> String:
-	if index < 6:
+	if index < 5:
 		return "VBoxContainer/HBoxContainer/Card%d" % (index + 1)
-	elif index < 12:
-		return "VBoxContainer/HBoxContainer2/Card%d" % (index - 5)
 	else:
-		return "VBoxContainer/HBoxContainer3/Card%d" % (index - 11)
+		return "VBoxContainer/HBoxContainer2/Card%d" % (index - 4)
 
 func get_full_card_path(index: int) -> String:
 	if index < 4:
 		return "FullCards/HBoxContainer/Card%d" % (index + 1)
 	else:
-		return "FullCards/HBoxContainer2/Card%d" % (index - 4 + 5)
+		return "FullCards/HBoxContainer2/Card%d" % (index - 4 +5)
 
 func is_effect_owned_for_card(id_set: String, effect: String) -> bool:
 	if not Global.collection.has(id_set):
@@ -174,12 +176,14 @@ func _on_card_button_pressed(card_index):
 	# Show FullCards and HideFull buttons
 	if has_node("FullCards"):
 		get_node("FullCards").visible = true
+		get_node("VBoxContainer").visible = false
 	if has_node("HideFull"):
 		get_node("HideFull").visible = true
 
 func _on_hide_full_pressed():
 	if has_node("FullCards"):
 		get_node("FullCards").visible = false
+		get_node("VBoxContainer").visible = true
 	if has_node("HideFull"):
 		get_node("HideFull").visible = false
 

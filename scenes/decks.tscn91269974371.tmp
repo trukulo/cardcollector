@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://djhk2xod75muq"]
+[gd_scene load_steps=9 format=3 uid="uid://djhk2xod75muq"]
 
 [ext_resource type="Script" uid="uid://bq5hofq71vy35" path="res://scripts/decks.gd" id="1_43i6p"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_hcl2w"]
@@ -8,7 +8,6 @@
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="5_bvnak"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_73twv"]
 [ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://gui/FlatUI4/kenneyUI-blue.tres" id="7_xkufl"]
-[ext_resource type="Theme" uid="uid://h1f7iqhh7ycb" path="res://gui/FlatUI4/kenneyUI-yellow.tres" id="8_xkufl"]
 
 [node name="Decks" type="Control"]
 layout_mode = 3
@@ -25,19 +24,16 @@ texture = ExtResource("1_hcl2w")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 3.0
-offset_top = -1.0
-offset_right = 4136.0
-offset_bottom = 2982.0
-scale = Vector2(0.36, 0.36)
-theme_override_constants/separation = 204
-alignment = 1
+offset_left = 12.0
+offset_top = 26.0
+offset_right = 4945.0
+offset_bottom = 3486.0
+scale = Vector2(0.3, 0.3)
+theme_override_constants/separation = 64
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
 theme_override_constants/separation = 24
-alignment = 1
 
 [node name="Card1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -51,21 +47,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card1"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="Card2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
 
@@ -77,21 +58,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card2"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="Card3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -105,21 +71,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card3"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="Card4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
 
@@ -131,21 +82,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card4"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="Card5" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -159,26 +95,21 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card5"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
+[node name="Card6" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
 theme_override_constants/separation = 24
-alignment = 1
 
 [node name="Card1" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -192,21 +123,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card1"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="Card2" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
 
@@ -218,21 +134,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card2"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="Card3" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -246,21 +147,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card3"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="Card4" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
 
@@ -272,21 +158,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
-
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card4"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="Card5" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
 layout_mode = 2
@@ -300,20 +171,93 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card5"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = 28.0
-offset_top = 1104.0
-offset_right = 742.0
-offset_bottom = 1256.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 128
-text = "999"
-horizontal_alignment = 1
-autowrap_mode = 3
+[node name="Card6" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -368,7 +312,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 32
 text = "Set #1"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -377,41 +321,6 @@ autowrap_mode = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("7_xkufl")
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 72
-text = ">"
-
-[node name="Sort" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 1498.0
-offset_top = 167.0
-offset_right = 1914.0
-offset_bottom = 279.0
-
-[node name="SortLeft" type="Button" parent="Sort"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("8_xkufl")
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 72
-text = "<"
-
-[node name="Sort" type="Label" parent="Sort"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("5_bvnak")
-theme_override_font_sizes/font_size = 52
-text = "Sorting"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="SortRight" type="Button" parent="Sort"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("8_xkufl")
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 72
 text = ">"
@@ -437,34 +346,27 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 1501.0
-offset_top = 441.0
-offset_right = 1910.0
-offset_bottom = 784.0
-theme = ExtResource("4_5qcsl")
-
 [node name="ButtonDupe" type="Button" parent="."]
 layout_mode = 0
 offset_left = 1499.0
-offset_top = 298.0
+offset_top = 162.0
 offset_right = 1912.0
-offset_bottom = 426.0
+offset_bottom = 290.0
 size_flags_horizontal = 3
-theme = ExtResource("4_5b8sw")
+theme = ExtResource("4_5qcsl")
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 48
 text = "DUPLICATES ONLY"
 
 [node name="ButtonSell" type="Button" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 1499.0
-offset_top = 806.0
+offset_top = 762.0
 offset_right = 1912.0
-offset_bottom = 934.0
+offset_bottom = 890.0
 size_flags_horizontal = 3
-theme = ExtResource("6_73twv")
+theme = ExtResource("4_5qcsl")
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 48
 text = "SELL CARD"
@@ -473,9 +375,9 @@ text = "SELL CARD"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 0
 offset_left = 1499.0
-offset_top = 430.0
+offset_top = 294.0
 offset_right = 1909.0
-offset_bottom = 800.0
+offset_bottom = 759.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
@@ -490,7 +392,5 @@ autowrap_mode = 3
 [connection signal="pressed" from="HBoxContainer/ButtonRight" to="." method="_on_button_right_pressed"]
 [connection signal="pressed" from="Sets/SetLeft" to="." method="_on_button_left_pressed"]
 [connection signal="pressed" from="Sets/SetRight" to="." method="_on_button_right_pressed"]
-[connection signal="pressed" from="Sort/SortLeft" to="." method="_on_sort_left_pressed"]
-[connection signal="pressed" from="Sort/SortRight" to="." method="_on_sort_right_pressed"]
 [connection signal="pressed" from="ButtonDupe" to="." method="_on_button_dupe_pressed"]
 [connection signal="pressed" from="ButtonSell" to="." method="_on_button_sell_pressed"]

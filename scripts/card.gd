@@ -44,7 +44,10 @@ func update_card_appearance() -> void:
 		"Silver":
 			$Panel/Info/Overlay.texture = load("res://gui/overlay_silver.png")
 			$Panel/Info/Overlay.visible = true
-		"Holo","":
+		"Holo":
+			$Panel/Info/Overlay.texture = load("res://gui/overlay_holo.png")
+			$Panel/Info/Overlay.visible = true
+		"":
 			$Panel/Info/Overlay.texture = load("res://gui/overlay.png")
 			$Panel/Info/Overlay.visible = true
 		_:
@@ -79,50 +82,19 @@ func update_card_appearance() -> void:
 	else:
 		$Panel/Picture.position.y = 0
 
-	# Set the colors of the red, blue, and yellow labels
-	$Panel/Info/red.add_theme_color_override("font_color", Color8(135, 39, 39))    # Red: #872727
-
-	$Panel/Info/blue.add_theme_color_override("font_color", Color8(59, 90, 109))   # Blue: #3b5a6d
-
-	$Panel/Info/yellow.add_theme_color_override("font_color", Color8(197, 197, 56)) # Yellow: #c5c538
-
-	# Update the border color based on stats
-	update_border_color()
-
-# Update the border color based on the card's stats
-func update_border_color() -> void:
-	var red = $Panel/Info/red.text.to_int()
-	var blue = $Panel/Info/blue.text.to_int()
-	var yellow = $Panel/Info/yellow.text.to_int()
-
-	var border_color: Color
-
-	# Determine the border color based on the rules
-	if red > blue and red > yellow:
-		border_color = Color(1, 0, 0)  # Red
-	elif blue > red and blue > yellow:
-		border_color = Color(0, 0, 1)  # Blue
-	elif yellow > red and yellow > blue:
-		border_color = Color(1, 1, 0)  # Yellow
-	elif yellow == blue and yellow > red:
-		border_color = Color(0, 1, 0)  # Green
-	elif red == yellow and red > blue:
-		border_color = Color(1, 0.5, 0)  # Orange
-	elif red == blue and red > yellow:
-		border_color = Color(0.5, 0, 0.5)  # Purple
-	elif red == blue and blue == yellow:
-		border_color = Color(1, 1, 1)  # White
-	else:
-		border_color = Color(0, 0, 0)  # Default (black)
+		# Set the colors of the red, blue, and yellow labels
+		$Panel/Info/red.add_theme_color_override("font_color", Color8(135, 39, 39))    # Red: #872727
+		$Panel/Info/blue.add_theme_color_override("font_color", Color8(59, 90, 109))   # Blue: #3b5a6d
+		$Panel/Info/yellow.add_theme_color_override("font_color", Color8(197, 197, 56)) # Yellow: #c5c538
 
 	# Create a new StyleBoxFlat resource for this card instance
 	var new_border_style = StyleBoxFlat.new()
 	new_border_style.draw_center = false  # Make the inside transparent
-	new_border_style.border_width_top = 16
-	new_border_style.border_width_bottom = 16
-	new_border_style.border_width_left = 16
-	new_border_style.border_width_right = 16
-	new_border_style.border_color = border_color
+	new_border_style.border_width_top = 24
+	new_border_style.border_width_bottom = 24
+	new_border_style.border_width_left = 24
+	new_border_style.border_width_right = 24
+	new_border_style.border_color = Color(0, 0, 0)
 	new_border_style.corner_radius_top_left = 24
 	new_border_style.corner_radius_top_right = 24
 	new_border_style.corner_radius_bottom_left = 24

@@ -27,7 +27,7 @@ func _ready() -> void:
 	if not has_node("ResetDialog"):
 		reset_dialog = ConfirmationDialog.new()
 		reset_dialog.name = "ResetDialog"
-		reset_dialog.dialog_text = "Are you sure you want to reset your game? This cannot be undone."
+		reset_dialog.dialog_text = "\nAre you sure you want to reset your game?\nThis cannot be undone.\n"
 		reset_dialog.get_ok_button().text = "Yes"
 		reset_dialog.get_cancel_button().text = "No"
 		add_child(reset_dialog)
@@ -36,10 +36,16 @@ func _ready() -> void:
 
 	reset_dialog.connect("confirmed", _on_reset_confirmed)
 
-	if Global.collection.size() < 4 or Global.info == false:
-		$VBoxContainer/ButtonDuels.visible = false
+	if Global.collection.size() < 5 or Global.info == false:
+		$VBoxContainer2/ButtonDuels.visible = false
 	else:
-		$VBoxContainer/ButtonDuels.visible = true
+		$VBoxContainer2/ButtonDuels.visible = true
+
+	if Global.collection.size() < 21 or Global.info == false:
+		$VBoxContainer2/ButtonShortDuel.visible = false
+	else:
+		$VBoxContainer2/ButtonShortDuel.visible = true
+
 
 func _on_Timer_timeout() -> void:
 	Global.update_money_by_time()
@@ -47,7 +53,7 @@ func _on_Timer_timeout() -> void:
 
 func update_money_label() -> void:
 	if has_node("MoneyLabel"):
-		$MoneyLabel.text = "Money: $%.2f" % Global.money
+		$MoneyLabel.text = "¥%d" % Global.money
 
 func _on_open_booster_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/choose_booster.tscn")
@@ -66,9 +72,13 @@ func _on_button_decks_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/decks.tscn")
 
 func _on_button_duels_pressed() -> void:
-	if Global.collection.size() < 4:
-		show_notification("You need at least 4 cards in your collection to play Duels!")
+	if Global.collection.size() < 21:
+		show_notification("You need at least 21 cards\nin your collection to play Duels!")
 	else:
+		Global.train = 0
+		Global.rounds = 4
+		Global.lostcards = 0
+		Global.woncards = 0
 		get_tree().change_scene_to_file("res://scenes/battle.tscn")
 
 func _on_button_play_pressed() -> void:
@@ -83,3 +93,16 @@ func show_notification(msg: String) -> void:
 	notif.dialog_text = msg
 	add_child(notif)
 	notif.popup_centered()
+
+func _on_button_auction_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/auction.tscn")
+
+func _on_button_short_duel_pressed() -> void:
+	if Global.collection.size() < 5:
+		show_notification("You need at least 5 cards\nin your collection to play Duels!")
+	else:
+		Global.train = 1
+		Global.rounds = 5
+		Global.lostcards = 0
+		Global.woncards = 0
+		get_tree().change_scene_to_file("res://scenes/battle.tscn")
