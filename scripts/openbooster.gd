@@ -28,38 +28,46 @@ func _ready():
 	reveal_timer.connect("timeout", _on_reveal_timer_timeout)
 	start_next_reveal()
 	# Show current set at the top
-	if has_node("Collection2"):
-		$Collection2.text = "Set: " + str(current_set_id)
 
 func is_card_new(id_set: String, effect: String) -> bool:
 	if not Global.collection.has(id_set):
 		return true
-	var entry = Global.collection[id_set]
 	if effect == "":
-		return entry.get("amount", 0) == 0
+		return Global.collection[id_set]["cards"].size() == 0
 	else:
-		return entry.get("effects", {}).get(effect, 0) == 0
+		for card in Global.collection[id_set]["cards"]:
+			if card["effect"] == effect:
+				return false
+		return true
 
 func update_collection_label():
 	if has_node("Collection"):
 		var collection_label = get_node("Collection")
-		var total_cards_in_set = 0
-		var owned_cards_in_set = 0
 		collection_label.text = "Set " + str(current_set_id)
 		print("Collection status: " + collection_label.text)
 
 func generate_booster_pack(set_id: int) -> void:
 	booster_pack = []
 	var cards_by_rarity = {"D": [], "C": [], "B": [], "A": [], "S": [], "X": []}
+
+	# 1. Group cards by rarity for the selected set
 	for card in Global.cards.values():
 		if card["set"] == set_id:
 			var rarity = card["rarity"]
 			if cards_by_rarity.has(rarity):
 				cards_by_rarity[rarity].append(card)
+
+	# 2. Shuffle each rarity group
 	for rarity in cards_by_rarity.keys():
 		cards_by_rarity[rarity].shuffle()
+
+	# 3. Add common cards (D) - 3 cards
 	add_cards_to_booster(cards_by_rarity["D"], 3)
+
+	# 4. Add uncommon cards (C) - 1 card
 	add_cards_to_booster(cards_by_rarity["C"], 1)
+
+	# 5. Prepare rare pool (B, A, S, X) with weights
 	var rare_pool = []
 	for card in cards_by_rarity["B"]:
 		rare_pool.append({"card": card, "weight": 50})
@@ -70,42 +78,53 @@ func generate_booster_pack(set_id: int) -> void:
 	for card in cards_by_rarity["X"]:
 		rare_pool.append({"card": card, "weight": 5})
 	rare_pool.shuffle()
-	for i in range(1):
-		if rare_pool.size() > 0:
-			var selected_card = weighted_random_selection(rare_pool)
-			if selected_card:
-				booster_pack.append(selected_card)
-				for j in range(rare_pool.size() - 1, -1, -1):
-					if rare_pool[j]["card"] == selected_card:
-						rare_pool.remove_at(j)
-	if Global.info:
-		for card in booster_pack:
-			card["effect"] = assign_card_effect()
-			update_card_price(card)
-	else:
-		for card in booster_pack:
-			card["effect"] = ""
-			var id_set = card["id_set"]
-			card["price"] = Global.prices.get(id_set, 0.0)
+
+	# 6. Add 1 rare card (weighted random)
+	if rare_pool.size() > 0:
+		var selected_card = weighted_random_selection(rare_pool)
+		if selected_card:
+			var card_copy = selected_card.duplicate()
+			# Apply random effects and grading
+			apply_card_properties(card_copy)
+			booster_pack.append(card_copy)
+
+	# 7. Print and debug
 	booster_pack.sort_custom(Callable(self, "_sort_by_rarity"))
 	print("Booster Pack: Generado con " + str(booster_pack.size()) + " cartas")
 	for card in booster_pack:
 		var id_set = card["id_set"]
-		var amount = Global.get_amount(id_set)
-		print("Carta: " + id_set + " - Rareza: " + card["rarity"] + " - Efecto: " + card.get("effect", "none") + " - Precio: ¥" + str(Global.prices[id_set]) + " - En colección: " + str(amount))
+		var amount = 0
+		if Global.collection.has(id_set):
+			amount = Global.collection[id_set]["cards"].size()
+
+# Apply random effects and grading to a card
+func apply_card_properties(card: Dictionary) -> void:
+	# Use assign_card_effect to potentially add an effect
+	var effect = assign_card_effect()
+	if effect != "":
+		card["effect"] = effect
+
+	# Get a random grading value from Global
+	card["grading"] = Global.get_random_grading()
+
+	# Set default protection
+	card["protection"] = 0
 
 func save_cards_to_collection():
 	for card in booster_pack:
 		var id_set = card["id_set"]
 		var effect = card.get("effect", "")
-		Global.add_to_collection(id_set, 1, effect, 0)
+		var grading = card.get("grading", Global.get_random_grading())  # Get the actual grading from the card
+		var protection = card.get("protection", 0)
+		Global.add_to_collection(id_set, 1, effect, 0, grading, protection)  # Pass the actual grading value
 	Global.save_data()
-	print("Booster Pack: Todas las cartas guardadas y datos almacenados")
 	update_collection_label()
 
 func add_cards_to_booster(cards: Array, count: int) -> void:
 	for i in range(min(count, cards.size())):
-		booster_pack.append(cards[i])
+		var card_copy = cards[i].duplicate()
+		apply_card_properties(card_copy)
+		booster_pack.append(card_copy)
 
 func weighted_random_selection(pool: Array):
 	if pool.size() == 0:
@@ -179,7 +198,22 @@ func reveal_card(index: int):
 					price_label.visible = true
 					var id_set = card["id_set"]
 					var effect = card.get("effect", "")
-					var price = Global.prices.get(id_set, 0.0)
+					var base_price = Global.prices.get(id_set, 0.0)
+
+					# Get the card's actual grading (ensure we use the actual value, not a new random one)
+					var card_grading = card.get("grading", 1.0)
+
+					# Calculate effect modifier
+					var effect_modifier = 1.0
+					if effect != "":
+						effect_modifier = get_effect_multiplier(effect)
+
+					# Calculate price using grading and effect
+					var price = base_price * effect_modifier
+					price *= 0.2 * (2.7 ** (card_grading - 6))  # Tuned base (2.7)
+					price = int(max(1, round(price/2)))
+
+					# Display in the label
 					var new_prefix = ""
 					if is_card_new(id_set, effect):
 						new_prefix = "NEW\n"
@@ -187,6 +221,7 @@ func reveal_card(index: int):
 						price_label.text = "%s%s\n¥%d" % [new_prefix, effect, price]
 					else:
 						price_label.text = "%s¥%d" % [new_prefix, price]
+
 				# Save after the last card is revealed and labeled
 				if index == 4:
 					save_cards_to_collection()
@@ -204,6 +239,7 @@ func assign_card_effect() -> String:
 	rng.randomize()
 	var random_value = rng.randf() * 100.0
 	var cumulative_probability = 0.0
+
 	for effect in effect_probabilities.keys():
 		cumulative_probability += effect_probabilities[effect]
 		if random_value <= cumulative_probability:
@@ -216,21 +252,21 @@ func _on_button_ok_pressed() -> void:
 func get_effect_multiplier(effect: String) -> float:
 	match effect:
 		"Silver":
-			return 2  # x2
+			return 2.0  # x2
 		"Gold":
-			return 3  # x3
+			return 3.0  # x3
 		"Holo":
-			return 4  # x4
+			return 4.0  # x4
 		"Full Art":
-			return 5  # x5
+			return 5.0  # x5
 		"Full Silver":
-			return 6  # x6
+			return 6.0  # x6
 		"Full Gold":
-			return 8  # x8
+			return 8.0  # x8
 		"Full Holo":
-			return 10  # x10
+			return 10.0  # x10
 		_:
-			return 1  # No multiplier for other effects
+			return 1.0  # No multiplier for other effects
 
 func update_card_price(card: Dictionary) -> void:
 	var id_set = card["id_set"]
@@ -249,15 +285,15 @@ func _populate_card(card_node: Node, card_data: Dictionary) -> void:
 	if card_node.has_node("Panel/Info/red"):
 		var red_label = card_node.get_node("Panel/Info/red")
 		red_label.text = str(card_data.get("red", 0))
-		red_label.add_theme_color_override("font_color", Color8(135, 39, 39))
+
 	if card_node.has_node("Panel/Info/blue"):
 		var blue_label = card_node.get_node("Panel/Info/blue")
 		blue_label.text = str(card_data.get("blue", 0))
-		blue_label.add_theme_color_override("font_color", Color8(59, 90, 109))
+
 	if card_node.has_node("Panel/Info/yellow"):
 		var yellow_label = card_node.get_node("Panel/Info/yellow")
 		yellow_label.text = str(card_data.get("yellow", 0))
-		yellow_label.add_theme_color_override("font_color", Color8(197, 197, 56))
+
 	if card_node.has_node("Panel/Info/set"):
 		card_node.get_node("Panel/Info/set").visible = false
 	if card_node.has_node("Panel/Info/rarity"):

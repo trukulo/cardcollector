@@ -26,6 +26,7 @@ var showing_duplicates_only := false
 # To remember which card is being shown in FullCard for selling
 var fullcard_id_set: Variant = null
 var fullcard_effect: String = ""
+var fullcard_card_instance = null  # Added to store reference to the specific card instance
 
 var pending_sell_id_set: Variant = null
 var pending_sell_effect: String = ""
@@ -85,7 +86,14 @@ func _ready():
 	# Connect sell button
 	if has_node("ButtonSell"):
 		var btn = get_node("ButtonSell")
-		btn.connect("pressed", Callable(self, "_on_button_sell_pressed"))
+		if not btn.is_connected("pressed", Callable(self, "_on_button_sell_pressed")):
+			btn.connect("pressed", Callable(self, "_on_button_sell_pressed"))
+		btn.visible = false
+	# Connect protect button
+	if has_node("ButtonProtect"):
+		var btn = get_node("ButtonProtect")
+		if not btn.is_connected("pressed", Callable(self, "_on_button_protect_pressed")):
+			btn.connect("pressed", Callable(self, "_on_button_protect_pressed"))
 		btn.visible = false
 
 # Sorting label update
@@ -133,37 +141,120 @@ func _on_sort_right_pressed():
 	update_card_keys()
 	populate_cards()
 
-# Exact multiplier logic from openbooster.gd
-func get_effect_multiplier(effect: String) -> float:
-	match effect:
-		"Silver":
-			return 2.0
-		"Gold":
-			return 3.0
-		"Holo":
-			return 4.0
-		"Full Art":
-			return 5.0
-		"Full Silver":
-			return 6.0
-		"Full Gold":
-			return 8.0
-		"Full Holo":
-			return 10.0
-		_:
-			return 1.0
+# Sorting implementation
+func sort_card_keys():
+	match sort_mode:
+		SortMode.PRICE_UP:
+			card_keys.sort_custom(Callable(self, "_sort_by_price_asc"))
+		SortMode.PRICE_DOWN:
+			card_keys.sort_custom(Callable(self, "_sort_by_price_desc"))
+		SortMode.RARITY_UP:
+			card_keys.sort_custom(Callable(self, "_sort_by_rarity_asc"))
+		SortMode.RARITY_DOWN:
+			card_keys.sort_custom(Callable(self, "_sort_by_rarity_desc"))
+		SortMode.NAME_UP:
+			card_keys.sort_custom(Callable(self, "_sort_by_name_asc"))
+		SortMode.NAME_DOWN:
+			card_keys.sort_custom(Callable(self, "_sort_by_name_desc"))
+		SortMode.NUMBER_UP:
+			card_keys.sort_custom(Callable(self, "_sort_by_number_asc"))
+		SortMode.NUMBER_DOWN:
+			card_keys.sort_custom(Callable(self, "_sort_by_number_desc"))
 
-func get_card_price(id_set, effect):
-	var price = null
-	if Global.prices.has(id_set):
-		price = Global.prices[id_set]
-		print("DEBUG: Found base price for id_set %s: %s" % [str(id_set), str(price)])
-	else:
-		print("DEBUG: No base price found for id_set %s" % str(id_set))
-	if price != null:
-		var multiplier = get_effect_multiplier(effect)
-		print("DEBUG: Using multiplier for effect %s: %s" % [str(effect), str(multiplier)])
-		price *= multiplier
+# Sorting comparison functions
+func _sort_by_price_asc(a, b):
+	var price_a = _get_full_card_price(a)
+	var price_b = _get_full_card_price(b)
+	if price_a < price_b:
+		return true
+	return false
+
+func _sort_by_price_desc(a, b):
+	var price_a = _get_full_card_price(a)
+	var price_b = _get_full_card_price(b)
+	if price_a > price_b:
+		return true
+	return false
+
+func _sort_by_rarity_asc(a, b):
+	var rarity_a = a["card_data"].get("rarity", "D")
+	var rarity_b = b["card_data"].get("rarity", "D")
+	var order_a = rarity_order.get(rarity_a, 0)
+	var order_b = rarity_order.get(rarity_b, 0)
+	if order_a < order_b:
+		return true
+	return false
+
+func _sort_by_rarity_desc(a, b):
+	var rarity_a = a["card_data"].get("rarity", "D")
+	var rarity_b = b["card_data"].get("rarity", "D")
+	var order_a = rarity_order.get(rarity_a, 0)
+	var order_b = rarity_order.get(rarity_b, 0)
+	if order_a > order_b:
+		return true
+	return false
+
+func _sort_by_name_asc(a, b):
+	var name_a = a["card_data"].get("name", "").to_lower()
+	var name_b = b["card_data"].get("name", "").to_lower()
+	if name_a < name_b:
+		return true
+	return false
+
+func _sort_by_name_desc(a, b):
+	var name_a = a["card_data"].get("name", "").to_lower()
+	var name_b = b["card_data"].get("name", "").to_lower()
+	if name_a > name_b:
+		return true
+	return false
+
+func _sort_by_number_asc(a, b):
+	var num_a = a["card_data"].get("id", 0)
+	var num_b = b["card_data"].get("id", 0)
+	if num_a < num_b:
+		return true
+	return false
+
+func _sort_by_number_desc(a, b):
+	var num_a = a["card_data"].get("id", 0)
+	var num_b = b["card_data"].get("id", 0)
+	if num_a > num_b:
+		return true
+	return false
+
+# Helper function to calculate the full price with all modifiers
+func _get_full_card_price(card_entry):
+	var base_price = Global.prices.get(card_entry["id_set"], 0)
+	if base_price == 0:
+		return 0
+
+	# Apply effect multiplier
+	var multiplier = Global.get_effect_multiplier(card_entry["effect"])
+	var price = base_price * multiplier
+
+	# Apply grading modifier
+	var grading = card_entry.get("grading", 8)
+	price *= 0.2 * (2.7 ** (grading - 6))  # Grading formula
+
+	# Final adjustment and rounding
+	price = int(max(1, round(price/2)))
+	return price
+
+# Update the get_card_price function to match (for display purposes)
+func get_card_price(id_set, effect, grading = 8):
+	var price = Global.prices.get(id_set, null)
+	if price == null:
+		return null
+
+	# Apply effect multiplier
+	var multiplier = Global.get_effect_multiplier(effect)
+	price *= multiplier
+
+	# Apply grading modifier
+	price *= 0.2 * (2.7 ** (grading - 6))  # Same grading formula
+
+	# Final adjustment and rounding
+	price = int(max(1, round(price/2)))
 	return price
 
 func update_card_keys():
@@ -175,82 +266,63 @@ func update_card_keys():
 			continue
 		if current_set != 0 and card_data.get("set", 0) != current_set:
 			continue
-		# Normal copies
-		var amount = entry.get("amount", 0)
-		# Count effects
-		var effect_count = 0
-		if entry.has("effects"):
-			for effect in entry["effects"].keys():
-				effect_count += entry["effects"][effect]
-		var total_owned = amount + effect_count
+
+		var cards_array = entry.get("cards", [])
+		var total_owned = cards_array.size()
 		var is_duplicate = total_owned > 1
-		if showing_duplicates_only and not is_duplicate:
-			continue
-		# Add normal copies (effect == "")
+
+		# Only show cards with more than one instance in duplicates-only mode
 		if showing_duplicates_only:
-			if amount > 1:
-				for i in range(amount - 1): # skip first
-					card_keys.append({"id_set": id_set, "effect": ""})
-		else:
-			for i in range(amount):
-				card_keys.append({"id_set": id_set, "effect": ""})
-		# Add each owned effect (and their count)
-		if entry.has("effects"):
-			for effect in entry["effects"].keys():
-				var effect_amount = entry["effects"][effect]
-				if showing_duplicates_only:
-					if effect_amount > 1:
-						for j in range(effect_amount - 1): # skip first
-							card_keys.append({"id_set": id_set, "effect": effect})
+			if not is_duplicate:
+				continue
+			# Add ALL instances of duplicated cards
+			for i in range(cards_array.size()):
+				var card_instance = cards_array[i]
+				var protection = 0
+				if card_instance.has("protection"):
+					protection = card_instance["protection"]
+				elif entry.has("protection"):
+					protection = entry["protection"]
+				elif card_data.has("protection"):
+					protection = card_data["protection"]
 				else:
-					for j in range(effect_amount):
-						card_keys.append({"id_set": id_set, "effect": effect})
-	# --- Sorting logic ---
-	match sort_mode:
-		SortMode.PRICE_UP:
-			card_keys.sort_custom(func(a, b):
-				return get_card_price(a["id_set"], a["effect"]) < get_card_price(b["id_set"], b["effect"]))
-		SortMode.PRICE_DOWN:
-			card_keys.sort_custom(func(a, b):
-				return get_card_price(a["id_set"], a["effect"]) > get_card_price(b["id_set"], b["effect"]))
-		SortMode.RARITY_UP:
-			card_keys.sort_custom(func(a, b):
-				var r1 = Global.cards.get(a["id_set"], {}).get("rarity", "")
-				var r2 = Global.cards.get(b["id_set"], {}).get("rarity", "")
-				return rarity_order.get(r1, 99) < rarity_order.get(r2, 99)
-			)
-		SortMode.RARITY_DOWN:
-			card_keys.sort_custom(func(a, b):
-				var r1 = Global.cards.get(a["id_set"], {}).get("rarity", "")
-				var r2 = Global.cards.get(b["id_set"], {}).get("rarity", "")
-				return rarity_order.get(r1, 99) > rarity_order.get(r2, 99)
-			)
-		SortMode.NAME_UP:
-			card_keys.sort_custom(func(a, b):
-				var n1 = Global.cards.get(a["id_set"], {}).get("name", "")
-				var n2 = Global.cards.get(b["id_set"], {}).get("name", "")
-				return n1.to_lower() < n2.to_lower()
-			)
-		SortMode.NAME_DOWN:
-			card_keys.sort_custom(func(a, b):
-				var n1 = Global.cards.get(a["id_set"], {}).get("name", "")
-				var n2 = Global.cards.get(b["id_set"], {}).get("name", "")
-				return n1.to_lower() > n2.to_lower()
-			)
-		SortMode.NUMBER_UP:
-			card_keys.sort_custom(func(a, b):
-				var id1 = int(Global.cards.get(a["id_set"], {}).get("id", 0))
-				var id2 = int(Global.cards.get(b["id_set"], {}).get("id", 0))
-				return id1 < id2
-			)
-		SortMode.NUMBER_DOWN:
-			card_keys.sort_custom(func(a, b):
-				var id1 = int(Global.cards.get(a["id_set"], {}).get("id", 0))
-				var id2 = int(Global.cards.get(b["id_set"], {}).get("id", 0))
-				return id1 > id2
-			)
-		_:
-			pass
+					protection = 0
+
+				card_keys.append({
+					"id_set": id_set,
+					"effect": card_instance.get("effect", ""),
+					"grading": card_instance.get("grading", 8),
+					"protection": protection,
+					"card_data": card_data,
+					"card_instance_index": i
+				})
+		else:
+			# Show all cards (regardless of duplicates)
+			for i in range(cards_array.size()):
+				var card_instance = cards_array[i]
+				var protection = 0
+				if card_instance.has("protection"):
+					protection = card_instance["protection"]
+				elif entry.has("protection"):
+					protection = entry["protection"]
+				elif card_data.has("protection"):
+					protection = card_data["protection"]
+				else:
+					protection = 0
+
+				card_keys.append({
+					"id_set": id_set,
+					"effect": card_instance.get("effect", ""),
+					"grading": card_instance.get("grading", 8),
+					"protection": protection,
+					"card_data": card_data,
+					"card_instance_index": i
+				})
+
+	# Apply sorting after building the array
+	if sort_mode != SortMode.NONE:
+		sort_card_keys()
+
 	total_pages = int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) if card_keys.size() > 0 else 1
 	current_page = 0
 
@@ -275,9 +347,19 @@ func populate_cards():
 				var card_entry = card_keys[start_index + i]
 				var id_set = card_entry["id_set"]
 				var effect = card_entry["effect"]
-				var card_data = Global.cards.get(id_set, null)
+				var grading = card_entry["grading"]
+				var protection = card_entry["protection"]
+				var card_data = card_entry["card_data"]  # This should be already included in your card_entry
+
 				if card_data:
+					# Set the card's specific properties
 					card_node.set_effect(effect)
+					card_node.set_protection(protection)
+
+					# Implement a method to set grading if it doesn't exist
+					if card_node.has_method("set_grading"):
+						card_node.set_grading(grading)
+
 					if card_node.has_node("Panel/Info/name"):
 						card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
 					if card_node.has_node("Panel/Info/number"):
@@ -297,13 +379,18 @@ func populate_cards():
 					if card_node.has_method("update_card_appearance"):
 						card_node.update_card_appearance()
 					card_node.visible = true
+
 					# Set the Price label in each card grid slot
 					if card_node.has_node("Price"):
-						var price = get_card_price(id_set, effect)
+						var price = get_card_price(id_set, effect, grading)
 						var price_text = "unknown"
 						if price != null:
 							price_text = "¥%d" % price
 						card_node.get_node("Price").text = "%s" % price_text
+
+					# Optionally, display grading information on each card
+					if card_node.has_node("Grading"):
+						card_node.get_node("Grading").text = "Grade: %d" % grading
 				else:
 					card_node.visible = false
 			else:
@@ -314,20 +401,59 @@ func _on_card_button_pressed(card_index):
 	if card_index >= 0 and (start_index + card_index) < card_keys.size():
 		var card_entry = card_keys[start_index + card_index]
 		var card_node = get_node(card_node_paths[card_index]) if has_node(card_node_paths[card_index]) else null
-		show_full_card(card_entry["id_set"], card_entry["effect"])
+		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
 
-func show_full_card(id_set, effect = ""):
-	print("DEBUG: show_full_card called for id_set: %s, effect: %s" % [id_set, effect])
+func show_full_card(id_set, effect = "", card_instance_index = -1):
+	print("DEBUG: show_full_card called for id_set: %s, effect: %s, instance_index: %s" % [id_set, effect, card_instance_index])
 	fullcard_id_set = id_set
 	fullcard_effect = effect
+	fullcard_card_instance = null  # Reset before finding new instance
+
 	var card_data = Global.cards.get(id_set, null)
+	if card_data == null:
+		print("ERROR: Card data not found for id_set: %s" % id_set)
+		return
+
+	# Initialize with default grading and protection
+	var grading = 8
+	var protection = 0
+
+	# Find the specific card instance
+	if Global.collection.has(id_set):
+		var cards_array = Global.collection[id_set].get("cards", [])
+
+		# If we have a specific index, use it
+		if card_instance_index >= 0 and card_instance_index < cards_array.size():
+			var card_instance = cards_array[card_instance_index]
+			grading = card_instance.get("grading", 8)
+			protection = card_instance.get("protection", 0)
+			fullcard_card_instance = card_instance
+			print("DEBUG: Found card by index %d with grading %d, protection %d" % [card_instance_index, grading, protection])
+		# Otherwise find by effect
+		else:
+			for i in range(cards_array.size()):
+				var card_instance = cards_array[i]
+				if card_instance.get("effect", "") == effect:
+					grading = card_instance.get("grading", 8)
+					protection = card_instance.get("protection", 0)
+					fullcard_card_instance = card_instance
+					print("DEBUG: Found card by effect '%s' with grading %d, protection %d" % [effect, grading, protection])
+					break
+
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
 		var full_card = get_node("FullCard")
+		full_card.get_node("Panel/Info/Overlay").visible = true
+		full_card.set_effect("")
 		$VBoxContainer.visible = false
 		$Price.visible = true
 		full_card.visible = true
 		full_card.set_effect(effect)
+
+		# Set protection status
+		if full_card.has_method("set_protection"):
+			full_card.set_protection(protection)
+
 		if full_card.has_node("Panel/Info/name"):
 			full_card.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
 		if full_card.has_node("Panel/Info/number"):
@@ -346,22 +472,31 @@ func show_full_card(id_set, effect = ""):
 				full_card.get_node("Panel/Picture").texture = null
 		if full_card.has_method("update_card_appearance"):
 			full_card.update_card_appearance()
-		# Optionally, you can also show price info in FullCard if you want
+
+		# Show price info in FullCard
 		if full_card.has_node("Price"):
-			var price = get_card_price(id_set, effect)
+			var price = get_card_price(id_set, effect, grading)
 			var price_text = "unknown"
 			if price != null:
 				price_text = "¥%d" % price
 			full_card.get_node("Price").text = "%s" % price_text
 			print("DEBUG: FullCard price label updated: %s" % price_text)
+
 		# Show and enable the sell button
 		if has_node("ButtonSell"):
 			get_node("ButtonSell").visible = true
+			get_node("ButtonSell").disabled = false
+		# Show and enable the protect button
+		if has_node("ButtonProtect"):
+			get_node("ButtonProtect").visible = true
+			# Disable protect button if already protected
+			get_node("ButtonProtect").disabled = (protection == 1)
+
 	# 2. Update the top-level Price label in the scene
 	if card_data and has_node("Price"):
 		print("DEBUG: Scene has node 'Price'")
 		var price_label = get_node("Price")
-		var price = get_card_price(id_set, effect)
+		var price = get_card_price(id_set, effect, grading)
 		var price_text = "unknown"
 		if price != null:
 			price_text = "¥%d" % price
@@ -370,9 +505,15 @@ func show_full_card(id_set, effect = ""):
 		var effect_str = "None"
 		if effect != "":
 			effect_str = effect
+
+		# Display protection status
+		var protection_text = "No"
+		if protection == 1:
+			protection_text = "Yes"
+
 		if Global.info == true:
-			price_label.text = "Name: %s\nSet: %s\nRarity: %s\nEffect: %s\nPrice: %s" % [
-				card_data.get("name", "Unknown"),
+			price_label.text = "Grading: %s\nSet: %s\nRarity: %s\nEffect: %s\nPrice: %s" % [
+				grading,
 				str(set_num),
 				rarity,
 				effect_str,
@@ -384,9 +525,6 @@ func show_full_card(id_set, effect = ""):
 				rarity,
 				price_text
 			]
-		print("DEBUG: Updated Price label for id_set: %s, effect: %s, price: %s" % [str(id_set), str(effect), price_text])
-	elif not has_node("Price"):
-		print("ERROR: Scene does NOT have a node named 'Price'!")
 
 func _on_full_card_button_pressed():
 	if has_node("FullCard"):
@@ -395,6 +533,10 @@ func _on_full_card_button_pressed():
 		$Price.visible = false
 	if has_node("ButtonSell"):
 		get_node("ButtonSell").visible = false
+		get_node("ButtonSell").disabled = true
+	if has_node("ButtonProtect"):
+		get_node("ButtonProtect").visible = false
+		get_node("ButtonProtect").disabled = true
 
 func _on_button_sell_pressed() -> void:
 	pending_sell_id_set = fullcard_id_set
@@ -405,49 +547,67 @@ func _on_button_sell_pressed() -> void:
 func _on_confirm_sell():
 	if pending_sell_id_set == null:
 		return
-	# Sell the card currently shown in FullCard
-	if fullcard_id_set == null:
-		print("ERROR: No card selected for selling!")
-		return
+
 	var id_set = pending_sell_id_set
 	var effect = pending_sell_effect
-	var entry = Global.collection.get(id_set, null)
-	if entry == null:
+
+	if not Global.collection.has(id_set):
 		print("ERROR: Card not found in collection for selling!")
 		return
-	var sold = false
-	# Remove effect card if effect is not empty
-	if effect != "" and entry.has("effects") and entry["effects"].has(effect):
-		entry["effects"][effect] -= 1
-		if entry["effects"][effect] <= 0:
-			entry["effects"].erase(effect)
-		sold = true
-	# Remove normal card if effect is empty
-	elif effect == "" and entry.get("amount", 0) > 0:
-		entry["amount"] -= 1
-		sold = true
-	# If no more cards left, remove from collection
-	if entry.get("amount", 0) <= 0 and (not entry.has("effects") or entry["effects"].size() == 0):
-		Global.collection.erase(id_set)
-	if sold:
-		var price = get_card_price(id_set, effect)
+
+	var entry = Global.collection[id_set]
+	var cards_array = entry.get("cards", [])
+	var found_card_index = -1
+
+	# Find the specific card with matching effect
+	for i in range(cards_array.size()):
+		if cards_array[i].get("effect", "") == effect:
+			found_card_index = i
+			break
+
+	if found_card_index >= 0:
+		# Get the price before removing
+		var price = get_card_price(id_set, effect, cards_array[found_card_index].get("grading", 8))
+
+		# Remove the specific card instance
+		cards_array.remove_at(found_card_index)
+
+		# If no more cards left in this entry, remove the entry
+		if cards_array.size() == 0:
+			Global.collection.erase(id_set)
+
+		# Apply price increase
 		if price != null:
 			Global.money += price
 			print("DEBUG: Sold card for ¥%d, new money: %s" % [price, str(Global.money)])
+
 		Global.save_data()
 		update_card_keys()
 		populate_cards()
-		# Hide FullCard and ButtonSell after selling
+
+		# Hide FullCard and buttons after selling
 		$VBoxContainer.visible = true
 		$Price.visible = false
 		if has_node("FullCard"):
 			get_node("FullCard").visible = false
 		if has_node("ButtonSell"):
 			get_node("ButtonSell").visible = false
+			get_node("ButtonSell").disabled = true
+		if has_node("ButtonProtect"):
+			get_node("ButtonProtect").visible = false
+			get_node("ButtonProtect").disabled = true
 	else:
-		print("ERROR: Could not sell card (not owned or already at zero)")
+		print("ERROR: Could not find specific card to sell")
 		$VBoxContainer.visible = true
 		$Price.visible = false
+		if has_node("FullCard"):
+			get_node("FullCard").visible = false
+		if has_node("ButtonSell"):
+			get_node("ButtonSell").visible = false
+			get_node("ButtonSell").disabled = true
+		if has_node("ButtonProtect"):
+			get_node("ButtonProtect").visible = false
+			get_node("ButtonProtect").disabled = true
 
 func _on_button_left_pressed():
 	if current_page > 0:
@@ -493,3 +653,69 @@ func _on_button_dupe_pressed():
 			btn.text = "Show All"
 		else:
 			btn.text = "Duplicates Only"
+
+func _on_button_protect_pressed() -> void:
+	# Ensure we have the current card selected
+	if fullcard_id_set == null:
+		print("ERROR: No card selected for protection!")
+		return
+
+	var dialog = ConfirmationDialog.new()
+	dialog.dialog_text = "Protecting will cost ¥100.\nWhen you protect a card, it won't be used in duels.\nDo you want to continue?"
+	add_child(dialog)
+
+	dialog.get_ok_button().text = "Yes"
+	dialog.get_cancel_button().text = "No"
+
+	dialog.popup_centered()
+	dialog.connect("confirmed", Callable(self, "_on_confirm_protect_card"))
+
+func _on_confirm_protect_card() -> void:
+	if Global.money < 100:
+		var notif = AcceptDialog.new()
+		notif.dialog_text = "You don't have enough money to protect this card!"
+		add_child(notif)
+		notif.popup_centered()
+		return
+
+	if fullcard_id_set == null or not Global.collection.has(fullcard_id_set):
+		print("ERROR: Invalid card selected for protection")
+		return
+
+	Global.money -= 100
+
+	var entry = Global.collection[fullcard_id_set]
+	var cards_array = entry.get("cards", [])
+	var card_found = false
+	var protected_index = -1
+
+	# Try to find by direct reference
+	if fullcard_card_instance != null:
+		for i in range(cards_array.size()):
+			if cards_array[i] == fullcard_card_instance:
+				cards_array[i]["protection"] = 1
+				card_found = true
+				protected_index = i
+				break
+
+	# Fallback: find by effect
+	if not card_found:
+		for i in range(cards_array.size()):
+			if cards_array[i].get("effect", "") == fullcard_effect:
+				cards_array[i]["protection"] = 1
+				card_found = true
+				protected_index = i
+				break
+
+	if card_found:
+		Global.save_data()
+		update_card_keys()
+		populate_cards()
+		var notif = AcceptDialog.new()
+		notif.dialog_text = "This card is now protected!"
+		add_child(notif)
+		notif.popup_centered()
+		# Refresh FullCard with the correct instance index!
+		show_full_card(fullcard_id_set, fullcard_effect, protected_index)
+	else:
+		print("ERROR: Failed to find specific card instance for protection")

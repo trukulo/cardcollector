@@ -21,12 +21,6 @@ func update_collection_labels():
 				if Global.get_amount(id_set) > 0:
 					owned_cards_in_set += 1
 
-		$Collection.text = "Set " + str(Global.selected_set) + ": " + str(owned_cards_in_set) + "/" + str(total_cards_in_set)
-
-	# Update total collection status
-	if has_node("Collection2"):
-		$Collection2.text = Global.get_collection_rarity_summary()
-
 func _on_button_right_pressed() -> void:
 	# Incrementar el set seleccionado
 	Global.selected_set += 1
@@ -60,7 +54,7 @@ func update_open_booster_button():
 
 		# Update the set number in BoosterTemplate/set
 		if has_node("BoosterTemplate/set"):
-			$BoosterTemplate/set.text = "Set #" + str(Global.selected_set)
+			$BoosterTemplate/set.text = "Set " + str(Global.selected_set)
 	else:
 		print("Error: No se encontró la imagen para el set " + str(Global.selected_set))
 

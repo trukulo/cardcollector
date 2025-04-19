@@ -2,6 +2,7 @@ extends Control
 
 var auction_card = null
 var auction_effect = ""
+var auction_grading = 8  # Will be randomized for each auction
 var market_price = 0
 var bid_price = 0
 var timer = 59
@@ -34,10 +35,18 @@ func pick_auction_card():
 		var pick = not_owned[randi() % not_owned.size()]
 		auction_card = Global.cards[pick["id_set"]]
 		auction_effect = pick["effect"]
+
+	# Assign a random grading for this auction card
+	auction_grading = Global.get_random_grading()
+
 	# Set up the card node
 	var card_node = $Card
 
-	$CardInfo.text = "Set %s, Rarity %s" % [str(auction_card.get("set", "")), auction_card.get("rarity", "")]
+	$CardInfo.text = "Set %s, Rarity %s, Grading %d" % [
+		str(auction_card.get("set", "")),
+		auction_card.get("rarity", ""),
+		auction_grading
+	]
 	if card_node.has_node("Panel/Info/red"):
 		card_node.get_node("Panel/Info/red").text = str(auction_card.get("red", 0))
 	if card_node.has_node("Panel/Info/blue"):
@@ -57,6 +66,8 @@ func pick_auction_card():
 			card_node.get_node("Panel/Picture").texture = load(image_path)
 		else:
 			card_node.get_node("Panel/Picture").texture = null
+	if card_node.has_node("Grading"):
+		card_node.get_node("Grading").text = "Grade: %d" % auction_grading
 
 func get_effect_multiplier(effect):
 	match effect:
@@ -71,7 +82,9 @@ func get_effect_multiplier(effect):
 
 func update_prices():
 	var id_set = auction_card["id_set"]
-	market_price = int(Global.prices.get(id_set, 100) * get_effect_multiplier(auction_effect))
+	var base_price = Global.prices.get(id_set, 100)
+	var effect_multiplier = get_effect_multiplier(auction_effect)
+	market_price = int(base_price * effect_multiplier * (0.2 * (2.7 ** (auction_grading - 6))))
 	bid_price = int(market_price * (0.5 + randf() * 0.2)) # Start at 50-70% of market price
 
 func update_ui():
@@ -160,7 +173,8 @@ func finish_auction():
 	if player_is_winner and Global.money >= bid_price:
 		$Notif/Label.text = "Congratulations! You won the auction!\nFinal Price: ¥%d" % bid_price
 		Global.money -= bid_price
-		Global.add_to_collection(auction_card["id_set"], 1, auction_effect)
+		# Add to collection with grading and effect!
+		Global.add_to_collection(auction_card["id_set"], 1, auction_effect, 0, auction_grading, 0)
 		Global.save_data()
 	else:
 		$Notif/Label.text = "You lost the auction!\nFinal Price: ¥%d" % bid_price

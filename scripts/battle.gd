@@ -251,8 +251,8 @@ func _resolve_battle():
 		rival_card_data[revealed_rival_index]["won"] = true
 	elif outcome == "rival_win":
 		await _animate_loss(player_cards[selected_player_index], rival_cards[revealed_rival_index])
-		_remove_card_from_collection(player["card"], player["effect"])
-		cards_lost.append({"card": player["card"], "effect": player["effect"]})
+		_remove_card_from_collection(player["card"], player["effect"], player["grading"])
+		cards_lost.append({"card": player["card"], "effect": player["effect"], "grading": player["grading"]})
 		player_card_data[selected_player_index]["lost"] = true
 		rival_card_data[revealed_rival_index]["won"] = false
 
@@ -333,12 +333,12 @@ func _generate_rival_hand() -> Array:
 func _get_random_effect_for_card(card):
 	var id_set = card.get("id_set", card.get("id", ""))
 	var possible_effects = []
-	if Global.collection.has(id_set):
-		var entry = Global.collection[id_set]
-		if entry.has("effects"):
-			for effect in entry["effects"].keys():
-				if entry["effects"][effect] > 0:
-					possible_effects.append(effect)
+	if Global.collection.has(id_set) and Global.collection[id_set].has("cards"):
+		var cards_array = Global.collection[id_set]["cards"]
+		for card_instance in cards_array:
+			var effect = card_instance.get("effect", "")
+			if effect != "" and not effect in possible_effects:
+				possible_effects.append(effect)
 	if possible_effects.size() == 0:
 		possible_effects = ["", "Full Art", "Silver", "Gold", "Holo", "Full Silver", "Full Gold", "Full Holo"]
 	var rng = RandomNumberGenerator.new()
@@ -351,43 +351,49 @@ func _populate_player_cards():
 	player_card_data.clear()
 	var owned = []
 	for id_set in Global.collection:
-		var entry = Global.collection[id_set]
-		if entry.get("amount", 0) > 0 and Global.cards.has(id_set):
-			var card = Global.cards[id_set]
-			# Get all effects for this card, including "" if present
-			var effects = []
-			if entry.has("effects"):
-				for effect in entry["effects"].keys():
-					if entry["effects"][effect] > 0:
-						effects.append(effect)
-			if effects.size() == 0:
-				effects.append("")
-			# Add one entry per owned card, each with a random effect
-			for n in range(entry.get("amount", 0)):
-				var rng = RandomNumberGenerator.new()
-				rng.randomize()
-				var effect = effects[rng.randi_range(0, effects.size() - 1)]
-				owned.append({"card": card, "effect": effect})
+		# Skip cards without "cards" array (might be old format entries)
+		if not Global.collection[id_set].has("cards"):
+			continue
+
+		var cards_array = Global.collection[id_set]["cards"]
+		if cards_array.is_empty() or not Global.cards.has(id_set):
+			continue
+
+		var card = Global.cards[id_set]
+
+		# Add all unprotected card instances to selection pool
+		for card_instance in cards_array:
+			if card_instance.get("protection", 0) == 0:
+				owned.append({
+					"card": card,
+					"effect": card_instance.get("effect", ""),
+					"grading": card_instance.get("grading", Global.get_random_grading())
+				})
+
 	if owned.size() < 4:
 		push_error("Not enough cards in collection for battle!")
 		return
+
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	owned.shuffle()
+
 	for i in range(4):
 		var card_data = owned[i]
 		var card = card_data["card"]
 		var effect = card_data["effect"]
+		var grading = card_data["grading"]
 		var card_instance = get_node(PLAYER_CARD_PATHS[i])
 		player_cards.append(card_instance)
 		player_card_data.append({
 			"card": card,
 			"effect": effect,
+			"grading": grading,
 			"lost": false
 		})
-		_show_card_face(card_instance, card, effect)
+		_show_card_face(card_instance, card, effect, grading)
 
-func _show_card_face(card_node, card, effect):
+func _show_card_face(card_node, card, effect, grading=8):
 	_set_card_pivot_center(card_node)
 	if card_node.has_node("Panel/Info"):
 		card_node.get_node("Panel/Info").visible = true
@@ -409,7 +415,10 @@ func _show_card_face(card_node, card, effect):
 			card_node.get_node("Panel/Picture").texture = null
 		card_node.get_node("Panel/Picture").position.y = 0
 	if card_node.has_node("Panel/Info/effect"):
-		card_node.get_node("Panel/Info/effect").text = effect
+		var display_text = effect
+		if grading > 0:
+			display_text += " [%d]" % grading
+		card_node.get_node("Panel/Info/effect").text = display_text
 	# --- SET EFFECT ON CARD NODE ---
 	if card_node.has_method("set_effect"):
 		card_node.set_effect(effect)
@@ -483,30 +492,56 @@ func _reveal_card(card_node, card, effect):
 
 func _add_card_to_collection(card, effect=""):
 	var id_set = card.get("id_set", card.get("id", ""))
-	if not Global.collection.has(id_set):
-		Global.collection[id_set] = {"amount": 1, "effects": {}, "deck": 0}
-	else:
-		Global.collection[id_set]["amount"] += 1
-	# Track effect
-	if not Global.collection[id_set].has("effects"):
-		Global.collection[id_set]["effects"] = {}
-	if effect != "":
-		if not Global.collection[id_set]["effects"].has(effect):
-			Global.collection[id_set]["effects"][effect] = 0
-		Global.collection[id_set]["effects"][effect] += 1
+	var grading = Global.get_random_grading()
 
-func _remove_card_from_collection(card, effect=""):
+	if not Global.collection.has(id_set):
+		Global.collection[id_set] = {
+			"cards": [],
+			"deck": 0
+		}
+
+	# Add a new card instance with the effect and grading
+	var card_instance = {
+		"effect": effect,
+		"grading": grading,
+		"protection": 0
+	}
+
+	Global.collection[id_set]["cards"].append(card_instance)
+
+func _remove_card_from_collection(card, effect="", grading=8):
 	var id_set = card.get("id_set", card.get("id", ""))
-	if Global.collection.has(id_set):
-		# Remove effect if present
-		if effect != "" and Global.collection[id_set].has("effects"):
-			if Global.collection[id_set]["effects"].has(effect):
-				Global.collection[id_set]["effects"][effect] -= 1
-				if Global.collection[id_set]["effects"][effect] <= 0:
-					Global.collection[id_set]["effects"].erase(effect)
-		# Always decrement amount
-		Global.collection[id_set]["amount"] -= 1
-		if Global.collection[id_set]["amount"] <= 0:
+
+	if Global.collection.has(id_set) and Global.collection[id_set].has("cards"):
+		var cards_array = Global.collection[id_set]["cards"]
+
+		# Find matching card instance to remove
+		var index_to_remove = -1
+		for i in range(cards_array.size()):
+			var card_instance = cards_array[i]
+			if card_instance.get("effect", "") == effect:
+				# If it's a matching effect and either we don't care about grading or it has the right grading
+				if grading <= 0 or card_instance.get("grading", 0) == grading:
+					# Apply 1% chance of grading decrease if not removing it
+					var rng = RandomNumberGenerator.new()
+					rng.randomize()
+					if rng.randf() <= 0.01:  # 1% chance
+						var current_grading = card_instance.get("grading", 6)
+						var new_grading = max(6, current_grading - 1)  # Minimum 6
+						if current_grading != new_grading:
+							card_instance["grading"] = new_grading
+							print("Card grading decreased from %d to %d" % [current_grading, new_grading])
+							return  # Don't remove the card, just decrease grading
+
+					index_to_remove = i
+					break
+
+		# If a matching card was found, remove it
+		if index_to_remove != -1:
+			cards_array.remove_at(index_to_remove)
+
+		# If no cards left, remove the entry
+		if cards_array.is_empty():
 			Global.collection.erase(id_set)
 
 func _animate_card_selected(card_node):
@@ -550,13 +585,13 @@ func _show_end_of_game_results():
 	if Global.train == 1 or Global.rounds == 0:
 		msg = "Battle finished!\n"
 		if Global.train == 0:
-			msg += "You have won then duel and ¥500.\n"
+			msg += "You have won the duel and ¥500.\n"
 			Global.money += 500
 		msg += "\nYou have won %d cards and lost %d cards.\n" % [Global.woncards, Global.lostcards]
 
 	else:
 		msg = "Next turn!\nYou have won %d cards and lost %d cards.\n" % [Global.woncards, Global.lostcards]
-
+	Global.save_data()
 	if has_node("Notif"):
 		$Notif.text = msg
 		$Notif.visible = true

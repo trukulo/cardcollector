@@ -23,6 +23,18 @@ func _ready() -> void:
 	# Initial update of the money label
 	update_money_label()
 
+	#Unlocking
+	if Global.collection.size() >= 50 and Global.unlock < 2:
+		Global.unlock += 1
+		_narrator("You have unlocked a new feature!")
+	if Global.collection.size() >= 100 and Global.unlock < 3:
+		Global.unlock += 1
+		_narrator("You have unlocked a new feature!")
+	if Global.collection.size() >= 200 and Global.unlock < 4:
+		Global.unlock += 1
+		_narrator("You have unlocked a new feature!")
+
+	Global.save_data()
 	# Create the confirmation dialog if not already in the scene
 	if not has_node("ResetDialog"):
 		reset_dialog = ConfirmationDialog.new()
@@ -36,16 +48,25 @@ func _ready() -> void:
 
 	reset_dialog.connect("confirmed", _on_reset_confirmed)
 
-	if Global.collection.size() < 5 or Global.info == false:
-		$VBoxContainer2/ButtonDuels.visible = false
-	else:
-		$VBoxContainer2/ButtonDuels.visible = true
-
-	if Global.collection.size() < 21 or Global.info == false:
+	if Global.unlock == 2 or Global.info == false:
 		$VBoxContainer2/ButtonShortDuel.visible = false
 	else:
 		$VBoxContainer2/ButtonShortDuel.visible = true
 
+	if Global.unlock == 3 or Global.info == false:
+		$VBoxContainer2/ButtonDuels.visible = false
+	else:
+		$VBoxContainer2/ButtonDuels.visible = true
+
+	if Global.unlock == 0:
+		await _narrator("In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation.")
+		await _narrator("Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born.")
+		await _narrator("Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name.")
+		await _narrator("Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction.")
+		await _narrator("Kaze, the ever-watchful, whose domain was the boundless sky. He soared above all things, his form as fleeting as the wind, yet his presence was eternal. None could hide from his sight, for he rode the currents of the air, whispering secrets to the clouds.")
+		await _enarrator("I am not sure what's going on here, I can't see... But I think this is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack.")
+		Global.unlock = 1
+		Global.save_data()
 
 func _on_Timer_timeout() -> void:
 	Global.update_money_by_time()
@@ -63,9 +84,13 @@ func _on_button_collection_pressed() -> void:
 
 func _on_button_reset_pressed() -> void:
 	reset_dialog.popup_centered()
+	_ready()
 
 func _on_reset_confirmed() -> void:
 	Global.reset_game()
+	update_money_label()
+	$VBoxContainer2/ButtonDuels.visible = false
+	$VBoxContainer2/ButtonShortDuel.visible = false
 	# Optionally, you can update UI or notify the player here
 
 func _on_button_decks_pressed() -> void:
@@ -106,3 +131,17 @@ func _on_button_short_duel_pressed() -> void:
 		Global.lostcards = 0
 		Global.woncards = 0
 		get_tree().change_scene_to_file("res://scenes/battle.tscn")
+
+func _narrator(message: String) -> void:
+	$Message/Label.text = message
+	$Message/Narrator.texture = load("res://gui/narrador.png")
+	$Message.visible = true
+	await $Message/NoNarrator.pressed
+	$Message.visible = false
+
+func _enarrator(message: String) -> void:
+	$Message/Label.text = message
+	$Message/Narrator.texture = load("res://gui/enarrador.png")
+	$Message.visible = true
+	await $Message/NoNarrator.pressed
+	$Message.visible = false

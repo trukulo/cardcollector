@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c656wt8q4lbp4"]
+[gd_scene load_steps=8 format=3 uid="uid://c656wt8q4lbp4"]
 
 [ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="1_ysxdp"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="3_mm8m7"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_xnfyq"]
+[ext_resource type="Texture2D" uid="uid://c020rv0pwrqcv" path="res://gui/posible.png" id="7_0nexr"]
 
 [node name="Openbooster" type="Control"]
 layout_mode = 3
@@ -42,6 +43,7 @@ theme_override_font_sizes/font_size = 72
 text = "CLOSE"
 
 [node name="Collection" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -54,22 +56,6 @@ theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("3_ki8ix")
 theme_override_font_sizes/font_size = 64
 horizontal_alignment = 1
-
-[node name="Collection2" type="Label" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 47.0
-offset_top = 879.0
-offset_right = 475.0
-offset_bottom = 1032.0
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 8
-text = "D: X
-C: X
-B: X
-A: X
-S: X
-X: X"
 
 [node name="Price1" type="Label" parent="."]
 layout_mode = 1
@@ -212,5 +198,12 @@ layout_mode = 2
 
 [node name="Card5" parent="CardContainer" instance=ExtResource("3_ysxdp")]
 layout_mode = 2
+
+[node name="Posible" type="Sprite2D" parent="CardContainer"]
+visible = false
+modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(1224.44, 540)
+scale = Vector2(1.98582, 1.69674)
+texture = ExtResource("7_0nexr")
 
 [connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]

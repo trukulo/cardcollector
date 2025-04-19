@@ -1,6 +1,7 @@
 extends Control
 
 var effect: String = "" # Effect of the card
+var protection: int = 0 # Protection status of the card
 
 func _ready() -> void:
 	# Show or hide the Info panel and adjust Picture position
@@ -76,17 +77,6 @@ func update_card_appearance() -> void:
 	if Global.info == false:
 		$Panel/Info.visible = false
 
-	# Adjust Picture position based on overlay visibility
-	if $Panel/Info/Overlay.visible and Global.info == true:
-		$Panel/Picture.position.y = 100
-	else:
-		$Panel/Picture.position.y = 0
-
-		# Set the colors of the red, blue, and yellow labels
-		$Panel/Info/red.add_theme_color_override("font_color", Color8(135, 39, 39))    # Red: #872727
-		$Panel/Info/blue.add_theme_color_override("font_color", Color8(59, 90, 109))   # Blue: #3b5a6d
-		$Panel/Info/yellow.add_theme_color_override("font_color", Color8(197, 197, 56)) # Yellow: #c5c538
-
 	# Create a new StyleBoxFlat resource for this card instance
 	var new_border_style = StyleBoxFlat.new()
 	new_border_style.draw_center = false  # Make the inside transparent
@@ -107,3 +97,26 @@ func update_card_appearance() -> void:
 	var info_style = StyleBoxFlat.new()
 	info_style.draw_center = false
 	$Panel/Info.add_theme_stylebox_override("panel", info_style)
+
+	# Adjust Picture position based on overlay visibility
+	if $Panel/Info/Overlay.visible and Global.info == true:
+		$Panel/Picture.position.y = 100
+		$Panel/Info/red.add_theme_color_override("font_color", Color8(255, 255, 255))
+		$Panel/Info/blue.add_theme_color_override("font_color", Color8(255, 255, 255))
+		$Panel/Info/yellow.add_theme_color_override("font_color", Color8(255, 255, 255))
+	else:
+		$Panel/Picture.position.y = 0
+		# Set the colors of the red, blue, and yellow labels
+		$Panel/Info/red.add_theme_color_override("font_color", Color8(135, 39, 39))    # Red: #872727
+		$Panel/Info/blue.add_theme_color_override("font_color", Color8(59, 90, 109))   # Blue: #3b5a6d
+		$Panel/Info/yellow.add_theme_color_override("font_color", Color8(197, 197, 56)) # Yellow: #c5c538
+
+func set_protection(protection: int) -> void:
+	if has_node("Protector"):
+		if protection == 1:
+			$Protector.visible = true
+		else:
+			$Protector.visible = false
+
+func get_protection() -> int:
+	return protection

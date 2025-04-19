@@ -95,17 +95,12 @@ func update_page():
 			else:
 				card_node.visible = false
 
-func is_any_effect_owned_for_card(id_set: String) -> bool:
+func is_any_effect_owned_for_card(id_set):
 	if not Global.collection.has(id_set):
 		return false
-	var entry = Global.collection[id_set]
-	if entry.get("amount", 0) > 0:
-		return true
-	if entry.has("effects"):
-		for effect in entry["effects"].keys():
-			if entry["effects"][effect] > 0:
-				return true
-	return false
+	if not Global.collection[id_set].has("cards"):
+		return false
+	return Global.collection[id_set]["cards"].size() > 0
 
 func get_card_path(index: int) -> String:
 	if index < 5:
@@ -119,16 +114,15 @@ func get_full_card_path(index: int) -> String:
 	else:
 		return "FullCards/HBoxContainer2/Card%d" % (index - 4 +5)
 
-func is_effect_owned_for_card(id_set: String, effect: String) -> bool:
+func is_effect_owned_for_card(id_set, effect):
 	if not Global.collection.has(id_set):
 		return false
-	var entry = Global.collection[id_set]
-	if effect == "":
-		return entry.get("amount", 0) > 0 and entry.get("deck", 0) == 0
-	elif effect == "Full Art":
-		return entry.has("effects") and entry["effects"].get("Full Art", 0) > 0 and entry.get("deck", 0) == 0
-	else:
-		return entry.has("effects") and entry["effects"].get(effect, 0) > 0 and entry.get("deck", 0) == 0
+	if not Global.collection[id_set].has("cards"):
+		return false
+	for card_instance in Global.collection[id_set]["cards"]:
+		if card_instance.get("effect", "") == effect:
+			return true
+	return false
 
 func _on_card_button_pressed(card_index):
 	var start_index = current_page * CARDS_PER_PAGE
@@ -150,6 +144,17 @@ func _on_card_button_pressed(card_index):
 			if owned:
 				if full_card.has_method("set_effect"):
 					full_card.set_effect(effect)
+				# Set protection from the first matching card instance
+				if full_card.has_method("set_protection"):
+					var protection = 0
+					if Global.collection.has(id_set) and Global.collection[id_set].has("cards"):
+						for card_instance in Global.collection[id_set]["cards"]:
+							if card_instance.get("effect", "") == effect:
+								protection = card_instance.get("protection", 0)
+								break
+					else:
+						protection = card_data.get("protection", 0)
+					full_card.set_protection(protection)
 				if full_card.has_node("Panel/Info/name"):
 					full_card.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
 				if full_card.has_node("Panel/Info/number"):
@@ -168,6 +173,7 @@ func _on_card_button_pressed(card_index):
 						full_card.get_node("Panel/Picture").texture = null
 				if full_card.has_method("update_card_appearance"):
 					full_card.update_card_appearance()
+
 	# Hide any extra slots (if you have more than 8 in the scene)
 	for i in range(8, 13):
 		var full_card_path = get_full_card_path(i)

@@ -9,8 +9,10 @@ var money: int = 0
 var last_connection: int = 0
 var deck_names: Dictionary = { 0: "Out of deck" }
 var selected_set: int = 1  # Último set seleccionado (por defecto 1)
-var info: bool = true  # Default value is true
 
+var unlock: int = 0
+
+var info: bool = true  # Default value is true
 var savegame_name: String = ""
 
 # --------------------
@@ -174,7 +176,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 			print("  %s: %d" % [rarity, set_rarity_summary[current_set_id][rarity]])
 
 # --------------------
-# ADD CARD
+# ADD AND REMOVE CARD
 # --------------------
 func add_card(id: int, set_id: int, rarity: String, stats: Array, rng: RandomNumberGenerator):
 	var id_set = "%s_%s" % [id, set_id]
@@ -183,7 +185,6 @@ func add_card(id: int, set_id: int, rarity: String, stats: Array, rng: RandomNum
 		"set": set_id,
 		"id_set": id_set,
 		"rarity": rarity,
-		"grading": 10,
 		"red": stats[0],
 		"blue": stats[1],
 		"yellow": stats[2],
@@ -224,59 +225,77 @@ func generate_card_name(rng: RandomNumberGenerator) -> String:
 	return name.capitalize()
 
 # --------------------
-# COLLECTION FUNCTIONS (unchanged)
+# COLLECTION FUNCTIONS (fixed)
 # --------------------
-func add_to_collection(id_set: String, amount: int, effect: String = "", deck: int = 0):
+func add_to_collection(id_set: String, amount: int, effect: String = "", deck: int = 0, grading: int = 7, protection: int = 0):
 	if not collection.has(id_set):
-		collection[id_set] = {"amount": 0, "effects": {}, "deck": 0}
-	if effect == "":
-		# Base card without effects
-		collection[id_set]["amount"] += amount
-	else:
-		# Effect variant
-		if not collection[id_set]["effects"].has(effect):
-			collection[id_set]["effects"][effect] = 0
-		collection[id_set]["effects"][effect] += amount
+		collection[id_set] = {
+			"cards": [],
+			"deck": 0
+		}
+	for i in range(amount):
+		var card_instance = {"grading": grading, "effect": effect, "protection": protection}
+		collection[id_set]["cards"].append(card_instance)
 
-	collection[id_set]["deck"] = deck
+
+func remove_from_collection(id_set: String, effect: String = "", grading: int = -1, protection: int = -1):
+	if collection.has(id_set) and collection[id_set].has("cards"):
+		var cards_array = collection[id_set]["cards"]
+		var index_to_remove := -1
+		for i in range(cards_array.size()):
+			var card = cards_array[i]
+			var is_match = true
+			if effect != "" and card.get("effect", "") != effect:
+				is_match = false
+			if grading != -1 and card.get("grading", -1) != grading:
+				is_match = false
+			if protection != -1 and card.get("protection", -1) != protection:
+				is_match = false
+			if is_match:
+				index_to_remove = i
+				break
+		if index_to_remove != -1:
+			cards_array.remove_at(index_to_remove)
+		if cards_array.is_empty():
+			collection.erase(id_set)
 
 func get_amount(id_set: String) -> int:
-	if collection.has(id_set):
-		return collection[id_set].get("amount", 0)
+	if collection.has(id_set) and collection[id_set].has("cards"):
+		return collection[id_set]["cards"].size()
 	return 0
 
-func has_card_with_effect(id_set: String, effect: String) -> bool:
+func has_card_with_effect(id_set, effect):
 	if not collection.has(id_set):
 		return false
-
-	if effect == "":
-		return collection[id_set]["amount"] > 0
-
-	if not collection[id_set].has("effects"):
+	if not collection[id_set].has("cards"):
 		return false
-
-	return collection[id_set]["effects"].get(effect, 0) > 0
+	for card_instance in collection[id_set]["cards"]:
+		if card_instance.get("effect", "") == effect:
+			return true
+	return false
 
 func get_effect_count(id_set: String, effect: String) -> int:
-	if not collection.has(id_set):
+	if not collection.has(id_set) or not collection[id_set].has("cards"):
 		return 0
 
-	if effect == "":
-		return collection[id_set]["amount"]
-
-	if not collection[id_set].has("effects"):
-		return 0
-
-	return collection[id_set]["effects"].get(effect, 0)
+	var count = 0
+	for card in collection[id_set]["cards"]:
+		if card.get("effect", "") == effect:
+			count += 1
+	return count
 
 func get_effects(id_set: String) -> Dictionary:
-	if not collection.has(id_set):
+	if not collection.has(id_set) or not collection[id_set].has("cards"):
 		return {}
 
-	if not collection[id_set].has("effects"):
-		return {}
-
-	return collection[id_set]["effects"]
+	var effects = {}
+	for card in collection[id_set]["cards"]:
+		var effect = card.get("effect", "")
+		if effect != "":
+			if not effects.has(effect):
+				effects[effect] = 0
+			effects[effect] += 1
+	return effects
 
 # --------------------
 # SAVE AND LOAD
@@ -291,7 +310,8 @@ func save_data():
 		"deck_names": deck_names,
 		"available_sets": available_sets,
 		"selected_set": selected_set,  # Save the selected set
-		"info": info  # Save the info variable
+		"info": info,  # Save the info variable
+		"unlock": unlock
 	}
 	f.store_var(data)
 	f.close()
@@ -308,6 +328,8 @@ func load_data():
 		deck_names = data.get("deck_names", {0: "Out of deck"})
 		available_sets = data.get("available_sets", {})
 		selected_set = data.get("selected_set", 1)  # Cargar el set seleccionado o usar 1 por defecto
+		info = data.get("info", true)  # Load the info variable
+		unlock = data.get("unlock", 0)  # Load the unlock variable
 	else:
 		collection = {}
 		money = 5000
@@ -327,7 +349,7 @@ func load_data():
 func update_money_by_time():
 	var now = Time.get_unix_time_from_system()
 	var seconds_passed = now - last_connection
-	var dollars_earned = int(seconds_passed / 1200)*100  # Earn 1 dollar every 1200 seconds
+	var dollars_earned = int(seconds_passed / 12)  # Earn 1 dollar every 1200 seconds
 	money += dollars_earned
 	last_connection = now
 	save_data()  # Save the updated money and last connection time
@@ -345,6 +367,7 @@ func search_by_price(min_price: float, max_price: float) -> Array:
 
 func filter_by_set(set_num: int) -> Array:
 	return cards.values().filter(func(c): return c["set"] == set_num)
+
 
 func filter_by_deck(deck: int) -> Array:
 	var result: Array = []
@@ -403,6 +426,7 @@ func reset_game():
 	collection = {}
 	money = 5000  # Changed reset money to 5000
 	last_connection = Time.get_unix_time_from_system()
+	unlock = 0
 
 	# Reset deck names while preserving the default deck 0
 	deck_names = { 0: "Out of deck" }
@@ -476,3 +500,57 @@ func load_selected_set():
 		f.close()
 	else:
 		selected_set = 1  # Valor por defecto si no existe el archivo
+
+# ------------------
+# RANDOM GRADING
+# ------------------
+
+func get_random_grading() -> int:
+	var grades = [6, 7, 8, 9, 10]
+	var weights = [10, 20, 50, 15, 5]
+	var total = 0
+	for w in weights:
+		total += w
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var pick = rng.randi_range(1, total)
+	var cumulative = 0
+	for i in range(grades.size()):
+		cumulative += weights[i]
+		if pick <= cumulative:
+			return grades[i]
+	return 8 # Fallback, should never happen
+
+# ------------------
+# PROTECTION
+# ------------------
+
+func protect_card_instance(id_set: String, grading: int = -1, effect: String = "", protection_value: int = 1):
+	if collection.has(id_set):
+		for card in collection[id_set]["cards"]:
+			if (grading == -1 or card.get("grading", -1) == grading) and (effect == "" or card.get("effect", "") == effect):
+				card["protection"] = protection_value
+				break  # Only protect the first match
+
+# ------------------
+# EFFECT MULTIPLIER
+# ------------------
+
+func get_effect_multiplier(effect: String) -> float:
+	match effect:
+		"Silver":
+			return 2.0
+		"Gold":
+			return 3.0
+		"Holo":
+			return 4.0
+		"Full Art":
+			return 5.0
+		"Full Silver":
+			return 6.0
+		"Full Gold":
+			return 8.0
+		"Full Holo":
+			return 10.0
+		_:
+			return 1.0
