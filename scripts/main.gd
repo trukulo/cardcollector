@@ -3,6 +3,8 @@ extends Control
 var reset_dialog: ConfirmationDialog
 
 func _ready() -> void:
+
+	print(Global.collection.size())
 	# Make sure Global data is loaded
 	if not Global.cards.size():
 		Global.generate_cards_with_seed(42)
@@ -23,16 +25,7 @@ func _ready() -> void:
 	# Initial update of the money label
 	update_money_label()
 
-	#Unlocking
-	if Global.collection.size() >= 50 and Global.unlock < 2:
-		Global.unlock += 1
-		_narrator("You have unlocked a new feature!")
-	if Global.collection.size() >= 100 and Global.unlock < 3:
-		Global.unlock += 1
-		_narrator("You have unlocked a new feature!")
-	if Global.collection.size() >= 200 and Global.unlock < 4:
-		Global.unlock += 1
-		_narrator("You have unlocked a new feature!")
+	_unlock()
 
 	Global.save_data()
 	# Create the confirmation dialog if not already in the scene
@@ -63,7 +56,7 @@ func _ready() -> void:
 		await _narrator("Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born.")
 		await _narrator("Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name.")
 		await _narrator("Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction.")
-		await _narrator("Kaze, the ever-watchful, whose domain was the boundless sky. He soared above all things, his form as fleeting as the wind, yet his presence was eternal. None could hide from his sight, for he rode the currents of the air, whispering secrets to the clouds.")
+		await _narrator("Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds.")
 		await _enarrator("I am not sure what's going on here, I can't see... But I think this is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack.")
 		Global.unlock = 1
 		Global.save_data()
@@ -145,3 +138,57 @@ func _enarrator(message: String) -> void:
 	$Message.visible = true
 	await $Message/NoNarrator.pressed
 	$Message.visible = false
+
+func _unlock() -> void:
+	var total_cards = 0
+	for amount in Global.collection.values():
+		total_cards += amount
+
+	#Unlocking
+	if total_cards >= 5 and Global.unlock < 1:
+		Global.unlock += 1
+		_enarrator("You have unlocked Collection!")
+	if total_cards >= 25 and Global.unlock < 2:
+		Global.unlock += 1
+		_enarrator("You have unlocked Decks!")
+	if total_cards >= 50 and Global.unlock < 3:
+		Global.unlock += 1
+		_enarrator("You have unlocked a Memory Game!")
+	if total_cards >= 100 and Global.unlock < 4:
+		Global.unlock += 1
+		_enarrator("You have unlocked a new set!")
+	if total_cards >= 100 and Global.unlock < 5:
+		Global.unlock += 1
+		_enarrator("You have unlocked Duels and a new set!")
+	if total_cards >= 200 and Global.unlock < 6:
+		Global.unlock += 1
+		_enarrator("You have unlocked Auctions and a new set!")
+	if total_cards >= 300 and Global.unlock < 7:
+		Global.unlock += 1
+		_enarrator("You have unlocked Battles and new set!")
+	if total_cards >= 400 and Global.unlock < 8:
+		Global.unlock += 1
+		_enarrator("You have unlocked Selling cards and new set!")
+	if total_cards >= 500 and Global.unlock < 9:
+		Global.unlock += 1
+		_enarrator("You have unlocked Protecting cards and new set!")
+
+	#Unlocked
+	if Global.unlock < 1:
+		$VBoxContainer/ButtonCollection.disabled = true
+		$VBoxContainer/ButtonCollection.text = "Collection 🔒"
+	if Global.unlock < 2:
+		$VBoxContainer/ButtonDecks.disabled = true
+		$VBoxContainer/ButtonDecks.text = "Decks 🔒"
+	if Global.unlock < 3:
+		$VBoxContainer2/ButtonPlay.disabled = true
+		$VBoxContainer2/ButtonPlay.text = "Memory 🔒"
+	if Global.unlock < 6:
+		$VBoxContainer/ButtonAuction.disabled = true
+		$VBoxContainer/ButtonAuction.text = "Auction 🔒"
+	if Global.unlock < 5:
+		$VBoxContainer2/ButtonShortDuel.disabled = true
+		$VBoxContainer2/ButtonShortDuel.text = "Duel 🔒"
+	if Global.unlock < 7:
+		$VBoxContainer2/ButtonDuels.disabled = true
+		$VBoxContainer2/ButtonDuels.text = "Battle 🔒"

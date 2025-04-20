@@ -1,8 +1,12 @@
 extends Control
 
 func _ready():
-	# Cargar el set seleccionado al iniciar
-	Global.load_data()  # Asegurarnos de que los datos estén actualizados
+	# Asegurarse de que los datos estén actualizados
+	Global.load_data()
+	# Limitar el set seleccionado al rango permitido
+	var max_set = max(1, Global.unlock - 2)
+	Global.selected_set = clamp(Global.selected_set, 1, max_set)
+	Global.save_data()
 	update_open_booster_button()
 	update_collection_labels()
 	if Global.info == false:
@@ -24,9 +28,10 @@ func update_collection_labels():
 func _on_button_right_pressed() -> void:
 	# Incrementar el set seleccionado
 	Global.selected_set += 1
-	if Global.selected_set > Global.set_editions.size():
-		Global.selected_set = 1  # Volver al primer set si se supera el límite
-	Global.save_data()  # Guardar el set seleccionado junto con los demás datos
+	var max_set = max(1, Global.unlock - 2)
+	if Global.selected_set > max_set:
+		Global.selected_set = max_set  # No pasar del máximo permitido
+	Global.save_data()
 	update_open_booster_button()
 	update_collection_labels()
 
@@ -34,8 +39,8 @@ func _on_button_left_pressed() -> void:
 	# Decrementar el set seleccionado
 	Global.selected_set -= 1
 	if Global.selected_set < 1:
-		Global.selected_set = Global.set_editions.size()  # Ir al último set si se baja del límite
-	Global.save_data()  # Guardar el set seleccionado junto con los demás datos
+		Global.selected_set = 1  # No bajar del mínimo permitido
+	Global.save_data()
 	update_open_booster_button()
 	update_collection_labels()
 

@@ -180,7 +180,7 @@ region_rect = Rect2(1051, 318, 4, 99)
 [resource]
 default_font = SubResource("31")
 Button/colors/font_color = Color(0, 0, 0, 1)
-Button/colors/font_disabled_color = Color(0.9, 0.9, 0.9, 0.2)
+Button/colors/font_disabled_color = Color(0.525101, 0.525101, 0.525101, 1)
 Button/colors/font_hover_color = Color(0, 0, 0, 1)
 Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(0, 0, 0, 1)

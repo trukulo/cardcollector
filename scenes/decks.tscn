@@ -477,7 +477,7 @@ size_flags_horizontal = 3
 theme = ExtResource("6_73twv")
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 40
-text = "SELL CARD"
+text = "SELL"
 
 [node name="ButtonProtect" type="Button" parent="."]
 layout_mode = 0

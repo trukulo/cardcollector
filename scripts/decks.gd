@@ -47,6 +47,7 @@ func _ready():
 	update_card_keys()
 	current_page = 0
 	populate_cards()
+	_unlock()
 	# Print debug info for prices
 	print("DEBUG: First 10 Global.prices entries:")
 	var count = 0
@@ -77,24 +78,6 @@ func _ready():
 		var btn = get_node("FullCard/Button")
 		if not btn.is_connected("pressed", Callable(self, "_on_full_card_button_pressed")):
 			btn.connect("pressed", Callable(self, "_on_full_card_button_pressed"))
-	# Connect dupe button
-	if has_node("ButtonDupe"):
-		var btn = get_node("ButtonDupe")
-		if not btn.is_connected("pressed", Callable(self, "_on_button_dupe_pressed")):
-			btn.connect("pressed", Callable(self, "_on_button_dupe_pressed"))
-		btn.text = "Duplicates Only"
-	# Connect sell button
-	if has_node("ButtonSell"):
-		var btn = get_node("ButtonSell")
-		if not btn.is_connected("pressed", Callable(self, "_on_button_sell_pressed")):
-			btn.connect("pressed", Callable(self, "_on_button_sell_pressed"))
-		btn.visible = false
-	# Connect protect button
-	if has_node("ButtonProtect"):
-		var btn = get_node("ButtonProtect")
-		if not btn.is_connected("pressed", Callable(self, "_on_button_protect_pressed")):
-			btn.connect("pressed", Callable(self, "_on_button_protect_pressed"))
-		btn.visible = false
 
 # Sorting label update
 func update_sort_label():
@@ -485,12 +468,9 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 		# Show and enable the sell button
 		if has_node("ButtonSell"):
 			get_node("ButtonSell").visible = true
-			get_node("ButtonSell").disabled = false
 		# Show and enable the protect button
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = true
-			# Disable protect button if already protected
-			get_node("ButtonProtect").disabled = (protection == 1)
 
 	# 2. Update the top-level Price label in the scene
 	if card_data and has_node("Price"):
@@ -533,10 +513,8 @@ func _on_full_card_button_pressed():
 		$Price.visible = false
 	if has_node("ButtonSell"):
 		get_node("ButtonSell").visible = false
-		get_node("ButtonSell").disabled = true
 	if has_node("ButtonProtect"):
 		get_node("ButtonProtect").visible = false
-		get_node("ButtonProtect").disabled = true
 
 func _on_button_sell_pressed() -> void:
 	pending_sell_id_set = fullcard_id_set
@@ -592,10 +570,8 @@ func _on_confirm_sell():
 			get_node("FullCard").visible = false
 		if has_node("ButtonSell"):
 			get_node("ButtonSell").visible = false
-			get_node("ButtonSell").disabled = true
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = false
-			get_node("ButtonProtect").disabled = true
 	else:
 		print("ERROR: Could not find specific card to sell")
 		$VBoxContainer.visible = true
@@ -604,10 +580,8 @@ func _on_confirm_sell():
 			get_node("FullCard").visible = false
 		if has_node("ButtonSell"):
 			get_node("ButtonSell").visible = false
-			get_node("ButtonSell").disabled = true
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = false
-			get_node("ButtonProtect").disabled = true
 
 func _on_button_left_pressed():
 	if current_page > 0:
@@ -719,3 +693,11 @@ func _on_confirm_protect_card() -> void:
 		show_full_card(fullcard_id_set, fullcard_effect, protected_index)
 	else:
 		print("ERROR: Failed to find specific card instance for protection")
+
+func _unlock() -> void:
+	if Global.unlock < 8:
+		$ButtonSell.disabled = true
+		$ButtonSell.text = "Sell 🔒"
+	if Global.unlock < 9:
+		$ButtonProtect.disabled = true
+		$ButtonProtect.text = "Protect 🔒"
