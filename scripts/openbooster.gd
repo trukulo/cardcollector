@@ -15,19 +15,20 @@ var current_card_displayed = null
 var current_set_id = 1
 var cards_revealed = 0
 var reveal_timer: Timer
+var revealed_cards := []
 
 func _ready():
 	Global.load_data()
+	revealed_cards = []
+	if Global.unlock < 6:
+		$ButtonReveal.disabled = true
+		$ButtonReveal.text = "Reveal 🔒"
 	current_set_id = Global.selected_set
 	generate_booster_pack(current_set_id)
+	for i in range(booster_pack.size()):
+		revealed_cards.append(false)
 	initialize_face_down_cards()
-	reveal_timer = Timer.new()
-	add_child(reveal_timer)
-	reveal_timer.wait_time = 0.5
-	reveal_timer.one_shot = true
-	reveal_timer.connect("timeout", _on_reveal_timer_timeout)
-	start_next_reveal()
-	# Show current set at the top
+	#_show_effects()
 
 func is_card_new(id_set: String, effect: String) -> bool:
 	if not Global.collection.has(id_set):
@@ -166,9 +167,6 @@ func initialize_face_down_cards():
 				if has_node(price_label_name):
 					get_node(price_label_name).visible = false
 
-func _on_reveal_timer_timeout():
-	start_next_reveal()
-
 func reveal_card(index: int):
 	if has_node("CardContainer"):
 		var card_container = get_node("CardContainer")
@@ -177,7 +175,7 @@ func reveal_card(index: int):
 			var card_node = card_container.get_node(card_node_name)
 			var card = booster_pack[index]
 			var tween = create_tween()
-			tween.tween_interval(0.5)
+			tween.tween_interval(0.10)
 			tween.tween_property(card_node, "scale:x", 0.1, 0.075)
 			tween.tween_callback(func():
 				if card_node.has_node("Panel/Picture"):
@@ -190,7 +188,7 @@ func reveal_card(index: int):
 				_populate_card(card_node, card)
 			)
 			tween.tween_property(card_node, "scale:x", 1.0, 0.075)
-			tween.tween_interval(0.25)
+			tween.tween_interval(0.10)
 			tween.tween_callback(func():
 				var price_label_name = "Price" + str(index + 1)
 				if has_node(price_label_name):
@@ -226,13 +224,9 @@ func reveal_card(index: int):
 				if index == 4:
 					save_cards_to_collection()
 					update_collection_label()
-			)
 
-func start_next_reveal():
-	if cards_revealed < 5:
-		reveal_card(cards_revealed)
-		cards_revealed += 1
-		reveal_timer.start()
+				_check_all_revealed()
+			)
 
 func assign_card_effect() -> String:
 	var rng = RandomNumberGenerator.new()
@@ -247,6 +241,7 @@ func assign_card_effect() -> String:
 	return ""
 
 func _on_button_ok_pressed() -> void:
+	Global.save_data()
 	get_tree().change_scene_to_file("res://scenes/choose_booster.tscn")
 
 func get_effect_multiplier(effect: String) -> float:
@@ -310,3 +305,96 @@ func _populate_card(card_node: Node, card_data: Dictionary) -> void:
 		overlay.material = null
 	if card_node.has_method("set_effect"):
 		card_node.set_effect(card_data.get("effect", ""))
+
+func _on_button_1_pressed():
+	if not revealed_cards[0]:
+		reveal_card(0)
+		revealed_cards[0] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(0)
+func _on_button_2_pressed():
+	if not revealed_cards[1]:
+		reveal_card(1)
+		revealed_cards[1] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(1)
+func _on_button_3_pressed():
+	if not revealed_cards[2]:
+		reveal_card(2)
+		revealed_cards[2] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(2)
+func _on_button_4_pressed():
+	if not revealed_cards[3]:
+		reveal_card(3)
+		revealed_cards[3] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(3)
+func _on_button_5_pressed():
+	if not revealed_cards[4]:
+		reveal_card(4)
+		revealed_cards[4] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(4)
+
+func _on_button_reveal_pressed() -> void:
+	reveal_card(0)
+	$ButtonReveal.disabled = true
+	reveal_card(1)
+	$ButtonReveal.disabled = true
+	reveal_card(2)
+	$ButtonReveal.disabled = true
+	reveal_card(3)
+	$ButtonReveal.disabled = true
+	reveal_card(4)
+	$ButtonReveal.disabled = true
+	_check_all_revealed()
+
+func _show_effects() -> void:
+	for i in range(booster_pack.size()):
+		var price_label_name = "Price" + str(i + 1)
+		if has_node(price_label_name):
+			var price_label = get_node(price_label_name)
+			var effect = booster_pack[i].get("effect", "")
+			price_label.text = effect if effect != "" else "No Effect"
+			price_label.visible = true
+
+
+func _on_button_hide_pressed() -> void:
+	$FullCard.visible = false
+
+func show_full_card(index: int):
+	var card_data = booster_pack[index]
+	if $FullCard.has_node("Panel/Picture"):
+		$FullCard.get_node("Panel/Picture").texture = load(card_data["image"])
+	if $FullCard.has_node("Panel/Info/name"):
+		$FullCard.get_node("Panel/Info/name").text = card_data.get("name", "Unknown")
+	if $FullCard.has_node("Panel/Info/number"):
+		$FullCard.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
+	if $FullCard.has_node("Panel/Info/effect"):
+		$FullCard.get_node("Panel/Info/effect").text = card_data.get("effect", "No Effect")
+	if $FullCard.has_node("Panel/Info/red"):
+		$FullCard.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
+	if $FullCard.has_node("Panel/Info/blue"):
+		$FullCard.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
+	if $FullCard.has_node("Panel/Info/yellow"):
+		$FullCard.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
+	# Ensure effect is visually applied
+	if $FullCard.has_method("set_effect"):
+		$FullCard.set_effect(card_data.get("effect", ""))
+	elif $FullCard.has_node("Panel") and $FullCard.get_node("Panel").has_method("set_effect"):
+		$FullCard.get_node("Panel").set_effect(card_data.get("effect", ""))
+	$FullCard.visible = true
+
+func _check_all_revealed():
+	var all_revealed = true
+	for revealed in revealed_cards:
+		if not revealed:
+			all_revealed = false
+			break
+	$ButtonOk.disabled = not all_revealed

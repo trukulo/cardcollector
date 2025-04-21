@@ -26,6 +26,7 @@ func _ready() -> void:
 	update_money_label()
 
 	_unlock()
+	$CardsAccount.text = "%d Cards" % get_total_card_count()
 
 	Global.save_data()
 	# Create the confirmation dialog if not already in the scene
@@ -141,10 +142,10 @@ func _enarrator(message: String) -> void:
 
 func _unlock() -> void:
 	var total_cards = 0
-	for amount in Global.collection.values():
-		total_cards += amount
+	for entry in Global.collection.values():
+		total_cards += entry["cards"].size()
 
-	#Unlocking
+	# Unlocking
 	if total_cards >= 5 and Global.unlock < 1:
 		Global.unlock += 1
 		_enarrator("You have unlocked Collection!")
@@ -156,10 +157,10 @@ func _unlock() -> void:
 		_enarrator("You have unlocked a Memory Game!")
 	if total_cards >= 100 and Global.unlock < 4:
 		Global.unlock += 1
-		_enarrator("You have unlocked a new set!")
-	if total_cards >= 100 and Global.unlock < 5:
-		Global.unlock += 1
 		_enarrator("You have unlocked Duels and a new set!")
+	if total_cards >= 150 and Global.unlock < 5:
+		Global.unlock += 1
+		_enarrator("You have unlocked Reveal!")
 	if total_cards >= 200 and Global.unlock < 6:
 		Global.unlock += 1
 		_enarrator("You have unlocked Auctions and a new set!")
@@ -176,19 +177,30 @@ func _unlock() -> void:
 	#Unlocked
 	if Global.unlock < 1:
 		$VBoxContainer/ButtonCollection.disabled = true
-		$VBoxContainer/ButtonCollection.text = "Collection 🔒"
+		$VBoxContainer/ButtonCollection.text = "Collection (L)"
 	if Global.unlock < 2:
 		$VBoxContainer/ButtonDecks.disabled = true
-		$VBoxContainer/ButtonDecks.text = "Decks 🔒"
+		$VBoxContainer/ButtonDecks.text = "Decks (L)"
 	if Global.unlock < 3:
 		$VBoxContainer2/ButtonPlay.disabled = true
-		$VBoxContainer2/ButtonPlay.text = "Memory 🔒"
+		$VBoxContainer2/ButtonPlay.text = "Memory (L)"
 	if Global.unlock < 6:
 		$VBoxContainer/ButtonAuction.disabled = true
-		$VBoxContainer/ButtonAuction.text = "Auction 🔒"
-	if Global.unlock < 5:
+		$VBoxContainer/ButtonAuction.text = "Auction (L)"
+	if Global.unlock < 4:
 		$VBoxContainer2/ButtonShortDuel.disabled = true
-		$VBoxContainer2/ButtonShortDuel.text = "Duel 🔒"
+		$VBoxContainer2/ButtonShortDuel.text = "Duel (L)"
 	if Global.unlock < 7:
 		$VBoxContainer2/ButtonDuels.disabled = true
-		$VBoxContainer2/ButtonDuels.text = "Battle 🔒"
+		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
+
+func get_total_card_count() -> int:
+	var total = 0
+	for set_data in Global.collection.values():
+		for card in set_data["cards"]:
+			# If you store a count property per card, use it:
+			if card.has("count"):
+				total += card["count"]
+			else:
+				total += 1
+	return total

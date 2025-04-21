@@ -697,7 +697,7 @@ func _on_confirm_protect_card() -> void:
 func _unlock() -> void:
 	if Global.unlock < 8:
 		$ButtonSell.disabled = true
-		$ButtonSell.text = "Sell 🔒"
+		$ButtonSell.text = "Sell (L)"
 	if Global.unlock < 9:
 		$ButtonProtect.disabled = true
-		$ButtonProtect.text = "Protect 🔒"
+		$ButtonProtect.text = "Protect (L)"

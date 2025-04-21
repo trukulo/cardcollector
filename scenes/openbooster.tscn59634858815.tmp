@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c656wt8q4lbp4"]
+[gd_scene load_steps=8 format=3 uid="uid://c656wt8q4lbp4"]
 
 [ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="1_ysxdp"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="3_mm8m7"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_xnfyq"]
-[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="6_si4a3"]
 [ext_resource type="Texture2D" uid="uid://c020rv0pwrqcv" path="res://gui/posible.png" id="7_0nexr"]
 
 [node name="Openbooster" type="Control"]
@@ -32,36 +31,16 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -159.251
-offset_right = 408.0
+offset_left = -79.5
+offset_top = -155.0
+offset_right = 79.5
 offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("4_xnfyq")
 theme_override_fonts/font = ExtResource("3_ki8ix")
 theme_override_font_sizes/font_size = 72
-disabled = true
 text = "CLOSE"
-
-[node name="ButtonReveal" type="Button" parent="."]
-custom_minimum_size = Vector2(400, 0)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -424.0
-offset_top = -159.251
-offset_right = -24.0
-offset_bottom = -48.0
-grow_horizontal = 2
-grow_vertical = 0
-theme = ExtResource("6_si4a3")
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 72
-text = "REVEAL"
 
 [node name="Collection" type="Label" parent="."]
 layout_mode = 1
@@ -272,38 +251,9 @@ position = Vector2(1224.44, 540)
 scale = Vector2(1.98582, 1.69674)
 texture = ExtResource("7_0nexr")
 
-[node name="FullCard" parent="." instance=ExtResource("3_ysxdp")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -516.0
-offset_right = 400.0
-offset_bottom = 580.0
-scale = Vector2(0.9, 0.9)
-
-[node name="ButtonHide" type="Button" parent="FullCard"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -679.0
-offset_top = -44.0
-offset_right = 676.0
-offset_bottom = 92.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
 [connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
-[connection signal="pressed" from="ButtonReveal" to="." method="_on_button_reveal_pressed"]
 [connection signal="pressed" from="CardContainer/Card1/Button1" to="." method="_on_button_1_pressed"]
 [connection signal="pressed" from="CardContainer/Card2/Button2" to="." method="_on_button_2_pressed"]
 [connection signal="pressed" from="CardContainer/Card3/Button3" to="." method="_on_button_3_pressed"]
 [connection signal="pressed" from="CardContainer/Card4/Button4" to="." method="_on_button_4_pressed"]
 [connection signal="pressed" from="CardContainer/Card5/Button5" to="." method="_on_button_5_pressed"]
-[connection signal="pressed" from="FullCard/ButtonHide" to="." method="_on_button_hide_pressed"]

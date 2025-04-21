@@ -9,6 +9,9 @@ func _ready():
 	Global.save_data()
 	update_open_booster_button()
 	update_collection_labels()
+	if Global.unlock < 3:
+		$HBoxContainer/ButtonLeft.disabled = true
+		$HBoxContainer/ButtonRight.disabled = true
 	if Global.info == false:
 		$BoosterTemplate.visible = false
 

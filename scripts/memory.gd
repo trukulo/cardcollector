@@ -191,7 +191,7 @@ func check_flipped_cards() -> void:
 			Global.money += 500  # Recompensa de dinero
 			Global.save_data()
 			if $Win:
-				$Win.text = "Winner!"  # Mostrar mensaje de victoria
+				$Win.text = "Winner!\n¥500"  # Mostrar mensaje de victoria
 				$Win.visible = true
 			hide_ui_elements()  # Ocultar elementos de la UI al ganar
 			await get_tree().create_timer(2.0).timeout  # Esperar 2 segundos
@@ -223,11 +223,11 @@ func check_flipped_cards() -> void:
 func hide_card(card_node: Node) -> void:
 	if card_node:
 		if card_node.has_node("Panel/Picture"):
-			var picture = card_node.get_node("Panel/Picture")
-			picture.texture = null  # Quitar la textura (vacío)
+			card_node.get_node("Panel/Picture").texture = null
 		if card_node.has_node("Panel/Info"):
-			var info_panel = card_node.get_node("Panel/Info")
-			info_panel.visible = false  # Ocultar la información
+			card_node.get_node("Panel/Info").visible = false
+		if card_node.has_node("Button"):
+			card_node.get_node("Button").disabled = true
 
 # Muestra todas las cartas
 func show_all_cards() -> void:
