@@ -81,16 +81,17 @@ func _highlight_bet_button(selected_stat, selected_direction):
 			var btn_path = "Panel/Deal/%s%s" % [stat.capitalize(), dir.capitalize()]
 			if has_node(btn_path):
 				var btn = get_node(btn_path)
-				if btn is Button:
-					if stat == selected_stat and dir == selected_direction:
-						btn.modulate = Color(0.5, 0.5, 0.5) # Darker
+				if btn is Control:
+					if selected_stat == null or selected_direction == null:
+						# Show all buttons when nothing is selected
+						btn.visible = true
 					else:
-						btn.modulate = Color(1, 1, 1) # Normal
+						# Only show the selected button
+						btn.visible = (stat == selected_stat && dir == selected_direction)
 
 func _update_turn_state():
 	if turn > 4:
 		await _show_end_of_game_results()
-		await get_tree().create_timer(5.0).timeout
 		if Global.train == 1 or Global.rounds == 0:
 			get_tree().change_scene_to_file("res://scenes/main.tscn")
 		else:
@@ -101,7 +102,7 @@ func _update_turn_state():
 		input_enabled = true
 		waiting_for_player_card = false
 		_set_bet_buttons_enabled(true)
-		_highlight_bet_button(null, null)
+		_highlight_bet_button(null, null)  # Make all buttons visible
 		if has_node("Notif"):
 			$Notif.text = "Your turn: choose one!"
 			$Notif.visible = true
@@ -109,7 +110,7 @@ func _update_turn_state():
 		input_enabled = false
 		waiting_for_player_card = false
 		_set_bet_buttons_enabled(false)
-		_highlight_bet_button(null, null)
+		_highlight_bet_button(null, null)  # Make all buttons visible but disabled
 		await get_tree().create_timer(1.0).timeout
 		await _rival_turn()
 
@@ -118,6 +119,9 @@ func _reset_selections():
 	selected_direction = ""
 	selected_player_index = -1
 	revealed_rival_index = -1
+
+	# Restore visibility of all bet buttons
+	_highlight_bet_button(null, null)
 
 func _on_bet_button_pressed(stat, direction):
 	if not input_enabled:
@@ -597,4 +601,11 @@ func _show_end_of_game_results():
 		$Notif.visible = true
 	if has_node("Panel"):
 		$Panel.visible = false
-	await get_tree().create_timer(2.0).timeout
+	$End.visible = true
+	await $End.pressed
+
+func _on_hide_pressed() -> void:
+	$FullCard.visible = false
+
+func _on_end_pressed() -> void:
+	$End.visible = false

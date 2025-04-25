@@ -91,10 +91,20 @@ func update_ui():
 	$MarketPrice.text = "Market Price ¥%d" % market_price
 	$BidPrice.text = "Bid Price ¥%d" % bid_price
 	$Tempo.text = str(timer)
-	var enough_money = Global.money >= int(bid_price * 1.1)
+	
+	# Calculate bid amounts
+	var bid_amount_10 = max(int(bid_price * 1.1), bid_price + 1)
+	var bid_amount_20 = max(int(bid_price * 1.2), bid_price + 1)
+	
+	# Update button text with actual bid amounts
+	$Bid.text = "Bid ¥%d" % bid_amount_10
+	$Bid2.text = "Bid ¥%d" % bid_amount_20
+	
+	var enough_money = Global.money >= bid_amount_10
 	$Bid.visible = enough_money
-	$Bid2.visible = Global.money >= int(bid_price * 1.2)
+	$Bid2.visible = Global.money >= bid_amount_20
 	$Notif.visible = false
+	
 	# Color BidPrice green if player is winning
 	if player_is_winner:
 		$BidPrice.add_theme_color_override("font_color", Color(0, 1, 0)) # green

@@ -6,6 +6,7 @@ var prices: Dictionary = {}
 var collection: Dictionary = {}
 
 var money: int = 0
+var souls: int = 0
 var last_connection: int = 0
 var deck_names: Dictionary = { 0: "Out of deck" }
 var selected_set: int = 1  # Último set seleccionado (por defecto 1)
@@ -32,7 +33,8 @@ func _ready():
 		savegame_name = "user://data.save"
 
 	collection = {}
-	money = 5000  # Changed reset money to 5000
+	money = 10000  # Changed reset money to 10000
+	souls = 0
 	last_connection = Time.get_unix_time_from_system()
 
 	# Reset deck names while preserving the default deck 0
@@ -86,80 +88,95 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 		print("Error: No se pudo abrir el directorio res://cards")
 		return
 
+	# Collect all folder names first
+	var folder_names = []
 	dir.list_dir_begin()
-	var set_index = 1
 	while true:
 		var folder_name = dir.get_next()
 		if folder_name == "":
 			break
 		if dir.current_is_dir() and not folder_name.begins_with("."):
-			# Assign a name to the set
-			var edition = "Edition %s" % folder_name.capitalize()
-			set_editions[set_index] = edition
-			available_sets[set_index] = true
-
-			# Count the number of valid card images using .import files
-			var card_dir = DirAccess.open("res://cards/" + folder_name)
-			if card_dir == null:
-				print("Error: No se pudo abrir el directorio res://cards/" + folder_name)
-				continue
-
-			card_dir.list_dir_begin()
-			var card_id = 1
-			var total_cards = 0
-			var card_files = []
-
-			# Collect all card files, ignoring "0.jpg" and counting .import files
-			while true:
-				var file_name = card_dir.get_next()
-				if file_name == "":
-					break
-				if file_name.ends_with(".import") and file_name != "0.jpg.import":
-					card_files.append(file_name)
-					total_cards += 1
-			card_dir.list_dir_end()
-
-			# Calculate the number of cards for each rarity
-			var rarities = []
-			for rarity in rarity_probabilities.keys():
-				var count = int(total_cards * (rarity_probabilities[rarity] / 100.0))
-				for i in range(count):
-					rarities.append(rarity)
-
-			# Ensure at least one S and one X card
-			if total_cards >= 2:
-				rarities[0] = "S"  # Assign the first card as S
-				rarities[1] = "X"  # Assign the second card as X
-
-			# Fill remaining slots with the most common rarity ("D")
-			while rarities.size() < total_cards:
-				rarities.append("D")
-			# Deterministic shuffle using our rng
-			for i in range(rarities.size() - 1, 0, -1):
-				var j = rng.randi_range(0, i)
-				var tmp = rarities[i]
-				rarities[i] = rarities[j]
-				rarities[j] = tmp
-
-			# Assign rarities and generate cards
-			for file_name in card_files:
-				var id_set = "%s_%s" % [card_id, set_index]
-				var rarity = rarities[(card_id - 1) % rarities.size()]
-				var points = rarity_points[rarity]
-
-				var stats = [0, 0, 0]
-				for i in range(points):
-					stats[rng.randi_range(0, 2)] += 1
-
-				add_card(card_id, set_index, rarity, stats, rng)
-
-				var base = rng.randf_range(base_price[rarity][0], base_price[rarity][1])
-				var modifier = 1.0 + rng.randf_range(-0.99, 0.99)
-				prices[id_set] = round(base * modifier * 100) / 100
-
-				card_id += 1
-			set_index += 1
+			folder_names.append(folder_name)
 	dir.list_dir_end()
+	
+	# Sort folders numerically
+	folder_names.sort_custom(func(a, b): return a.to_int() < b.to_int())
+	
+	var set_index = 1
+	for folder_name in folder_names:
+		# Assign a name to the set
+		var edition = "Edition %s" % folder_name.capitalize()
+		set_editions[set_index] = edition
+		available_sets[set_index] = true
+
+		# Count the number of valid card images using .import files
+		var card_dir = DirAccess.open("res://cards/" + folder_name)
+		if card_dir == null:
+			print("Error: No se pudo abrir el directorio res://cards/" + folder_name)
+			continue
+
+		card_dir.list_dir_begin()
+		var card_id = 1
+		var total_cards = 0
+		var card_files = []
+
+		# Collect all card files, ignoring "png" and counting .import files
+		while true:
+			var file_name = card_dir.get_next()
+			if file_name == "":
+				break
+			if file_name.ends_with(".import") and file_name != "0.png.import":
+				card_files.append(file_name)
+				total_cards += 1
+		card_dir.list_dir_end()
+
+		# Calculate the number of cards for each rarity
+		var rarities = []
+		for rarity in rarity_probabilities.keys():
+			var count = int(total_cards * (rarity_probabilities[rarity] / 100.0))
+			for i in range(count):
+				rarities.append(rarity)
+
+		# Ensure at least one S and one X card
+		if total_cards >= 2:
+			rarities[0] = "S"  # Assign the first card as S
+			rarities[1] = "X"  # Assign the second card as X
+
+		# Fill remaining slots with the most common rarity ("D")
+		while rarities.size() < total_cards:
+			rarities.append("D")
+		# Deterministic shuffle using our rng
+		for i in range(rarities.size() - 1, 0, -1):
+			var j = rng.randi_range(0, i)
+			var tmp = rarities[i]
+			rarities[i] = rarities[j]
+			rarities[j] = tmp
+
+		# Sort card files numerically
+		card_files.sort_custom(func(a, b): 
+			var a_num = a.get_basename().get_file().to_int()
+			var b_num = b.get_basename().get_file().to_int()
+			return a_num < b_num
+		)
+
+		# Assign rarities and generate cards
+		for file_name in card_files:
+			var id_set = "%s_%s" % [card_id, set_index]
+			var rarity = rarities[(card_id - 1) % rarities.size()]
+			var points = rarity_points[rarity]
+
+			var stats = [0, 0, 0]
+			for i in range(points):
+				stats[rng.randi_range(0, 2)] += 1
+
+			add_card(card_id, set_index, rarity, stats, rng)
+
+			var base = rng.randf_range(base_price[rarity][0], base_price[rarity][1])
+			var modifier = 1.0 + rng.randf_range(-0.99, 0.99)
+			prices[id_set] = round(base * modifier * 100) / 100
+
+			card_id += 1
+		set_index += 1
 
 	# Print a summary of rarities for each set
 	var set_rarity_summary = {}
@@ -306,6 +323,7 @@ func save_data():
 	var data = {
 		"collection": collection,
 		"money": money,
+		"souls": souls,
 		"last_connection": Time.get_unix_time_from_system(),
 		"deck_names": deck_names,
 		"available_sets": available_sets,
@@ -323,7 +341,8 @@ func load_data():
 		var data = f.get_var()
 		f.close()
 		collection = data.get("collection", {})
-		money = data.get("money", 5000)  # Changed default to 5000
+		money = data.get("money", 10000)  # Changed default to 10000
+		souls = data.get("souls", 0)
 		last_connection = data.get("last_connection", Time.get_unix_time_from_system())
 		deck_names = data.get("deck_names", {0: "Out of deck"})
 		available_sets = data.get("available_sets", {})
@@ -332,7 +351,8 @@ func load_data():
 		unlock = data.get("unlock", 0)  # Load the unlock variable
 	else:
 		collection = {}
-		money = 5000
+		money = 10000
+		souls = 0
 		last_connection = Time.get_unix_time_from_system()
 		deck_names = {0: "Out of deck"}
 		available_sets = {}
@@ -424,7 +444,8 @@ func open_print(set_id: int):
 func reset_game():
 	# Clear all player data
 	collection = {}
-	money = 5000  # Changed reset money to 5000
+	money = 10000  # Changed reset money to 10000
+	souls = 0
 	last_connection = Time.get_unix_time_from_system()
 	unlock = 0
 

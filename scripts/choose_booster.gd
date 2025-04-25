@@ -81,3 +81,14 @@ func _on_button_open_booster_pressed() -> void:
 		$NotMoney.visible = true
 		await get_tree().create_timer(1.0).timeout
 		$NotMoney.visible = false
+
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_left"):
+		_on_button_left_pressed()
+	elif event.is_action_pressed("ui_right"):
+		_on_button_right_pressed()
+	elif event.is_action_pressed("ui_cancel"):
+		_on_button_home_pressed()
+	elif event.is_action_pressed("ui_accept"):
+		_on_button_open_booster_pressed()

@@ -62,6 +62,7 @@ func _ready() -> void:
 		Global.unlock = 1
 		Global.save_data()
 
+
 func _on_Timer_timeout() -> void:
 	Global.update_money_by_time()
 	update_money_label()
@@ -173,7 +174,9 @@ func _unlock() -> void:
 	if total_cards >= 500 and Global.unlock < 9:
 		Global.unlock += 1
 		_enarrator("You have unlocked Protecting cards and new set!")
-
+	if total_cards >= 600 and Global.unlock < 10:
+		Global.unlock += 1
+		_enarrator("You have unlocked Sacrifice!")
 	#Unlocked
 	if Global.unlock < 1:
 		$VBoxContainer/ButtonCollection.disabled = true
@@ -193,6 +196,9 @@ func _unlock() -> void:
 	if Global.unlock < 7:
 		$VBoxContainer2/ButtonDuels.disabled = true
 		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
+	if Global.unlock < 10:
+		$VBoxContainer2/ButtonSacrifice.disabled = true
+		$VBoxContainer2/ButtonSacrifice.text = "Sacrifice (L)"
 
 func get_total_card_count() -> int:
 	var total = 0
@@ -204,3 +210,7 @@ func get_total_card_count() -> int:
 			else:
 				total += 1
 	return total
+
+
+func _on_button_sacrifice_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/sacrifice.tscn")

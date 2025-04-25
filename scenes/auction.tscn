@@ -116,10 +116,10 @@ autowrap_mode = 3
 
 [node name="ButtonHome" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1571.0
-offset_top = 858.0
-offset_right = 1702.0
-offset_bottom = 981.251
+offset_left = 1288.0
+offset_top = 869.0
+offset_right = 1419.0
+offset_bottom = 992.251
 size_flags_horizontal = 3
 theme = ExtResource("5_xi5ty")
 theme_override_fonts/font = ExtResource("4_8gxxa")
@@ -128,12 +128,14 @@ text = "x"
 
 [node name="Bid" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1014.0
+offset_left = 845.0
 offset_top = 679.0
-offset_right = 1337.32
+offset_right = 1337.0
 offset_bottom = 812.251
 size_flags_horizontal = 3
 theme = ExtResource("6_xi5ty")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_8gxxa")
 theme_override_font_sizes/font_size = 92
 text = "Bid +10%"
@@ -142,10 +144,12 @@ text = "Bid +10%"
 layout_mode = 0
 offset_left = 1366.0
 offset_top = 679.0
-offset_right = 1701.32
+offset_right = 1862.0
 offset_bottom = 812.251
 size_flags_horizontal = 3
 theme = ExtResource("6_xi5ty")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_8gxxa")
 theme_override_font_sizes/font_size = 92
 text = "Bid +20%"

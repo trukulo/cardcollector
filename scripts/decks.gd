@@ -2,10 +2,13 @@ extends Control
 
 const CARDS_PER_PAGE = 10
 
-enum SortMode { NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NAME_UP, NAME_DOWN, NUMBER_UP, NUMBER_DOWN }
+enum SortMode {
+	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NAME_UP, NAME_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN  # Add these new sort modes
+}
 var sort_modes = [
 	SortMode.NONE, SortMode.PRICE_UP, SortMode.PRICE_DOWN, SortMode.RARITY_UP, SortMode.RARITY_DOWN,
-	SortMode.NAME_UP, SortMode.NAME_DOWN, SortMode.NUMBER_UP, SortMode.NUMBER_DOWN
+	SortMode.NAME_UP, SortMode.NAME_DOWN, SortMode.NUMBER_UP, SortMode.NUMBER_DOWN,
+	SortMode.GRADE_UP, SortMode.GRADE_DOWN  # Add the new sort modes
 ]
 var sort_mode: int = SortMode.NONE
 var rarity_order = {"D": 0, "C": 1, "B": 2, "A": 3, "S": 4, "X": 5}
@@ -21,7 +24,6 @@ var card_node_paths = [
 	"VBoxContainer/HBoxContainer2/Card1", "VBoxContainer/HBoxContainer2/Card2", "VBoxContainer/HBoxContainer2/Card3",
 	"VBoxContainer/HBoxContainer2/Card4", "VBoxContainer/HBoxContainer2/Card5"
 ]
-var showing_duplicates_only := false
 
 # To remember which card is being shown in FullCard for selling
 var fullcard_id_set: Variant = null
@@ -32,6 +34,16 @@ var pending_sell_id_set: Variant = null
 var pending_sell_effect: String = ""
 var confirm_dialog: ConfirmationDialog = null
 
+var full_card_original_position: Vector2
+var full_card_original_scale: Vector2
+var full_card_original_rotation: float
+
+var prev_page := current_page
+var current_fullcard_index: int = -1
+
+enum FilterMode { DUPLICATES, PROTECTED, ALL }
+var current_filter_mode = FilterMode.DUPLICATES
+
 func _ready():
 	confirm_dialog = ConfirmationDialog.new()
 	confirm_dialog.dialog_text = "Are you sure you want to sell this card?"
@@ -40,6 +52,7 @@ func _ready():
 	confirm_dialog.connect("confirmed", Callable(self, "_on_confirm_sell"))
 	add_child(confirm_dialog)
 	Global.load_data()
+	$ButtonDupe.text = "Dupes"  # Add this line to set initial text
 	set_ids = [0] + Global.set_editions.keys()
 	set_ids.sort()
 	current_set = 0
@@ -102,6 +115,10 @@ func update_sort_label():
 				label.text = "Number Asc"
 			SortMode.NUMBER_DOWN:
 				label.text = "Number Desc"
+			SortMode.GRADE_UP:
+				label.text = "Grading Asc"
+			SortMode.GRADE_DOWN:
+				label.text = "Grading Desc"
 
 # Sorting button handlers
 func _on_sort_left_pressed():
@@ -111,7 +128,9 @@ func _on_sort_left_pressed():
 	else:
 		sort_mode = sort_modes[-1]
 	update_sort_label()
+	var prev_page = current_page
 	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_sort_right_pressed():
@@ -121,12 +140,16 @@ func _on_sort_right_pressed():
 	else:
 		sort_mode = sort_modes[0]
 	update_sort_label()
+	var prev_page = current_page
 	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 # Sorting implementation
 func sort_card_keys():
 	match sort_mode:
+		SortMode.NONE:
+			card_keys.reverse()
 		SortMode.PRICE_UP:
 			card_keys.sort_custom(Callable(self, "_sort_by_price_asc"))
 		SortMode.PRICE_DOWN:
@@ -143,21 +166,37 @@ func sort_card_keys():
 			card_keys.sort_custom(Callable(self, "_sort_by_number_asc"))
 		SortMode.NUMBER_DOWN:
 			card_keys.sort_custom(Callable(self, "_sort_by_number_desc"))
+		SortMode.GRADE_UP:
+			card_keys.sort_custom(Callable(self, "_sort_by_grade_asc"))
+		SortMode.GRADE_DOWN:
+			card_keys.sort_custom(Callable(self, "_sort_by_grade_desc"))
 
 # Sorting comparison functions
 func _sort_by_price_asc(a, b):
 	var price_a = _get_full_card_price(a)
 	var price_b = _get_full_card_price(b)
-	if price_a < price_b:
-		return true
-	return false
+	if price_a == price_b:
+		var set_a = a["card_data"].get("set", 0)
+		var set_b = b["card_data"].get("set", 0)
+		if set_a == set_b:
+			var num_a = a["card_data"].get("id", 0)
+			var num_b = b["card_data"].get("id", 0)
+			return num_a < num_b
+		return set_a < set_b
+	return price_a < price_b
 
 func _sort_by_price_desc(a, b):
 	var price_a = _get_full_card_price(a)
 	var price_b = _get_full_card_price(b)
-	if price_a > price_b:
-		return true
-	return false
+	if price_a == price_b:
+		var set_a = a["card_data"].get("set", 0)
+		var set_b = b["card_data"].get("set", 0)
+		if set_a == set_b:
+			var num_a = a["card_data"].get("id", 0)
+			var num_b = b["card_data"].get("id", 0)
+			return num_a > num_b
+		return set_a > set_b
+	return price_a > price_b
 
 func _sort_by_rarity_asc(a, b):
 	var rarity_a = a["card_data"].get("rarity", "D")
@@ -204,6 +243,20 @@ func _sort_by_number_desc(a, b):
 	if num_a > num_b:
 		return true
 	return false
+
+func _sort_by_grade_asc(a, b):
+	var grade_a = a["grading"]
+	var grade_b = b["grading"]
+	if grade_a == grade_b:
+		return _sort_by_number_asc(a, b)  # Secondary sort by card number
+	return grade_a < grade_b
+
+func _sort_by_grade_desc(a, b):
+	var grade_a = a["grading"]
+	var grade_b = b["grading"]
+	if grade_a == grade_b:
+		return _sort_by_number_desc(a, b)  # Secondary sort by card number
+	return grade_a > grade_b
 
 # Helper function to calculate the full price with all modifiers
 func _get_full_card_price(card_entry):
@@ -252,59 +305,36 @@ func update_card_keys():
 
 		var cards_array = entry.get("cards", [])
 		var total_owned = cards_array.size()
-		var is_duplicate = total_owned > 1
 
-		# Only show cards with more than one instance in duplicates-only mode
-		if showing_duplicates_only:
-			if not is_duplicate:
+		for i in range(cards_array.size()):
+			var card_instance = cards_array[i]
+			var protection = card_instance.get("protection", 0)
+
+			# Determine if the card should be added based on the current filter
+			var add_card = false
+			match current_filter_mode:
+				FilterMode.DUPLICATES:
+					add_card = (total_owned > 1)  # Show all instances of duplicated cards
+				FilterMode.PROTECTED:
+					add_card = (protection == 1)  # Show only protected cards
+				FilterMode.ALL:
+					add_card = true  # Show all cards
+
+			if not add_card:
 				continue
-			# Add ALL instances of duplicated cards
-			for i in range(cards_array.size()):
-				var card_instance = cards_array[i]
-				var protection = 0
-				if card_instance.has("protection"):
-					protection = card_instance["protection"]
-				elif entry.has("protection"):
-					protection = entry["protection"]
-				elif card_data.has("protection"):
-					protection = card_data["protection"]
-				else:
-					protection = 0
 
-				card_keys.append({
-					"id_set": id_set,
-					"effect": card_instance.get("effect", ""),
-					"grading": card_instance.get("grading", 8),
-					"protection": protection,
-					"card_data": card_data,
-					"card_instance_index": i
-				})
-		else:
-			# Show all cards (regardless of duplicates)
-			for i in range(cards_array.size()):
-				var card_instance = cards_array[i]
-				var protection = 0
-				if card_instance.has("protection"):
-					protection = card_instance["protection"]
-				elif entry.has("protection"):
-					protection = entry["protection"]
-				elif card_data.has("protection"):
-					protection = card_data["protection"]
-				else:
-					protection = 0
-
-				card_keys.append({
-					"id_set": id_set,
-					"effect": card_instance.get("effect", ""),
-					"grading": card_instance.get("grading", 8),
-					"protection": protection,
-					"card_data": card_data,
-					"card_instance_index": i
-				})
+			# Add the card to the list
+			card_keys.append({
+				"id_set": id_set,
+				"effect": card_instance.get("effect", ""),
+				"grading": card_instance.get("grading", 8),
+				"protection": protection,
+				"card_data": card_data,
+				"card_instance_index": i
+			})
 
 	# Apply sorting after building the array
-	if sort_mode != SortMode.NONE:
-		sort_card_keys()
+	sort_card_keys()
 
 	total_pages = int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) if card_keys.size() > 0 else 1
 	current_page = 0
@@ -383,7 +413,7 @@ func _on_card_button_pressed(card_index):
 	var start_index = current_page * CARDS_PER_PAGE
 	if card_index >= 0 and (start_index + card_index) < card_keys.size():
 		var card_entry = card_keys[start_index + card_index]
-		var card_node = get_node(card_node_paths[card_index]) if has_node(card_node_paths[card_index]) else null
+		current_fullcard_index = start_index + card_index
 		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
 
 func show_full_card(id_set, effect = "", card_instance_index = -1):
@@ -422,6 +452,13 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 					fullcard_card_instance = card_instance
 					print("DEBUG: Found card by effect '%s' with grading %d, protection %d" % [effect, grading, protection])
 					break
+
+	# Update the protect button text based on current protection status
+	if has_node("ButtonProtect"):
+		if protection == 1:
+			get_node("ButtonProtect").text = "UNPROTECT"
+		else:
+			get_node("ButtonProtect").text = "PROTECT"
 
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
@@ -471,6 +508,9 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 		# Show and enable the protect button
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = true
+		# Show and enable the sacrifice button
+		if has_node("ButtonSacrifice"):
+			get_node("ButtonSacrifice").visible = true
 
 	# 2. Update the top-level Price label in the scene
 	if card_data and has_node("Price"):
@@ -515,6 +555,8 @@ func _on_full_card_button_pressed():
 		get_node("ButtonSell").visible = false
 	if has_node("ButtonProtect"):
 		get_node("ButtonProtect").visible = false
+	if has_node("ButtonSacrifice"):
+		get_node("ButtonSacrifice").visible = false
 
 func _on_button_sell_pressed() -> void:
 	pending_sell_id_set = fullcard_id_set
@@ -537,15 +579,20 @@ func _on_confirm_sell():
 	var cards_array = entry.get("cards", [])
 	var found_card_index = -1
 
-	# Find the specific card with matching effect
+	# Retrieve grading and protection from the full card instance
+	var grading = fullcard_card_instance.get("grading", 8) if fullcard_card_instance else 8
+	var protection = fullcard_card_instance.get("protection", 0) if fullcard_card_instance else 0
+
+	# Find the specific card with matching effect, grading, and protection
 	for i in range(cards_array.size()):
-		if cards_array[i].get("effect", "") == effect:
+		var card = cards_array[i]
+		if card.get("effect", "") == effect and card.get("grading", 8) == grading and card.get("protection", 0) == protection:
 			found_card_index = i
 			break
 
 	if found_card_index >= 0:
 		# Get the price before removing
-		var price = get_card_price(id_set, effect, cards_array[found_card_index].get("grading", 8))
+		var price = get_card_price(id_set, effect, grading)
 
 		# Remove the specific card instance
 		cards_array.remove_at(found_card_index)
@@ -560,7 +607,9 @@ func _on_confirm_sell():
 			print("DEBUG: Sold card for ¥%d, new money: %s" % [price, str(Global.money)])
 
 		Global.save_data()
+		var prev_page = current_page
 		update_card_keys()
+		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 		populate_cards()
 
 		# Hide FullCard and buttons after selling
@@ -572,6 +621,8 @@ func _on_confirm_sell():
 			get_node("ButtonSell").visible = false
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = false
+		if has_node("ButtonSacrifice"):
+			get_node("ButtonSacrifice").visible = false
 	else:
 		print("ERROR: Could not find specific card to sell")
 		$VBoxContainer.visible = true
@@ -582,16 +633,38 @@ func _on_confirm_sell():
 			get_node("ButtonSell").visible = false
 		if has_node("ButtonProtect"):
 			get_node("ButtonProtect").visible = false
+		if has_node("ButtonSacrifice"):
+			get_node("ButtonSacrifice").visible = false
 
 func _on_button_left_pressed():
-	if current_page > 0:
-		current_page -= 1
-		populate_cards()
+	if has_node("FullCard") and get_node("FullCard").visible:
+		# Fullcard navigation
+		if current_fullcard_index > 0:
+			current_fullcard_index -= 1
+		else:
+			current_fullcard_index = card_keys.size() - 1  # wrap around
+		var card_entry = card_keys[current_fullcard_index]
+		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
+	else:
+		# Grid navigation
+		if current_page > 0:
+			current_page -= 1
+			populate_cards()
 
 func _on_button_right_pressed():
-	if current_page < total_pages - 1:
-		current_page += 1
-		populate_cards()
+	if has_node("FullCard") and get_node("FullCard").visible:
+		# Fullcard navigation
+		if current_fullcard_index < card_keys.size() - 1:
+			current_fullcard_index += 1
+		else:
+			current_fullcard_index = 0  # wrap around
+		var card_entry = card_keys[current_fullcard_index]
+		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
+	else:
+		# Grid navigation
+		if current_page < total_pages - 1:
+			current_page += 1
+			populate_cards()
 
 func _on_button_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
@@ -603,7 +676,9 @@ func _on_set_left_pressed():
 	else:
 		current_set = set_ids[-1]  # Wrap around to last
 	update_set_label()
+	var prev_page = current_page
 	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_set_right_pressed():
@@ -613,20 +688,29 @@ func _on_set_right_pressed():
 	else:
 		current_set = set_ids[0]  # Wrap around to first (all)
 	update_set_label()
+	var prev_page = current_page
 	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_button_dupe_pressed():
-	showing_duplicates_only = !showing_duplicates_only
+	# Cycle to the next filter mode
+	current_filter_mode = (current_filter_mode + 1) % 3
+
+	# Update the button text based on the current mode
+	match current_filter_mode:
+		FilterMode.DUPLICATES:
+			$ButtonDupe.text = "Duplicates"
+		FilterMode.PROTECTED:
+			$ButtonDupe.text = "Protected"
+		FilterMode.ALL:
+			$ButtonDupe.text = "All"
+
+	# Refresh the displayed cards
+	var prev_page = current_page
 	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
-	# Update button text
-	if has_node("ButtonDupe"):
-		var btn = get_node("ButtonDupe")
-		if showing_duplicates_only:
-			btn.text = "Show All"
-		else:
-			btn.text = "Duplicates Only"
 
 func _on_button_protect_pressed() -> void:
 	# Ensure we have the current card selected
@@ -634,15 +718,67 @@ func _on_button_protect_pressed() -> void:
 		print("ERROR: No card selected for protection!")
 		return
 
-	var dialog = ConfirmationDialog.new()
-	dialog.dialog_text = "Protecting will cost ¥100.\nWhen you protect a card, it won't be used in duels.\nDo you want to continue?"
-	add_child(dialog)
+	# Check if the card is already protected
+	var is_protected = false
+	if fullcard_card_instance != null:
+		is_protected = fullcard_card_instance.get("protection", 0) == 1
+	else:
+		# Find the card instance by effect if we don't have a direct reference
+		var entry = Global.collection.get(fullcard_id_set, {})
+		var cards_array = entry.get("cards", [])
+		for card in cards_array:
+			if card.get("effect", "") == fullcard_effect:
+				is_protected = card.get("protection", 0) == 1
+				break
 
-	dialog.get_ok_button().text = "Yes"
-	dialog.get_cancel_button().text = "No"
+	if is_protected:
+		# Unprotect the card (with confirmation dialog)
+		var dialog = ConfirmationDialog.new()
+		dialog.dialog_text = "Are you sure you want to remove protection from this card?\nThe card will be available for duels again."
+		add_child(dialog)
 
-	dialog.popup_centered()
-	dialog.connect("confirmed", Callable(self, "_on_confirm_protect_card"))
+		dialog.get_ok_button().text = "Yes"
+		dialog.get_cancel_button().text = "No"
+
+		# Make sure we remove any previous connections to avoid duplicates
+		if dialog.is_connected("confirmed", Callable(self, "_on_confirm_unprotect_card")):
+			dialog.disconnect("confirmed", Callable(self, "_on_confirm_unprotect_card"))
+
+		# Connect the signal to our handler
+		dialog.connect("confirmed", Callable(self, "_on_confirm_unprotect_card"))
+		dialog.popup_centered()
+
+		# Connect signals to clean up the dialog after it's closed
+		if not dialog.is_connected("close_requested", Callable(self, "_cleanup_dialog")):
+			dialog.connect("close_requested", Callable(self, "_cleanup_dialog").bind(dialog))
+		if not dialog.is_connected("canceled", Callable(self, "_cleanup_dialog")):
+			dialog.connect("canceled", Callable(self, "_cleanup_dialog").bind(dialog))
+	else:
+		# Protect the card (with confirmation dialog and cost)
+		var dialog = ConfirmationDialog.new()
+		dialog.dialog_text = "Protecting will cost ¥100.\nWhen you protect a card, it won't be used in duels.\nDo you want to continue?"
+		add_child(dialog)
+
+		dialog.get_ok_button().text = "Yes"
+		dialog.get_cancel_button().text = "No"
+
+		# Make sure we remove any previous connections to avoid duplicates
+		if dialog.is_connected("confirmed", Callable(self, "_on_confirm_protect_card")):
+			dialog.disconnect("confirmed", Callable(self, "_on_confirm_protect_card"))
+
+		# Connect the signal to our handler
+		dialog.connect("confirmed", Callable(self, "_on_confirm_protect_card"))
+		dialog.popup_centered()
+
+		# Connect signals to clean up the dialog after it's closed
+		if not dialog.is_connected("close_requested", Callable(self, "_cleanup_dialog")):
+			dialog.connect("close_requested", Callable(self, "_cleanup_dialog").bind(dialog))
+		if not dialog.is_connected("canceled", Callable(self, "_cleanup_dialog")):
+			dialog.connect("canceled", Callable(self, "_cleanup_dialog").bind(dialog))
+
+func _cleanup_dialog(dialog):
+	if is_instance_valid(dialog):
+		dialog.queue_free()
 
 func _on_confirm_protect_card() -> void:
 	if Global.money < 100:
@@ -683,7 +819,9 @@ func _on_confirm_protect_card() -> void:
 
 	if card_found:
 		Global.save_data()
+		var prev_page = current_page
 		update_card_keys()
+		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 		populate_cards()
 		var notif = AcceptDialog.new()
 		notif.dialog_text = "This card is now protected!"
@@ -694,6 +832,49 @@ func _on_confirm_protect_card() -> void:
 	else:
 		print("ERROR: Failed to find specific card instance for protection")
 
+func _on_confirm_unprotect_card() -> void:
+	if fullcard_id_set == null or not Global.collection.has(fullcard_id_set):
+		print("ERROR: Invalid card selected for unprotection")
+		return
+
+	var entry = Global.collection[fullcard_id_set]
+	var cards_array = entry.get("cards", [])
+	var card_found = false
+	var unprotected_index = -1
+
+	# Try to find by direct reference
+	if fullcard_card_instance != null:
+		for i in range(cards_array.size()):
+			if cards_array[i] == fullcard_card_instance:
+				cards_array[i]["protection"] = 0
+				card_found = true
+				unprotected_index = i
+				break
+
+	# Fallback: find by effect
+	if not card_found:
+		for i in range(cards_array.size()):
+			if cards_array[i].get("effect", "") == fullcard_effect:
+				cards_array[i]["protection"] = 0
+				card_found = true
+				unprotected_index = i
+				break
+
+	if card_found:
+		Global.save_data()
+		var prev_page = current_page
+		update_card_keys()
+		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
+		populate_cards()
+		var notif = AcceptDialog.new()
+		notif.dialog_text = "This card is no longer protected!"
+		add_child(notif)
+		notif.popup_centered()
+		# Refresh FullCard with the correct instance index!
+		show_full_card(fullcard_id_set, fullcard_effect, unprotected_index)
+	else:
+		print("ERROR: Failed to find specific card instance for unprotection")
+
 func _unlock() -> void:
 	if Global.unlock < 8:
 		$ButtonSell.disabled = true
@@ -701,3 +882,108 @@ func _unlock() -> void:
 	if Global.unlock < 9:
 		$ButtonProtect.disabled = true
 		$ButtonProtect.text = "Protect (L)"
+	if Global.unlock < 10:
+		$ButtonSacrifice.disabled = true
+		$ButtonSacrifice.text = "Sacrifice (L)"
+
+func _on_button_sacrifice_pressed() -> void:
+	var full_card = get_node("FullCard")
+	full_card_original_position = full_card.position
+	full_card_original_scale = full_card.scale
+	full_card_original_rotation = full_card.rotation_degrees
+	# After removing the card, before saving data
+	var rarity = "D"
+	var effect = ""
+	if Global.cards.has(fullcard_id_set):
+		rarity = Global.cards[fullcard_id_set].get("rarity", "D")
+	if Global.collection.has(fullcard_id_set):
+		effect = Global.collection[fullcard_id_set].get("effect", "")
+	var souls_gained = 1
+	match rarity:
+		"D":
+			souls_gained = 1
+		"C":
+			souls_gained = 2
+		"B":
+			souls_gained = 5
+		"A":
+			souls_gained = 10
+		"S":
+			souls_gained = 15
+		"X":
+			souls_gained = 20
+
+
+	Global.souls += souls_gained
+	if fullcard_id_set == null:
+		print("ERROR: No card selected for sacrifice!")
+		return
+	if not Global.collection.has(fullcard_id_set):
+		print("ERROR: Card not found in collection for sacrifice!")
+		return
+
+	# Remove only the specific card instance
+	var entry = Global.collection[fullcard_id_set]
+	var cards_array = entry.get("cards", [])
+	var found_card_index = -1
+
+	for i in range(cards_array.size()):
+		if cards_array[i].get("effect", "") == fullcard_effect:
+			found_card_index = i
+			break
+
+	match fullcard_effect:
+		"Silver":
+			souls_gained += 1
+		"Gold":
+			souls_gained += 2
+		"Holo":
+			souls_gained += 3
+		"Full Art":
+			souls_gained += 5
+		"Full Silver":
+			souls_gained += 7
+		"Full Gold":
+			souls_gained += 8
+		"Full Holo":
+			souls_gained += 10
+	Global.souls += souls_gained
+
+	if found_card_index != -1:
+		cards_array.remove_at(found_card_index)
+		if cards_array.size() == 0:
+			Global.collection.erase(fullcard_id_set)
+	else:
+		print("ERROR: Could not find specific card to sacrifice!")
+		return
+
+	Global.save_data()
+	var prev_page = current_page
+	update_card_keys()
+	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
+	populate_cards()
+	var target_y = -full_card.size.y
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(full_card, "position:y", target_y, 1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(full_card, "rotation_degrees", 720, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(full_card, "scale", Vector2(0.1, 0.1), 1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.finished.connect(_on_full_card_animation_finished.bind(full_card))
+
+func _on_full_card_animation_finished(full_card):
+	full_card.position = full_card_original_position
+	full_card.scale = full_card_original_scale
+	full_card.rotation_degrees = full_card_original_rotation
+	full_card.visible = false
+	_on_full_card_button_pressed()
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_left"):
+		_on_button_left_pressed()
+		# Optionally, accept the event to prevent further propagation:
+		# get_tree().set_input_as_handled()
+	elif event.is_action_pressed("ui_right"):
+		_on_button_right_pressed()
+		# get_tree().set_input_as_handled()
+	elif event.is_action_pressed("ui_cancel"):
+		_on_button_home_pressed()

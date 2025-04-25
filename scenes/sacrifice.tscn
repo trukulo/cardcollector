@@ -1,0 +1,186 @@
+[gd_scene load_steps=9 format=3 uid="uid://ehntt6d3rnwa"]
+
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_7l6qq"]
+[ext_resource type="Script" uid="uid://urncfyh30wbg" path="res://scripts/sacrifice.gd" id="1_b8skw"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="2_b8skw"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="3_1ybnd"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="5_1ybnd"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="5_wo5ah"]
+[ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="6_2h7ws"]
+[ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://gui/FlatUI4/kenneyUI-blue.tres" id="7_gvgrn"]
+
+[node name="Sacrifice" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b8skw")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(960, 565)
+texture = ExtResource("1_7l6qq")
+
+[node name="Souls" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -380.0
+offset_top = 16.0
+offset_right = 380.0
+offset_bottom = 171.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 128
+text = "Souls: XXXXXX"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card" parent="." instance=ExtResource("5_1ybnd")]
+layout_mode = 1
+offset_left = 569.0
+offset_top = 185.0
+offset_right = -551.0
+offset_bottom = 201.0
+scale = Vector2(0.6, 0.6)
+
+[node name="Menu" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 56.0
+offset_top = -167.0
+offset_right = -47.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Souls3" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_wo5ah")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "3"
+
+[node name="Souls7" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_2h7ws")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "7"
+
+[node name="Souls13" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_gvgrn")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "13"
+
+[node name="Souls23" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_2h7ws")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "23"
+
+[node name="Souls31" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_wo5ah")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "31"
+
+[node name="ButtonHome" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_1ybnd")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 72
+text = "X"
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 1294.0
+offset_top = 260.0
+offset_right = 1703.0
+offset_bottom = 751.0
+theme = ExtResource("6_2h7ws")
+
+[node name="Price" type="Label" parent="Panel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NotMoney" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -523.0
+offset_top = -89.5
+offset_right = 523.0
+offset_bottom = 89.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_2h7ws")
+
+[node name="Label" type="Label" parent="NotMoney"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_b8skw")
+theme_override_font_sizes/font_size = 136
+text = "NOT ENOUGH SOULS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Menu/Souls3" to="." method="_on_souls_3_pressed"]
+[connection signal="pressed" from="Menu/Souls7" to="." method="_on_souls_7_pressed"]
+[connection signal="pressed" from="Menu/Souls13" to="." method="_on_souls_13_pressed"]
+[connection signal="pressed" from="Menu/Souls23" to="." method="_on_souls_23_pressed"]
+[connection signal="pressed" from="Menu/Souls31" to="." method="_on_souls_31_pressed"]
+[connection signal="pressed" from="Menu/ButtonHome" to="." method="_on_button_home_pressed"]

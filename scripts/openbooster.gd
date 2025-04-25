@@ -3,12 +3,12 @@ extends Node
 var booster_pack: Array = []
 var rarity_order = {"D": 0, "C": 1, "B": 2, "A": 3, "S": 4, "X": 5}
 var effect_probabilities = {
-	"Full Art": 10.0,  # 10%
-	"Silver": 5.0,     # 5%
-	"Gold": 2.0,       # 2%
-	"Holo": 0.5,       # 0.5%
-	"Full Silver": 5.0,  # 5%
-	"Full Gold": 2.0,    # 2%
+	"Silver": 3.5,     # 5%
+	"Gold": 3.0,       # 2%
+	"Holo": 2.5,       # 0.5%
+	"Full Art": 2.0,  # 10%
+	"Full Silver": 1.5,  # 5%
+	"Full Gold": 1.0,    # 2%
 	"Full Holo": 0.5     # 0.5%
 }
 var current_card_displayed = null
@@ -20,9 +20,9 @@ var revealed_cards := []
 func _ready():
 	Global.load_data()
 	revealed_cards = []
-	if Global.unlock < 6:
+	if Global.unlock < 5:
 		$ButtonReveal.disabled = true
-		$ButtonReveal.text = "Reveal 🔒"
+		$ButtonReveal.text = "Reveal (L)"
 	current_set_id = Global.selected_set
 	generate_booster_pack(current_set_id)
 	for i in range(booster_pack.size()):
@@ -70,14 +70,16 @@ func generate_booster_pack(set_id: int) -> void:
 
 	# 5. Prepare rare pool (B, A, S, X) with weights
 	var rare_pool = []
+	for card in cards_by_rarity["C"]:
+		rare_pool.append({"card": card, "weight": 60})
 	for card in cards_by_rarity["B"]:
-		rare_pool.append({"card": card, "weight": 50})
+		rare_pool.append({"card": card, "weight": 40})
 	for card in cards_by_rarity["A"]:
-		rare_pool.append({"card": card, "weight": 30})
+		rare_pool.append({"card": card, "weight": 20})
 	for card in cards_by_rarity["S"]:
-		rare_pool.append({"card": card, "weight": 15})
+		rare_pool.append({"card": card, "weight": 10})
 	for card in cards_by_rarity["X"]:
-		rare_pool.append({"card": card, "weight": 5})
+		rare_pool.append({"card": card, "weight": 1})
 	rare_pool.shuffle()
 
 	# 6. Add 1 rare card (weighted random)
@@ -343,15 +345,15 @@ func _on_button_5_pressed():
 		show_full_card(4)
 
 func _on_button_reveal_pressed() -> void:
-	reveal_card(0)
+	_on_button_1_pressed()
 	$ButtonReveal.disabled = true
-	reveal_card(1)
+	_on_button_2_pressed()
 	$ButtonReveal.disabled = true
-	reveal_card(2)
+	_on_button_3_pressed()
 	$ButtonReveal.disabled = true
-	reveal_card(3)
+	_on_button_4_pressed()
 	$ButtonReveal.disabled = true
-	reveal_card(4)
+	_on_button_5_pressed()
 	$ButtonReveal.disabled = true
 	_check_all_revealed()
 
@@ -397,4 +399,88 @@ func _check_all_revealed():
 		if not revealed:
 			all_revealed = false
 			break
+
+	if all_revealed:
+		# Change button from "Reveal" to "Again (¥500)"
+		$ButtonReveal.disabled = false
+		$ButtonReveal.text = "Again (¥500)"
+		# Change button's functionality to open new pack instead of revealing cards
+		if $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_reveal_pressed")):
+			$ButtonReveal.disconnect("pressed", Callable(self, "_on_button_reveal_pressed"))
+		if not $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_again_pressed")):
+			$ButtonReveal.connect("pressed", Callable(self, "_on_button_again_pressed"))
+
 	$ButtonOk.disabled = not all_revealed
+
+func _on_button_again_pressed() -> void:
+	# Check if player has enough money
+	if Global.money >= 500:
+		# Deduct money
+		Global.money -= 500
+		Global.save_data()
+
+		# Reset card state
+		revealed_cards = []
+		for i in range(5):
+			revealed_cards.append(false)
+
+		# Generate new booster pack
+		generate_booster_pack(current_set_id)
+
+		# Reset UI
+		initialize_face_down_cards()
+				# Reset card effects when showing backcard
+		if has_node("CardContainer"):
+			var card_container = get_node("CardContainer")
+			for i in range(5):
+				var card_node_name = "Card" + str(i + 1)
+				if card_container.has_node(card_node_name):
+					var card_node = card_container.get_node(card_node_name)
+					if card_node.has_method("set_effect"):
+						card_node.set_effect("")  # Remove effect by setting empty string
+					elif card_node.has_node("Panel") and card_node.get_node("Panel").has_method("set_effect"):
+						card_node.get_node("Panel").set_effect("")  # Remove effect from Panel if method exists there
+					if card_node.has_node("Panel/Info/Overlay"):
+						var overlay = card_node.get_node("Panel/Info/Overlay")
+						overlay.material = null
+					card_node.get_node("Panel/Picture").position.y = 0
+
+		# Reset button
+		$ButtonReveal.text = "Reveal"
+		if $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_again_pressed")):
+			$ButtonReveal.disconnect("pressed", Callable(self, "_on_button_again_pressed"))
+		if not $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_reveal_pressed")):
+			$ButtonReveal.connect("pressed", Callable(self, "_on_button_reveal_pressed"))
+
+		# Hide all price labels
+		for i in range(5):
+			var price_label_name = "Price" + str(i + 1)
+			if has_node(price_label_name):
+				get_node(price_label_name).visible = false
+
+		# Disable Ok button until all cards are revealed again
+		$ButtonOk.disabled = true
+	else:
+		$NotMoney.visible = true
+		await get_tree().create_timer(1).timeout
+		$NotMoney.visible = false
+
+func _on_button_1_gui_input(event: InputEvent) -> void:
+	pass # Replace with function body.
+
+func _on_button_2_gui_input(event: InputEvent) -> void:
+	pass # Replace with function body.
+
+func _on_button_3_gui_input(event: InputEvent) -> void:
+	pass # Replace with function body.
+
+func _on_button_4_gui_input(event: InputEvent) -> void:
+	pass # Replace with function body.
+
+func _on_button_5_gui_input(event: InputEvent) -> void:
+	pass # Replace with function body.
+
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_accept"):
+		if Global.unlock >= 5:
+			_on_button_reveal_pressed()
