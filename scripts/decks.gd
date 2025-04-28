@@ -987,3 +987,10 @@ func _unhandled_input(event):
 		# get_tree().set_input_as_handled()
 	elif event.is_action_pressed("ui_cancel"):
 		_on_button_home_pressed()
+
+func _on_close_filters_pressed():
+	# Add functionality for closing filters here
+	$Filters.visible = false
+
+func _on_button_filters_pressed() -> void:
+	$Filters.visible = true

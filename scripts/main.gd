@@ -43,14 +43,14 @@ func _ready() -> void:
 	reset_dialog.connect("confirmed", _on_reset_confirmed)
 
 	if Global.unlock == 2 or Global.info == false:
-		$VBoxContainer2/ButtonShortDuel.visible = false
+		%ButtonShortDuel.visible = false
 	else:
-		$VBoxContainer2/ButtonShortDuel.visible = true
+		%ButtonShortDuel.visible = true
 
 	if Global.unlock == 3 or Global.info == false:
-		$VBoxContainer2/ButtonDuels.visible = false
+		%ButtonDuels.visible = false
 	else:
-		$VBoxContainer2/ButtonDuels.visible = true
+		%ButtonDuels.visible = true
 
 	if Global.unlock == 0:
 		await _narrator("In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation.")
@@ -84,8 +84,8 @@ func _on_button_reset_pressed() -> void:
 func _on_reset_confirmed() -> void:
 	Global.reset_game()
 	update_money_label()
-	$VBoxContainer2/ButtonDuels.visible = false
-	$VBoxContainer2/ButtonShortDuel.visible = false
+	%ButtonDuels.visible = false
+	%ButtonShortDuel.visible = false
 	# Optionally, you can update UI or notify the player here
 
 func _on_button_decks_pressed() -> void:

@@ -57,6 +57,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot1" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot1"]
@@ -69,6 +70,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot2" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot2"]
@@ -81,6 +83,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot3" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot3"]
@@ -98,6 +101,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot4"]
@@ -110,6 +114,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot5" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot5"]
@@ -122,6 +127,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot6" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot6"]
@@ -139,6 +145,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot7" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot7"]
@@ -151,6 +158,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot8" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot8"]
@@ -163,6 +171,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot9" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot9"]
@@ -180,6 +189,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot10" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot10"]
@@ -192,6 +202,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot11" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot11"]
@@ -204,6 +215,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot12" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot12"]
@@ -221,6 +233,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot13" parent="HBoxContainer/VBoxContainer5" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer5/Slot13"]
@@ -233,6 +246,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot14" parent="HBoxContainer/VBoxContainer5" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer5/Slot14"]
@@ -245,6 +259,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot15" parent="HBoxContainer/VBoxContainer5" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer5/Slot15"]
@@ -262,6 +277,7 @@ theme_override_constants/separation = 32
 alignment = 2
 
 [node name="Slot16" parent="HBoxContainer/VBoxContainer6" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer6/Slot16"]
@@ -274,6 +290,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot17" parent="HBoxContainer/VBoxContainer6" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer6/Slot17"]
@@ -286,6 +303,7 @@ grow_vertical = 2
 flat = true
 
 [node name="Slot18" parent="HBoxContainer/VBoxContainer6" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer6/Slot18"]
