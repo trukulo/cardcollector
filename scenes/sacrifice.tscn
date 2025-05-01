@@ -18,8 +18,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b8skw")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 565)
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
 texture = ExtResource("1_7l6qq")
 
 [node name="Souls" type="Label" parent="."]
@@ -43,11 +43,11 @@ autowrap_mode = 3
 
 [node name="Card" parent="." instance=ExtResource("5_1ybnd")]
 layout_mode = 1
-offset_left = 569.0
-offset_top = 185.0
-offset_right = -551.0
-offset_bottom = 201.0
-scale = Vector2(0.6, 0.6)
+offset_left = 116.0
+offset_top = 175.0
+offset_right = -122.0
+offset_bottom = -643.0
+scale = Vector2(1.2, 1.2)
 
 [node name="Menu" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -125,10 +125,10 @@ text = "X"
 [node name="Panel" type="Panel" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 1294.0
-offset_top = 260.0
-offset_right = 1703.0
-offset_bottom = 751.0
+offset_left = 49.0
+offset_top = 1522.0
+offset_right = 1037.0
+offset_bottom = 1728.0
 theme = ExtResource("6_2h7ws")
 
 [node name="Price" type="Label" parent="Panel"]

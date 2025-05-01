@@ -52,13 +52,17 @@ func _ready() -> void:
 	else:
 		%ButtonDuels.visible = true
 
+
+	$Playtime.text = "Playtime: " + Global.format_playtime()
+
 	if Global.unlock == 0:
 		await _narrator("In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation.")
 		await _narrator("Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born.")
 		await _narrator("Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name.")
 		await _narrator("Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction.")
 		await _narrator("Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds.")
-		await _enarrator("I am not sure what's going on here, I can't see... But I think this is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack.")
+		await _enarrator("This is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack. The type of the booster means the type of cards you will get more frequently.")
+		
 		Global.unlock = 1
 		Global.save_data()
 
@@ -196,6 +200,9 @@ func _unlock() -> void:
 	if Global.unlock < 7:
 		$VBoxContainer2/ButtonDuels.disabled = true
 		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
+	if Global.unlock < 8:
+		$VBoxContainer2/ButtonJunk.disabled = true
+		$VBoxContainer2/ButtonJunk.text = "Junk (L)"  # Updated text for ButtonJunk
 	if Global.unlock < 10:
 		$VBoxContainer2/ButtonSacrifice.disabled = true
 		$VBoxContainer2/ButtonSacrifice.text = "Sacrifice (L)"
@@ -214,3 +221,16 @@ func get_total_card_count() -> int:
 
 func _on_button_sacrifice_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/sacrifice.tscn")
+
+
+func _on_ginme_pressed() -> void:
+	Global.money += 1000
+	update_money_label()
+	Global.save_data()
+
+func _on_button_junk_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/junk.tscn")
+
+
+func _on_button_lab_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/lab.tscn")

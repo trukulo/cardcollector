@@ -26,6 +26,21 @@ var rounds: int = 4
 var woncards: int = 0
 var lostcards: int = 0
 
+# Variable to store the current booster type (Primes, Evens, Odds, Triples, or "")
+var boostertype: String = ""
+
+# Playtime tracking in seconds
+var playtime: int = 0
+var last_playtime_save: int = 0
+
+# Function to set the booster type
+func set_booster_type(type: String) -> void:
+	boostertype = type
+
+# Function to reset the booster type (will default to random Evens or Odds)
+func reset_booster_type() -> void:
+	boostertype = ""
+
 func _ready():
 	if info == false:
 		savegame_name = "user://dataS.save"
@@ -52,6 +67,11 @@ func _ready():
 
 	# Update money based on time
 	update_money_by_time()
+
+	# Initialize playtime tracking variables if they haven't been loaded yet
+	if playtime == 0:
+		playtime = 0
+		last_playtime_save = Time.get_unix_time_from_system()
 
 # --------------------
 # CARD GENERATION
@@ -98,10 +118,10 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 		if dir.current_is_dir() and not folder_name.begins_with("."):
 			folder_names.append(folder_name)
 	dir.list_dir_end()
-	
+
 	# Sort folders numerically
 	folder_names.sort_custom(func(a, b): return a.to_int() < b.to_int())
-	
+
 	var set_index = 1
 	for folder_name in folder_names:
 		# Assign a name to the set
@@ -125,7 +145,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 			var file_name = card_dir.get_next()
 			if file_name == "":
 				break
-			if file_name.ends_with(".import") and file_name != "0.png.import":
+			if file_name.ends_with(".import") and file_name != "0.jpg.import":
 				card_files.append(file_name)
 				total_cards += 1
 		card_dir.list_dir_end()
@@ -153,7 +173,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 			rarities[j] = tmp
 
 		# Sort card files numerically
-		card_files.sort_custom(func(a, b): 
+		card_files.sort_custom(func(a, b):
 			var a_num = a.get_basename().get_file().to_int()
 			var b_num = b.get_basename().get_file().to_int()
 			return a_num < b_num
@@ -318,6 +338,9 @@ func get_effects(id_set: String) -> Dictionary:
 # SAVE AND LOAD
 # --------------------
 func save_data():
+	# Update playtime before saving
+	update_playtime()
+
 	# Save only the player's collection and other relevant data
 	var f = FileAccess.open(savegame_name, FileAccess.WRITE)
 	var data = {
@@ -329,7 +352,9 @@ func save_data():
 		"available_sets": available_sets,
 		"selected_set": selected_set,  # Save the selected set
 		"info": info,  # Save the info variable
-		"unlock": unlock
+		"unlock": unlock,
+		"playtime": playtime,  # Save the playtime
+		"last_playtime_save": last_playtime_save  # Save the last timestamp
 	}
 	f.store_var(data)
 	f.close()
@@ -349,6 +374,8 @@ func load_data():
 		selected_set = data.get("selected_set", 1)  # Cargar el set seleccionado o usar 1 por defecto
 		info = data.get("info", true)  # Load the info variable
 		unlock = data.get("unlock", 0)  # Load the unlock variable
+		playtime = data.get("playtime", 0)  # Load the playtime, default to 0
+		last_playtime_save = data.get("last_playtime_save", Time.get_unix_time_from_system())  # Load the last timestamp
 	else:
 		collection = {}
 		money = 10000
@@ -357,12 +384,15 @@ func load_data():
 		deck_names = {0: "Out of deck"}
 		available_sets = {}
 		selected_set = 1
+		playtime = 0
+		last_playtime_save = Time.get_unix_time_from_system()
 		# Initialize available_sets as in reset_game
 		for set_id in range(1, 101):
 			available_sets[set_id] = true
 		# Optionally, save immediately to create the save file
 		generate_cards_with_seed(42)
 		save_data()
+
 # --------------------
 # PASSIVE INCOME
 # --------------------
@@ -575,3 +605,16 @@ func get_effect_multiplier(effect: String) -> float:
 			return 10.0
 		_:
 			return 1.0
+
+func update_playtime():
+	var current_time = Time.get_unix_time_from_system()
+	var elapsed = current_time - last_playtime_save
+	playtime += elapsed
+	last_playtime_save = current_time
+
+func format_playtime() -> String:
+	var seconds = playtime % 60
+	var minutes = (playtime / 60) % 60
+	var hours = (playtime / 3600)
+
+	return "%02d:%02d" % [hours, minutes]

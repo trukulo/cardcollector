@@ -1,10 +1,10 @@
 extends Control
 
-var selected_cards = []  # Almacena las 18 cartas seleccionadas (9 duplicadas y mezcladas)
+var selected_cards = []  # Almacena las 16 cartas seleccionadas (8 duplicadas y mezcladas)
 var revealed_cards = {}  # Almacena el estado de las cartas reveladas
 var flipped_cards = []  # Almacena las dos cartas giradas actualmente
 var random_set = -1  # Set aleatorio seleccionado
-var attempts = 10  # Intentos iniciales
+var attempts = 8  # Intentos iniciales
 var matched_pairs = 0  # Contador de parejas correctas
 
 func _ready() -> void:
@@ -16,7 +16,7 @@ func _ready() -> void:
 
 	# Mostrar la imagen del set en PicBooster
 	if $PicBooster:
-		$PicBooster.texture = load("res://cards/%d/0.jpg" % random_set)
+		$PicBooster.texture = load("res://cards/%d/1.jpg" % random_set)
 
 	# Mostrar el nombre del set en BoosterTemplate/set.text
 	if $BoosterTemplate/set:
@@ -26,8 +26,8 @@ func _ready() -> void:
 	if $Attempts:
 		$Attempts.text = "Attempts: %d" % attempts
 
-	# Seleccionar 9 cartas aleatorias del set
-	var random_cards = get_random_cards_from_set(random_set, 9)
+	# Seleccionar 8 cartas aleatorias del set
+	var random_cards = get_random_cards_from_set(random_set, 8)
 
 	# Duplicar y mezclar las cartas
 	selected_cards = duplicate_and_shuffle_cards(random_cards)
@@ -61,9 +61,14 @@ func duplicate_and_shuffle_cards(cards: Array) -> Array:
 # Inicializa las cartas en los slots
 func initialize_cards() -> void:
 	for i in range(selected_cards.size()):
-		var container_index = int(i / 3) + 1
-		var card_index = i + 1
-		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index]
+		# Calcular el índice del slot global (1-16)
+		var global_slot_index = i + 1
+		
+		# Determinar en qué VBoxContainer está y qué número de slot es dentro de ese container
+		var container_index = int((global_slot_index - 1) / 4) + 1  # VBoxContainer1 a VBoxContainer4
+		var slot_index = global_slot_index  # Slot1 a Slot16 (numeración continua)
+		
+		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
@@ -97,8 +102,15 @@ func _on_card_pressed(card_index: int) -> void:
 
 	revealed_cards[card_index] = true  # Marcar la carta como revelada
 	var card_data = selected_cards[card_index]
-	var container_index = int(card_index / 3) + 1
-	var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index + 1]
+	
+	# Calcular el índice del slot global (1-16)
+	var global_slot_index = card_index + 1
+		
+	# Determinar en qué VBoxContainer está y qué número de slot es
+	var container_index = int((global_slot_index - 1) / 4) + 1  # VBoxContainer1 a VBoxContainer4
+	var slot_index = global_slot_index  # Slot1 a Slot16 (numeración continua)
+	
+	var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 
 	if has_node(card_node_path):
 		var card_node = get_node(card_node_path)
@@ -187,7 +199,7 @@ func check_flipped_cards() -> void:
 		matched_pairs += 1  # Incrementar el contador de parejas correctas
 
 		# Verificar si todas las parejas están correctas
-		if matched_pairs == 9:
+		if matched_pairs == 8:
 			Global.money += 500  # Recompensa de dinero
 			Global.save_data()
 			if $Win:
@@ -232,9 +244,14 @@ func hide_card(card_node: Node) -> void:
 # Muestra todas las cartas
 func show_all_cards() -> void:
 	for i in range(selected_cards.size()):
-		var container_index = int(i / 3) + 1
-		var card_index = i + 1
-		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index]
+		# Calcular el índice del slot global (1-16)
+		var global_slot_index = i + 1
+		
+		# Determinar en qué VBoxContainer está y qué número de slot es
+		var container_index = int((global_slot_index - 1) / 4) + 1  # VBoxContainer1 a VBoxContainer4
+		var slot_index = global_slot_index  # Slot1 a Slot16 (numeración continua)
+		
+		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
 			var card_data = selected_cards[i]
@@ -243,9 +260,14 @@ func show_all_cards() -> void:
 # Realiza la animación de flip para todas las cartas restantes
 func flip_all_remaining_cards() -> void:
 	for i in range(selected_cards.size()):
-		var container_index = int(i / 3) + 1
-		var card_index = i + 1
-		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, card_index]
+		# Calcular el índice del slot global (1-16)
+		var global_slot_index = i + 1
+		
+		# Determinar en qué VBoxContainer está y qué número de slot es
+		var container_index = int((global_slot_index - 1) / 4) + 1  # VBoxContainer1 a VBoxContainer4
+		var slot_index = global_slot_index  # Slot1 a Slot16 (numeración continua)
+		
+		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
 			if card_node.visible:  # Solo realizar el flip si la carta está visible

@@ -17,16 +17,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gjsic")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 565)
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
 texture = ExtResource("1_2no26")
 
 [node name="Card" parent="." instance=ExtResource("3_gap3f")]
 layout_mode = 1
-offset_left = -3.0
-offset_top = 40.0
-offset_right = -1123.0
-offset_bottom = 56.0
+offset_left = 123.0
+offset_top = 313.0
+offset_right = -157.0
+offset_bottom = -511.0
 scale = Vector2(0.9, 0.9)
 
 [node name="Tempo" type="Label" parent="."]
@@ -36,10 +36,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 216.0
-offset_top = -485.0
-offset_right = 589.0
-offset_bottom = -330.0
+offset_left = -185.0
+offset_top = -844.0
+offset_right = 188.0
+offset_bottom = -689.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -58,17 +58,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -113.0
-offset_top = -306.0
-offset_right = 918.0
-offset_bottom = -151.0
+offset_left = -527.0
+offset_top = 471.0
+offset_right = 504.0
+offset_bottom = 626.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("4_8gxxa")
-theme_override_font_sizes/font_size = 96
+theme_override_font_sizes/font_size = 84
 text = "Market Price:"
 autowrap_mode = 3
 
@@ -79,17 +79,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -113.0
-offset_top = -162.0
-offset_right = 918.0
-offset_bottom = -7.0
+offset_left = -527.0
+offset_top = 615.0
+offset_right = 504.0
+offset_bottom = 770.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("4_8gxxa")
-theme_override_font_sizes/font_size = 96
+theme_override_font_sizes/font_size = 84
 text = "Bid Price:"
 autowrap_mode = 3
 
@@ -100,26 +100,26 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -113.0
-offset_top = -26.0
-offset_right = 918.0
-offset_bottom = 129.0
+offset_left = -527.0
+offset_top = 751.0
+offset_right = 504.0
+offset_bottom = 906.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("4_8gxxa")
-theme_override_font_sizes/font_size = 96
+theme_override_font_sizes/font_size = 84
 text = "Bid Price:"
 autowrap_mode = 3
 
 [node name="ButtonHome" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1288.0
-offset_top = 869.0
-offset_right = 1419.0
-offset_bottom = 992.251
+offset_left = 910.0
+offset_top = 1726.0
+offset_right = 1041.0
+offset_bottom = 1849.25
 size_flags_horizontal = 3
 theme = ExtResource("5_xi5ty")
 theme_override_fonts/font = ExtResource("4_8gxxa")
@@ -128,10 +128,10 @@ text = "x"
 
 [node name="Bid" type="Button" parent="."]
 layout_mode = 0
-offset_left = 845.0
-offset_top = 679.0
-offset_right = 1337.0
-offset_bottom = 812.251
+offset_left = 661.0
+offset_top = 1404.0
+offset_right = 1061.0
+offset_bottom = 1537.25
 size_flags_horizontal = 3
 theme = ExtResource("6_xi5ty")
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -142,10 +142,10 @@ text = "Bid +10%"
 
 [node name="Bid2" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1366.0
-offset_top = 679.0
-offset_right = 1862.0
-offset_bottom = 812.251
+offset_left = 660.0
+offset_top = 1555.0
+offset_right = 1060.0
+offset_bottom = 1688.25
 size_flags_horizontal = 3
 theme = ExtResource("6_xi5ty")
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)

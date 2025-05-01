@@ -1,0 +1,454 @@
+[gd_scene load_steps=9 format=3 uid="uid://c656wt8q4lbp4"]
+
+[ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
+[ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="1_ysxdp"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="3_ki8ix"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="3_mm8m7"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_xnfyq"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="6_si4a3"]
+[ext_resource type="Texture2D" uid="uid://c020rv0pwrqcv" path="res://gui/posible.png" id="7_0nexr"]
+
+[node name="Openbooster" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("1_ysxdp")
+script = ExtResource("1_g08gs")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(504, 956)
+rotation = 1.5708
+texture = ExtResource("3_mm8m7")
+
+[node name="ButtonOk" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -127.251
+offset_right = 408.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_xnfyq")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 72
+disabled = true
+text = "CLOSE"
+
+[node name="ButtonReveal" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -424.0
+offset_top = -127.251
+offset_right = -24.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("6_si4a3")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 72
+text = "REVEAL"
+
+[node name="Collection" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 40.0
+offset_bottom = 128.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 64
+text = "Click cards to open"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 16.0
+offset_right = 2486.0
+offset_bottom = 3832.0
+scale = Vector2(0.42, 0.42)
+
+[node name="CardContainer1" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 760)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Card1" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button1" type="Button" parent="VBoxContainer/CardContainer1/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="VBoxContainer/CardContainer1/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="VBoxContainer/CardContainer1/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Posible" type="Sprite2D" parent="VBoxContainer/CardContainer1"]
+visible = false
+modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(1224.44, 540)
+scale = Vector2(1.98582, 1.69674)
+texture = ExtResource("7_0nexr")
+
+[node name="PriceContainer1" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 200)
+layout_mode = 2
+
+[node name="Price1" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price2" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price3" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CardContainer2" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 760)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Card4" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button4" type="Button" parent="VBoxContainer/CardContainer2/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card5" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button5" type="Button" parent="VBoxContainer/CardContainer2/Card5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card6" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button6" type="Button" parent="VBoxContainer/CardContainer2/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Posible" type="Sprite2D" parent="VBoxContainer/CardContainer2"]
+visible = false
+modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(1224.44, 540)
+scale = Vector2(1.98582, 1.69674)
+texture = ExtResource("7_0nexr")
+
+[node name="PriceContainer2" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 200)
+layout_mode = 2
+
+[node name="Price4" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price5" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price6" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CardContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 760)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Card7" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button7" type="Button" parent="VBoxContainer/CardContainer3/Card7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card8" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button8" type="Button" parent="VBoxContainer/CardContainer3/Card8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card9" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button9" type="Button" parent="VBoxContainer/CardContainer3/Card9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Posible" type="Sprite2D" parent="VBoxContainer/CardContainer3"]
+visible = false
+modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(1224.44, 540)
+scale = Vector2(1.98582, 1.69674)
+texture = ExtResource("7_0nexr")
+
+[node name="PriceContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 300)
+layout_mode = 2
+
+[node name="Price7" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price8" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price9" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="FullCard" parent="." instance=ExtResource("3_ysxdp")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -860.0
+offset_right = 400.0
+offset_bottom = 236.0
+scale = Vector2(1.3, 1.3)
+
+[node name="ButtonHide" type="Button" parent="FullCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -679.0
+offset_top = -44.0
+offset_right = 676.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.4, 1.4)
+flat = true
+
+[node name="NotMoney" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -523.0
+offset_top = -89.5
+offset_right = 523.0
+offset_bottom = 89.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ysxdp")
+
+[node name="Label" type="Label" parent="NotMoney"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 136
+text = "NOT ENOUGH MONEY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
+[connection signal="pressed" from="ButtonReveal" to="." method="_on_button_reveal_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card1/Button1" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card1/Button1" to="." method="_on_button_1_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card2/Button2" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card2/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card3/Button3" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card3/Button3" to="." method="_on_button_3_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card4/Button4" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card4/Button4" to="." method="_on_button_4_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card5/Button5" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card5/Button5" to="." method="_on_button_5_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card6/Button6" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card6/Button6" to="." method="_on_button_6_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card7/Button7" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card7/Button7" to="." method="_on_button_7_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card8/Button8" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card8/Button8" to="." method="_on_button_8_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card9/Button9" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card9/Button9" to="." method="_on_button_9_pressed"]
+[connection signal="pressed" from="FullCard/ButtonHide" to="." method="_on_button_hide_pressed"]

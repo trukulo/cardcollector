@@ -19,8 +19,8 @@ grow_vertical = 2
 theme = ExtResource("3_4k4yi")
 script = ExtResource("1_rsvmj")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 565)
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
 texture = ExtResource("3_uwart")
 
 [node name="ButtonOpenBooster" type="TextureButton" parent="."]
@@ -30,10 +30,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -201.0
-offset_top = -321.0
-offset_right = 599.0
-offset_bottom = 775.0
+offset_left = -460.0
+offset_top = -724.0
+offset_right = 1374.0
+offset_bottom = 1952.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
@@ -46,10 +46,10 @@ stretch_mode = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 506.0
-offset_top = 905.0
-offset_right = 1414.0
-offset_bottom = 1028.0
+offset_left = 85.0
+offset_top = 1699.0
+offset_right = 993.0
+offset_bottom = 1822.0
 
 [node name="ButtonLeft" type="Button" parent="HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
@@ -83,10 +83,11 @@ text = ">"
 
 [node name="BoosterTemplate" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 755.0
-offset_top = 183.0
-offset_right = 1162.0
-offset_bottom = 822.0
+offset_left = 62.0
+offset_top = 163.0
+offset_right = 469.0
+offset_bottom = 802.0
+scale = Vector2(2.30268, 2.30268)
 mouse_filter = 2
 texture = ExtResource("6_6x3o1")
 
@@ -101,7 +102,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("3_a7wdi")
 theme_override_font_sizes/font_size = 48
-text = "NAKAMA TCG"
+text = "XXX"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -124,8 +125,7 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 40.0
-offset_bottom = 128.0
+offset_bottom = 164.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -133,6 +133,21 @@ theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("3_a7wdi")
 theme_override_font_sizes/font_size = 64
 horizontal_alignment = 1
+
+[node name="Price" type="Label" parent="."]
+layout_mode = 0
+offset_left = -5.0
+offset_top = -6.0
+offset_right = 1090.0
+offset_bottom = 169.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_a7wdi")
+theme_override_font_sizes/font_size = 100
+text = "PRICE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NotMoney" type="Panel" parent="."]
 visible = false
@@ -161,6 +176,39 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_a7wdi")
 theme_override_font_sizes/font_size = 136
 text = "NOT ENOUGH MONEY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OutStock" type="Panel" parent="."]
+visible = false
+modulate = Color(1, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -582.0
+offset_top = 72.0
+offset_right = 184.0
+offset_bottom = 251.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.597467
+scale = Vector2(1.59466, 1.59466)
+theme = ExtResource("3_4k4yi")
+
+[node name="Label" type="Label" parent="OutStock"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_a7wdi")
+theme_override_font_sizes/font_size = 136
+text = "OUT OF STOCK"
 horizontal_alignment = 1
 vertical_alignment = 1
 

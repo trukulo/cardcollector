@@ -1,6 +1,6 @@
 extends Control
 
-const CARDS_PER_PAGE = 10
+const CARDS_PER_PAGE = 12
 const FILTER_ALL = "ALL"  # Special value for showing all effects
 
 const EFFECT_TYPES = [
@@ -28,7 +28,7 @@ var current_page: int = 0
 var total_pages: int = 0
 var cards_in_set: Array = []
 var current_fullcard_index: int = -1
-var current_filter: String = ""  # Track the current effect filter
+var current_filter: String = "ALL"  # Track the current effect filter
 
 func _ready():
 	Global.load_data()
@@ -59,7 +59,7 @@ func load_set(set_id: int):
 	total_pages = ceil(float(cards_in_set.size()) / CARDS_PER_PAGE)
 	current_page = 0
 	var set_folder = "res://cards/" + str(set_id)
-	var image_path = set_folder + "/0.jpg"
+	var image_path = set_folder + "/1.jpg"
 	if ResourceLoader.exists(image_path):
 		$Booster.texture = load(image_path)
 	else:
@@ -69,7 +69,7 @@ func load_set(set_id: int):
 
 func update_booster_pack_image(set_id: int):
 	var set_folder = "res://cards/" + str(set_id)
-	var image_path = set_folder + "/0.jpg"
+	var image_path = set_folder + "/1.jpg"
 	if ResourceLoader.exists(image_path):
 		$Set.texture = load(image_path)
 	else:
@@ -184,10 +184,12 @@ func is_any_effect_owned_for_card(id_set):
 	return Global.collection[id_set]["cards"].size() > 0
 
 func get_card_path(index: int) -> String:
-	if index < 5:
+	if index < 4:
 		return "VBoxContainer/HBoxContainer/Card%d" % (index + 1)
+	elif index < 8:
+		return "VBoxContainer/HBoxContainer2/Card%d" % (index - 3)
 	else:
-		return "VBoxContainer/HBoxContainer2/Card%d" % (index - 4)
+		return "VBoxContainer/HBoxContainer3/Card%d" % (index - 7)
 
 func get_full_card_path(index: int) -> String:
 	if index < 4:

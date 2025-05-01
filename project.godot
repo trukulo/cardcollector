@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Nakama TCG"
-config/version="0.28"
+config/name="Nakama TCG Phone"
+config/version="0.35"
 run/main_scene="uid://by66laxewwc5j"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0.197937, 0.197937, 0.197937, 1)
@@ -25,11 +25,12 @@ Global="*res://scripts/global.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1080
+window/size/viewport_height=1920
 window/size/mode=3
 window/size/borderless=true
 window/stretch/mode="canvas_items"
+window/handheld/orientation=1
 window/vsync/vsync_mode=0
 
 [gui]

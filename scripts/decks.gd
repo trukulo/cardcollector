@@ -1,6 +1,6 @@
 extends Control
 
-const CARDS_PER_PAGE = 10
+const CARDS_PER_PAGE = 12
 
 enum SortMode {
 	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NAME_UP, NAME_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN  # Add these new sort modes
@@ -20,9 +20,11 @@ var current_set := 0  # 0 = all sets, otherwise set number
 var set_ids := []
 var card_node_paths = [
 	"VBoxContainer/HBoxContainer/Card1", "VBoxContainer/HBoxContainer/Card2", "VBoxContainer/HBoxContainer/Card3",
-	"VBoxContainer/HBoxContainer/Card4", "VBoxContainer/HBoxContainer/Card5",
+	"VBoxContainer/HBoxContainer/Card4",
 	"VBoxContainer/HBoxContainer2/Card1", "VBoxContainer/HBoxContainer2/Card2", "VBoxContainer/HBoxContainer2/Card3",
-	"VBoxContainer/HBoxContainer2/Card4", "VBoxContainer/HBoxContainer2/Card5"
+	"VBoxContainer/HBoxContainer2/Card4",
+	"VBoxContainer/HBoxContainer3/Card1", "VBoxContainer/HBoxContainer3/Card2", "VBoxContainer/HBoxContainer3/Card3",
+	"VBoxContainer/HBoxContainer3/Card4"
 ]
 
 # To remember which card is being shown in FullCard for selling
@@ -42,7 +44,11 @@ var prev_page := current_page
 var current_fullcard_index: int = -1
 
 enum FilterMode { DUPLICATES, PROTECTED, ALL }
-var current_filter_mode = FilterMode.DUPLICATES
+var current_filter_mode = FilterMode.ALL
+
+var filter_grading := [true, true, true, true, true]  # Grading: 6-10
+var filter_rarity := [true, true, true, true, true, true]  # Rarity: D, C, B, A, S, X
+var filter_effect := [true, true, true, true, true, true, true, true]  # Effects: B, S, G, H, FA, FS, FG, FH
 
 func _ready():
 	confirm_dialog = ConfirmationDialog.new()
@@ -308,9 +314,18 @@ func update_card_keys():
 
 		for i in range(cards_array.size()):
 			var card_instance = cards_array[i]
+			var grading = card_instance.get("grading", 8)
 			var protection = card_instance.get("protection", 0)
+			var effect = card_instance.get("effect", "")
+			var rarity = card_data.get("rarity", "D")
 
-			# Determine if the card should be added based on the current filter
+			print("DEBUG: Evaluating card - Grading:", grading, "Rarity:", rarity, "Effect:", effect)
+
+			# Determine if the card passes the filters
+			if not _passes_filters(grading, rarity, effect):
+				continue
+
+			# Determine if the card should be added based on the current filter mode
 			var add_card = false
 			match current_filter_mode:
 				FilterMode.DUPLICATES:
@@ -326,8 +341,8 @@ func update_card_keys():
 			# Add the card to the list
 			card_keys.append({
 				"id_set": id_set,
-				"effect": card_instance.get("effect", ""),
-				"grading": card_instance.get("grading", 8),
+				"effect": effect,
+				"grading": grading,
 				"protection": protection,
 				"card_data": card_data,
 				"card_instance_index": i
@@ -338,6 +353,39 @@ func update_card_keys():
 
 	total_pages = int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) if card_keys.size() > 0 else 1
 	current_page = 0
+	print("DEBUG: Total cards after filtering:", card_keys.size())
+
+func _passes_filters(grading: int, rarity: String, effect: String) -> bool:
+	# Check grading filter
+	if grading < 6 or grading > 10 or not filter_grading[grading - 6]:
+		print("DEBUG: Card failed grading filter: Grading =", grading)
+		return false
+
+	# Check rarity filter
+	var rarity_index = rarity_order.get(rarity, -1)
+	if rarity_index == -1 or not filter_rarity[rarity_index]:
+		print("DEBUG: Card failed rarity filter: Rarity =", rarity)
+		return false
+
+	# Check effect filter
+	var effect_index = _get_effect_index(effect)
+	if effect_index == -1 or not filter_effect[effect_index]:
+		print("DEBUG: Card failed effect filter: Effect =", effect)
+		return false
+
+	return true
+
+func _get_effect_index(effect: String) -> int:
+	match effect:
+		"": return 0
+		"Silver": return 1
+		"Gold": return 2
+		"Holo": return 3
+		"Full Art": return 4
+		"Full Silver": return 5
+		"Full Gold": return 6
+		"Full Holo": return 7
+		_: return -1  # Invalid effect
 
 func update_set_label():
 	if has_node("Sets/Set"):
@@ -458,7 +506,13 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 		if protection == 1:
 			get_node("ButtonProtect").text = "UNPROTECT"
 		else:
-			get_node("ButtonProtect").text = "PROTECT"
+			if Global.unlock < 9:
+				get_node("ButtonProtect").disabled = true
+				get_node("ButtonProtect").text = "Protect (L)"
+			else:
+				get_node("ButtonProtect").disabled = false
+				# Set the text to "Protect" if not protected
+				get_node("ButtonProtect").text = "Protect"
 
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
@@ -466,9 +520,15 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 		full_card.get_node("Panel/Info/Overlay").visible = true
 		full_card.set_effect("")
 		$VBoxContainer.visible = false
+		$Panel.visible = true
 		$Price.visible = true
 		full_card.visible = true
 		full_card.set_effect(effect)
+		$Sets.visible = false
+		$Sort.visible = false
+		$ButtonDupe.visible = false
+		$ButtonFilters.visible = false
+		$HBoxContainer.visible = false
 
 		# Set protection status
 		if full_card.has_method("set_protection"):
@@ -549,6 +609,7 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 func _on_full_card_button_pressed():
 	if has_node("FullCard"):
 		get_node("FullCard").visible = false
+		$Panel.visible = false
 		$VBoxContainer.visible = true
 		$Price.visible = false
 	if has_node("ButtonSell"):
@@ -557,6 +618,11 @@ func _on_full_card_button_pressed():
 		get_node("ButtonProtect").visible = false
 	if has_node("ButtonSacrifice"):
 		get_node("ButtonSacrifice").visible = false
+	$ButtonDupe.visible = true
+	$ButtonFilters.visible = true
+	$HBoxContainer.visible = true
+	$Sets.visible = true
+	$Sort.visible = true
 
 func _on_button_sell_pressed() -> void:
 	pending_sell_id_set = fullcard_id_set
@@ -614,6 +680,7 @@ func _on_confirm_sell():
 
 		# Hide FullCard and buttons after selling
 		$VBoxContainer.visible = true
+		$Panel.visible = false
 		$Price.visible = false
 		if has_node("FullCard"):
 			get_node("FullCard").visible = false
@@ -626,6 +693,7 @@ func _on_confirm_sell():
 	else:
 		print("ERROR: Could not find specific card to sell")
 		$VBoxContainer.visible = true
+		$Panel.visible = false
 		$Price.visible = false
 		if has_node("FullCard"):
 			get_node("FullCard").visible = false
@@ -699,11 +767,11 @@ func _on_button_dupe_pressed():
 
 	# Update the button text based on the current mode
 	match current_filter_mode:
-		FilterMode.DUPLICATES:
-			$ButtonDupe.text = "Duplicates"
-		FilterMode.PROTECTED:
-			$ButtonDupe.text = "Protected"
 		FilterMode.ALL:
+			$ButtonDupe.text = "Duplicates"
+		FilterMode.DUPLICATES:
+			$ButtonDupe.text = "Protected"
+		FilterMode.PROTECTED:
 			$ButtonDupe.text = "All"
 
 	# Refresh the displayed cards
@@ -989,8 +1057,53 @@ func _unhandled_input(event):
 		_on_button_home_pressed()
 
 func _on_close_filters_pressed():
-	# Add functionality for closing filters here
+	# Update filter settings based on checkboxes
+	var filter_container = $Filters/VBoxContainer
+
+	# Update grading filter
+	var grading_hbox = filter_container.get_node("HBoxContainer")
+	for i in range(5):  # Grading: 6 to 10
+		filter_grading[i] = grading_hbox.get_child(i * 2).button_pressed  # CheckBox states
+
+	# Update rarity filter
+	var rarity_hbox = filter_container.get_node("HBoxContainer2")
+	for i in range(6):  # Rarity: D, C, B, A, S, X
+		filter_rarity[i] = rarity_hbox.get_child(i * 2).button_pressed  # CheckBox states
+
+	# Update type (effect) filter
+	var effect_hbox = filter_container.get_node("HBoxContainer3")
+	for i in range(8):  # Effects: B, S, G, H, FA, FS, FG, FH
+		filter_effect[i] = effect_hbox.get_child(i * 2).button_pressed  # CheckBox states
+
+	# Apply filters and refresh cards
+	update_card_keys()
+	populate_cards()
 	$Filters.visible = false
 
 func _on_button_filters_pressed() -> void:
 	$Filters.visible = true
+
+func _on_full_view_pressed() -> void:
+	var info_panel = $FullCard/Panel/Info
+	var effect_overlay = $FullCard/Panel/Info/Overlay
+	var picture = $FullCard/Panel/Picture
+
+	if info_panel.visible:
+		# Hide info panel and effect overlay
+		info_panel.visible = false
+		effect_overlay.visible = false
+
+		# Store original position of the picture if not already stored
+		if not picture.has_meta("original_position"):
+			picture.set_meta("original_position", picture.position)
+
+		# Set picture position Y to 0
+		picture.position.y = 0
+	else:
+		# Show info panel and effect overlay
+		info_panel.visible = true
+		effect_overlay.visible = true
+
+		# Restore original position of the picture if it was stored
+		if picture.has_meta("original_position"):
+			picture.position = picture.get_meta("original_position")

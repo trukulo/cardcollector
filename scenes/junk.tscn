@@ -1,0 +1,84 @@
+[gd_scene load_steps=6 format=3 uid="uid://bg2kihdee3bo"]
+
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_51s5w"]
+[ext_resource type="Script" uid="uid://bwjodspqxu1y3" path="res://scripts/junk.gd" id="1_ouwl6"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="3_3k27h"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_mg36t"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="5_pc67k"]
+
+[node name="Junk" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ouwl6")
+
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
+texture = ExtResource("1_51s5w")
+
+[node name="ButtonOk" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -167.251
+offset_right = 408.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_3k27h")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_mg36t")
+theme_override_font_sizes/font_size = 72
+text = "X"
+
+[node name="ButtonJunk" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -424.0
+offset_top = -167.251
+offset_right = -24.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_pc67k")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_mg36t")
+theme_override_font_sizes/font_size = 72
+text = "SELL JUNK"
+
+[node name="Briefing" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 57.0
+offset_top = 350.0
+offset_right = -54.0
+offset_bottom = -853.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 128
+text = "SELL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
+[connection signal="pressed" from="ButtonJunk" to="." method="_on_button_junk_pressed"]

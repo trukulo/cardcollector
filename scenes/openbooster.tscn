@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c656wt8q4lbp4"]
+[gd_scene load_steps=8 format=3 uid="uid://c656wt8q4lbp4"]
 
 [ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="1_ysxdp"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_xnfyq"]
 [ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="6_si4a3"]
-[ext_resource type="Texture2D" uid="uid://c020rv0pwrqcv" path="res://gui/posible.png" id="7_0nexr"]
 
 [node name="Openbooster" type="Control"]
 layout_mode = 3
@@ -20,8 +19,8 @@ size_flags_horizontal = 4
 theme = ExtResource("1_ysxdp")
 script = ExtResource("1_g08gs")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 565)
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
 texture = ExtResource("3_mm8m7")
 
 [node name="ButtonOk" type="Button" parent="."]
@@ -33,9 +32,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 8.0
-offset_top = -159.251
+offset_top = -119.251
 offset_right = 408.0
-offset_bottom = -48.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("4_xnfyq")
@@ -55,9 +54,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -424.0
-offset_top = -159.251
+offset_top = -119.251
 offset_right = -24.0
-offset_bottom = -48.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("6_si4a3")
@@ -68,6 +67,7 @@ theme_override_font_sizes/font_size = 72
 text = "REVEAL"
 
 [node name="Collection" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -82,137 +82,24 @@ theme_override_font_sizes/font_size = 64
 text = "Click cards to open"
 horizontal_alignment = 1
 
-[node name="Price1" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -922.0
-offset_top = 169.0
-offset_right = -570.0
-offset_bottom = 404.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 54
-text = "Set X: X/X"
-horizontal_alignment = 1
-autowrap_mode = 3
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 8.0
+offset_right = 2486.0
+offset_bottom = 4216.0
+scale = Vector2(0.42, 0.42)
 
-[node name="Price2" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -553.0
-offset_top = 169.0
-offset_right = -201.0
-offset_bottom = 404.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 54
-text = "Set X: X/X"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="Price3" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -178.0
-offset_top = 169.0
-offset_right = 174.0
-offset_bottom = 404.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 54
-text = "Set X: X/X"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="Price4" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 196.0
-offset_top = 169.0
-offset_right = 548.0
-offset_bottom = 404.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 54
-text = "Set X: X/X"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="Price5" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 571.0
-offset_top = 169.0
-offset_right = 923.0
-offset_bottom = 404.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("3_ki8ix")
-theme_override_font_sizes/font_size = 54
-text = "Set X: X/X"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="CardContainer" type="HBoxContainer" parent="."]
+[node name="CardContainer1" type="HBoxContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 760)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -930.0
-offset_top = -335.0
-offset_right = 3198.0
-offset_bottom = 761.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.45, 0.45)
+layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Card1" parent="CardContainer" instance=ExtResource("3_ysxdp")]
+[node name="Card1" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Button1" type="Button" parent="CardContainer/Card1"]
+[node name="Button1" type="Button" parent="VBoxContainer/CardContainer1/Card1"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -221,10 +108,11 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card2" parent="CardContainer" instance=ExtResource("3_ysxdp")]
+[node name="Card2" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Button2" type="Button" parent="CardContainer/Card2"]
+[node name="Button2" type="Button" parent="VBoxContainer/CardContainer1/Card2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -233,10 +121,11 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card3" parent="CardContainer" instance=ExtResource("3_ysxdp")]
+[node name="Card3" parent="VBoxContainer/CardContainer1" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Button3" type="Button" parent="CardContainer/Card3"]
+[node name="Button3" type="Button" parent="VBoxContainer/CardContainer1/Card3"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -245,10 +134,59 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card4" parent="CardContainer" instance=ExtResource("3_ysxdp")]
+[node name="PriceContainer1" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 200)
 layout_mode = 2
 
-[node name="Button4" type="Button" parent="CardContainer/Card4"]
+[node name="Price1" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price2" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price3" type="Label" parent="VBoxContainer/PriceContainer1"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CardContainer2" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 760)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Card4" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button4" type="Button" parent="VBoxContainer/CardContainer2/Card4"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -257,10 +195,11 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card5" parent="CardContainer" instance=ExtResource("3_ysxdp")]
+[node name="Card5" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Button5" type="Button" parent="CardContainer/Card5"]
+[node name="Button5" type="Button" parent="VBoxContainer/CardContainer2/Card5"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -269,12 +208,148 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Posible" type="Sprite2D" parent="CardContainer"]
-visible = false
-modulate = Color(1, 1, 1, 0.392157)
-position = Vector2(1224.44, 540)
-scale = Vector2(1.98582, 1.69674)
-texture = ExtResource("7_0nexr")
+[node name="Card6" parent="VBoxContainer/CardContainer2" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button6" type="Button" parent="VBoxContainer/CardContainer2/Card6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="PriceContainer2" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 200)
+layout_mode = 2
+
+[node name="Price4" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price5" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price6" type="Label" parent="VBoxContainer/PriceContainer2"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CardContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 760)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Card7" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button7" type="Button" parent="VBoxContainer/CardContainer3/Card7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card8" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button8" type="Button" parent="VBoxContainer/CardContainer3/Card8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card9" parent="VBoxContainer/CardContainer3" instance=ExtResource("3_ysxdp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button9" type="Button" parent="VBoxContainer/CardContainer3/Card9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="PriceContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1080, 300)
+layout_mode = 2
+
+[node name="Price7" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price8" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Price9" type="Label" parent="VBoxContainer/PriceContainer3"]
+custom_minimum_size = Vector2(800, 330)
+layout_mode = 2
+size_flags_horizontal = 7
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_ki8ix")
+theme_override_font_sizes/font_size = 90
+text = "Set X: X/X"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="FullCard" parent="." instance=ExtResource("3_ysxdp")]
 visible = false
@@ -285,10 +360,10 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -400.0
-offset_top = -516.0
+offset_top = -732.0
 offset_right = 400.0
-offset_bottom = 580.0
-scale = Vector2(0.9, 0.9)
+offset_bottom = 364.0
+scale = Vector2(1.3, 1.3)
 
 [node name="ButtonHide" type="Button" parent="FullCard"]
 layout_mode = 1
@@ -301,6 +376,7 @@ offset_right = 676.0
 offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.4, 1.4)
 flat = true
 
 [node name="NotMoney" type="Panel" parent="."]
@@ -335,14 +411,22 @@ vertical_alignment = 1
 
 [connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
 [connection signal="pressed" from="ButtonReveal" to="." method="_on_button_reveal_pressed"]
-[connection signal="gui_input" from="CardContainer/Card1/Button1" to="." method="_on_button_1_gui_input"]
-[connection signal="pressed" from="CardContainer/Card1/Button1" to="." method="_on_button_1_pressed"]
-[connection signal="gui_input" from="CardContainer/Card2/Button2" to="." method="_on_button_2_gui_input"]
-[connection signal="pressed" from="CardContainer/Card2/Button2" to="." method="_on_button_2_pressed"]
-[connection signal="gui_input" from="CardContainer/Card3/Button3" to="." method="_on_button_3_gui_input"]
-[connection signal="pressed" from="CardContainer/Card3/Button3" to="." method="_on_button_3_pressed"]
-[connection signal="gui_input" from="CardContainer/Card4/Button4" to="." method="_on_button_4_gui_input"]
-[connection signal="pressed" from="CardContainer/Card4/Button4" to="." method="_on_button_4_pressed"]
-[connection signal="gui_input" from="CardContainer/Card5/Button5" to="." method="_on_button_5_gui_input"]
-[connection signal="pressed" from="CardContainer/Card5/Button5" to="." method="_on_button_5_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card1/Button1" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card1/Button1" to="." method="_on_button_1_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card2/Button2" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card2/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer1/Card3/Button3" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer1/Card3/Button3" to="." method="_on_button_3_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card4/Button4" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card4/Button4" to="." method="_on_button_4_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card5/Button5" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card5/Button5" to="." method="_on_button_5_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer2/Card6/Button6" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer2/Card6/Button6" to="." method="_on_button_6_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card7/Button7" to="." method="_on_button_1_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card7/Button7" to="." method="_on_button_7_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card8/Button8" to="." method="_on_button_2_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card8/Button8" to="." method="_on_button_8_pressed"]
+[connection signal="gui_input" from="VBoxContainer/CardContainer3/Card9/Button9" to="." method="_on_button_3_gui_input"]
+[connection signal="pressed" from="VBoxContainer/CardContainer3/Card9/Button9" to="." method="_on_button_9_pressed"]
 [connection signal="pressed" from="FullCard/ButtonHide" to="." method="_on_button_hide_pressed"]

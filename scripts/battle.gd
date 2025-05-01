@@ -581,7 +581,7 @@ func _all_cards_gone() -> bool:
 
 func _show_end_of_game_results():
 	$Notif.set_anchors_preset(Control.PRESET_FULL_RECT)
-	$Notif.size = Vector2(1920,1080)
+	$Notif.size = Vector2(1080,1920)
 	$Notif.position = Vector2(0,0)
 	Global.woncards += cards_won.size()
 	Global.lostcards += cards_lost.size()

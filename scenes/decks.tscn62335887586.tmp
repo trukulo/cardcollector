@@ -1,0 +1,871 @@
+[gd_scene load_steps=11 format=3 uid="uid://djhk2xod75muq"]
+
+[ext_resource type="Script" uid="uid://bq5hofq71vy35" path="res://scripts/decks.gd" id="1_43i6p"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_hcl2w"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="2_ojrkc"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="4_5b8sw"]
+[ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="4_5qcsl"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="5_bvnak"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_73twv"]
+[ext_resource type="Theme" uid="uid://bb6vwl0h1flws" path="res://gui/FlatUI4/kenneyUI-blue.tres" id="7_xkufl"]
+[ext_resource type="Theme" uid="uid://h1f7iqhh7ycb" path="res://gui/FlatUI4/kenneyUI-yellow.tres" id="8_xkufl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkufl"]
+bg_color = Color(0.20871, 0.20871, 0.20871, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Decks" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_43i6p")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(504, 956)
+rotation = 1.5708
+texture = ExtResource("1_hcl2w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 161.0
+offset_right = 4138.0
+offset_bottom = 4049.0
+scale = Vector2(0.33, 0.33)
+theme_override_constants/separation = 300
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1104.0
+offset_right = 742.0
+offset_bottom = 1256.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 657.0
+offset_top = 1761.0
+offset_right = 1070.0
+offset_bottom = 1873.0
+
+[node name="ButtonLeft" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_5b8sw")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "<"
+
+[node name="ButtonHome" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_73twv")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "x"
+
+[node name="ButtonRight" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_5b8sw")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = ">"
+
+[node name="Sets" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 1616.0
+offset_right = 429.0
+offset_bottom = 1728.0
+
+[node name="SetLeft" type="Button" parent="Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "<"
+
+[node name="Set" type="Label" parent="Sets"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 52
+text = "Set #1"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SetRight" type="Button" parent="Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = ">"
+
+[node name="Sort" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 1766.0
+offset_right = 429.0
+offset_bottom = 1878.0
+
+[node name="SortLeft" type="Button" parent="Sort"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("8_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "<"
+
+[node name="Sort" type="Label" parent="Sort"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 52
+text = "Sorting"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SortRight" type="Button" parent="Sort"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("8_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = ">"
+
+[node name="FullCard" parent="." instance=ExtResource("2_ojrkc")]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 143.0
+offset_top = 5.0
+offset_right = 943.0
+offset_bottom = 1101.0
+scale = Vector2(1.3, 1.3)
+
+[node name="Button" type="Button" parent="FullCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 355.0
+offset_top = 1528.0
+offset_right = 1075.0
+offset_bottom = 1900.0
+theme = ExtResource("4_5qcsl")
+
+[node name="ButtonDupe" type="Button" parent="."]
+layout_mode = 0
+offset_left = 657.0
+offset_top = 1614.0
+offset_right = 857.0
+offset_bottom = 1742.0
+size_flags_horizontal = 3
+theme = ExtResource("4_5b8sw")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 48
+text = "DUPES"
+
+[node name="ButtonFilters" type="Button" parent="."]
+layout_mode = 0
+offset_left = 869.0
+offset_top = 1614.0
+offset_right = 1069.0
+offset_bottom = 1742.0
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 48
+text = "FILTER"
+
+[node name="ButtonSell" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 1656.0
+offset_right = 339.0
+offset_bottom = 1777.0
+size_flags_horizontal = 3
+theme = ExtResource("6_73twv")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 40
+text = "SELL"
+
+[node name="ButtonProtect" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 1782.0
+offset_right = 338.0
+offset_bottom = 1901.0
+size_flags_horizontal = 3
+theme = ExtResource("7_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 40
+text = "Protect"
+
+[node name="ButtonSacrifice" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 1533.0
+offset_right = 339.0
+offset_bottom = 1652.0
+size_flags_horizontal = 3
+theme = ExtResource("8_xkufl")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 40
+text = "SACRIFICE"
+
+[node name="Price" type="Label" parent="."]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 363.0
+offset_top = 1531.0
+offset_right = 1072.0
+offset_bottom = 1904.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Filters" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -483.0
+offset_top = -279.0
+offset_right = 498.0
+offset_bottom = 468.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xkufl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Filters"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_top = 18.0
+offset_right = -28.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Filters/VBoxContainer"]
+layout_mode = 2
+text = "Grading: "
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Filters/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label2" type="Label" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "6 "
+
+[node name="CheckBox2" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label3" type="Label" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "7 "
+
+[node name="CheckBox3" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label4" type="Label" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "8 "
+
+[node name="CheckBox4" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label5" type="Label" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "9 "
+
+[node name="CheckBox5" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label6" type="Label" parent="Filters/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "10 "
+
+[node name="Label2" type="Label" parent="Filters/VBoxContainer"]
+layout_mode = 2
+text = "Rarity: "
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Filters/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label2" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "D "
+
+[node name="CheckBox2" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label3" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "C "
+
+[node name="CheckBox3" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label4" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "B "
+
+[node name="CheckBox4" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label5" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "A "
+
+[node name="CheckBox5" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label6" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "S "
+
+[node name="CheckBox6" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label7" type="Label" parent="Filters/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "X "
+
+[node name="Label3" type="Label" parent="Filters/VBoxContainer"]
+layout_mode = 2
+text = "Type: "
+horizontal_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Filters/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label2" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "B "
+
+[node name="CheckBox2" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label3" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "S "
+
+[node name="CheckBox3" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label4" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "G "
+
+[node name="CheckBox4" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label5" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "H "
+
+[node name="CheckBox5" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label6" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FA "
+
+[node name="CheckBox6" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label7" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FS "
+
+[node name="CheckBox7" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label8" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FG "
+
+[node name="CheckBox8" type="CheckBox" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Label9" type="Label" parent="Filters/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FH "
+
+[node name="CloseFilters" type="Button" parent="Filters/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_73twv")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 72
+text = "x"
+
+[connection signal="pressed" from="HBoxContainer/ButtonLeft" to="." method="_on_button_left_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonHome" to="." method="_on_button_home_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonRight" to="." method="_on_button_right_pressed"]
+[connection signal="pressed" from="Sets/SetLeft" to="." method="_on_button_left_pressed"]
+[connection signal="pressed" from="Sets/SetRight" to="." method="_on_button_right_pressed"]
+[connection signal="pressed" from="Sort/SortLeft" to="." method="_on_sort_left_pressed"]
+[connection signal="pressed" from="Sort/SortRight" to="." method="_on_sort_right_pressed"]
+[connection signal="pressed" from="ButtonDupe" to="." method="_on_button_dupe_pressed"]
+[connection signal="pressed" from="ButtonFilters" to="." method="_on_button_filters_pressed"]
+[connection signal="pressed" from="ButtonSell" to="." method="_on_button_sell_pressed"]
+[connection signal="pressed" from="ButtonProtect" to="." method="_on_button_protect_pressed"]
+[connection signal="pressed" from="ButtonSacrifice" to="." method="_on_button_sacrifice_pressed"]
+[connection signal="pressed" from="Filters/VBoxContainer/CloseFilters" to="." method="_on_close_filters_pressed"]

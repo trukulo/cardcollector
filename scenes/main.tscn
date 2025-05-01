@@ -27,8 +27,8 @@ grow_vertical = 2
 theme = ExtResource("1_sugp2")
 script = ExtResource("1_o5qli")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(960, 565)
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 950)
 texture = ExtResource("3_jyhfs")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -38,10 +38,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -694.0
-offset_top = -238.0
-offset_right = 6.0
-offset_bottom = 398.0
+offset_left = -617.0
+offset_top = -253.5
+offset_right = 83.0
+offset_bottom = 557.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 64
@@ -99,6 +99,19 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Decks"
 
+[node name="ButtonLab" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("6_85g3d")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Laboratory"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -107,9 +120,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -92.0
-offset_top = -232.0
+offset_top = -249.5
 offset_right = 608.0
-offset_bottom = 454.0
+offset_bottom = 561.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 64
@@ -166,15 +179,28 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Sacrifice"
 
+[node name="ButtonJunk" type="Button" parent="VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("8_ya4ey")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Junk"
+
 [node name="MoneyLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -321.0
-offset_top = 72.0
+offset_top = 392.0
 offset_right = 321.0
-offset_bottom = 186.0
+offset_bottom = 506.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -190,9 +216,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -321.0
-offset_top = 176.0
+offset_top = 496.0
 offset_right = 321.0
-offset_bottom = 290.0
+offset_bottom = 610.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -208,10 +234,10 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
-offset_left = 100.0
-offset_top = 90.0
-offset_right = 600.0
-offset_bottom = 201.251
+offset_left = 26.0
+offset_top = 141.0
+offset_right = 526.0
+offset_bottom = 252.251
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("8_ya4ey")
@@ -225,10 +251,10 @@ text = "Reset"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
-offset_left = 1330.0
-offset_top = 90.0
-offset_right = 1830.0
-offset_bottom = 201.251
+offset_left = 549.0
+offset_top = 141.0
+offset_right = 1049.0
+offset_bottom = 252.251
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_sugp2")
@@ -245,25 +271,26 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -282.0
+offset_top = -555.0
+offset_right = -3.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("1_sugp2")
 theme_override_styles/panel = SubResource("StyleBoxFlat_85g3d")
 
 [node name="Narrator" type="Sprite2D" parent="Message"]
-position = Vector2(283, -82)
+position = Vector2(283, 214)
 texture = ExtResource("9_85g3d")
 
 [node name="Label" type="Label" parent="Message"]
 layout_mode = 0
 offset_left = 620.0
-offset_top = 15.0
-offset_right = 1880.0
-offset_bottom = 256.0
+offset_top = 20.0
+offset_right = 1062.0
+offset_bottom = 494.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 42
 text = "Four dragons were, the Kami. Tsuchi, the worm with wings from the deep. Mizu, one with the water, guarding the oceans and rivers. Hi, the son of the Sun, pure fire. Kaze, just above everthing always watching in the skies."
 autowrap_mode = 3
 
@@ -272,7 +299,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -1073.0
+offset_top = -1351.0
+offset_bottom = 296.0
 grow_horizontal = 2
 grow_vertical = 2
 flat = true
@@ -282,27 +310,59 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 292.0
-offset_top = 1005.0
-offset_right = 934.0
-offset_bottom = 1076.0
+offset_left = 56.0
+offset_top = 1858.0
+offset_right = 520.0
+offset_bottom = 1929.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
-text = "v0.28"
+text = "v0.35"
 horizontal_alignment = 2
+
+[node name="Ginme" type="Button" parent="Version"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 355.0
+offset_right = 11.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Playtime" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -528.0
+offset_top = 1858.0
+offset_right = 285.0
+offset_bottom = 1929.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 48
+text = "Time Played: 00:00"
 
 [connection signal="pressed" from="VBoxContainer/OpenBooster" to="." method="_on_open_booster_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonAuction" to="." method="_on_button_auction_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonCollection" to="." method="_on_button_collection_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonDecks" to="." method="_on_button_decks_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonLab" to="." method="_on_button_lab_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonPlay" to="." method="_on_button_play_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonShortDuel" to="." method="_on_button_short_duel_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonDuels" to="." method="_on_button_duels_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonSacrifice" to="." method="_on_button_sacrifice_pressed"]
+[connection signal="pressed" from="VBoxContainer2/ButtonJunk" to="." method="_on_button_junk_pressed"]
 [connection signal="pressed" from="ButtonReset" to="." method="_on_button_reset_pressed"]
 [connection signal="pressed" from="ButtonQuit" to="." method="_on_button_quit_pressed"]
 [connection signal="pressed" from="Message/NoNarrator" to="." method="_on_no_narrator_pressed"]
+[connection signal="pressed" from="Version/Ginme" to="." method="_on_ginme_pressed"]

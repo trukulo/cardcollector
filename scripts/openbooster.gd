@@ -17,6 +17,34 @@ var cards_revealed = 0
 var reveal_timer: Timer
 var revealed_cards := []
 
+# Booster type functions
+func is_prime(num: int) -> bool:
+	if num == 1:
+		return true
+	if num <= 1:
+		return false
+	if num <= 3:
+		return true
+	if num % 2 == 0 or num % 3 == 0:
+		return false
+
+	var i = 5
+	while i * i <= num:
+		if num % i == 0 or num % (i + 2) == 0:
+			return false
+		i += 6
+
+	return true
+
+func is_even(num: int) -> bool:
+	return num % 2 == 0
+
+func is_odd(num: int) -> bool:
+	return num % 2 != 0
+
+func is_triple(num: int) -> bool:
+	return num % 3 == 0
+
 func _ready():
 	Global.load_data()
 	revealed_cards = []
@@ -28,7 +56,6 @@ func _ready():
 	for i in range(booster_pack.size()):
 		revealed_cards.append(false)
 	initialize_face_down_cards()
-	#_show_effects()
 
 func is_card_new(id_set: String, effect: String) -> bool:
 	if not Global.collection.has(id_set):
@@ -62,43 +89,75 @@ func generate_booster_pack(set_id: int) -> void:
 	for rarity in cards_by_rarity.keys():
 		cards_by_rarity[rarity].shuffle()
 
-	# 3. Add common cards (D) - 3 cards
-	add_cards_to_booster(cards_by_rarity["D"], 3)
+	# Get the booster type and filter cards accordingly
+	var booster_type := ""
+	if Global.boostertype != "":
+		booster_type = Global.boostertype
+	if booster_type.is_empty():
+		booster_type = "Evens" if randf() < 0.5 else "Odds"
 
-	# 4. Add uncommon cards (C) - 1 card
-	add_cards_to_booster(cards_by_rarity["C"], 1)
+	# 3. Add common cards (D) - 5 cards
+	add_cards_to_booster(filter_cards_by_type(cards_by_rarity["D"], booster_type), 5)
+
+	# 4. Add uncommon cards (C) - 2 cards
+	add_cards_to_booster(filter_cards_by_type(cards_by_rarity["C"], booster_type), 2)
 
 	# 5. Prepare rare pool (B, A, S, X) with weights
 	var rare_pool = []
-	for card in cards_by_rarity["C"]:
-		rare_pool.append({"card": card, "weight": 60})
-	for card in cards_by_rarity["B"]:
-		rare_pool.append({"card": card, "weight": 40})
-	for card in cards_by_rarity["A"]:
-		rare_pool.append({"card": card, "weight": 20})
-	for card in cards_by_rarity["S"]:
-		rare_pool.append({"card": card, "weight": 10})
-	for card in cards_by_rarity["X"]:
+	for card in filter_cards_by_type(cards_by_rarity["B"], booster_type):
+		rare_pool.append({"card": card, "weight": 100})
+	for card in filter_cards_by_type(cards_by_rarity["A"], booster_type):
+		rare_pool.append({"card": card, "weight": 50})
+	for card in filter_cards_by_type(cards_by_rarity["S"], booster_type):
+		rare_pool.append({"card": card, "weight": 5})
+	for card in filter_cards_by_type(cards_by_rarity["X"], booster_type):
 		rare_pool.append({"card": card, "weight": 1})
 	rare_pool.shuffle()
 
-	# 6. Add 1 rare card (weighted random)
+	# 6. Add 2 rare cards (weighted random)
 	if rare_pool.size() > 0:
-		var selected_card = weighted_random_selection(rare_pool)
-		if selected_card:
-			var card_copy = selected_card.duplicate()
-			# Apply random effects and grading
-			apply_card_properties(card_copy)
-			booster_pack.append(card_copy)
+		for i in range(2):
+			var selected_card = weighted_random_selection(rare_pool)
+			if selected_card:
+				var card_copy = selected_card.duplicate()
+				apply_card_properties(card_copy)
+				booster_pack.append(card_copy)
 
-	# 7. Print and debug
+	# 7. Sort and debug
 	booster_pack.sort_custom(Callable(self, "_sort_by_rarity"))
-	print("Booster Pack: Generado con " + str(booster_pack.size()) + " cartas")
-	for card in booster_pack:
-		var id_set = card["id_set"]
-		var amount = 0
-		if Global.collection.has(id_set):
-			amount = Global.collection[id_set]["cards"].size()
+	print("Booster Pack: Generated with " + str(booster_pack.size()) + " cards (Type: " + booster_type + ")")
+
+# Filter cards based on booster type
+func filter_cards_by_type(cards: Array, booster_type: String) -> Array:
+	# If there are no cards or too few cards, return the original array to avoid empty boosters
+	if cards.size() < 3:
+		return cards
+
+	var filtered_cards = []
+	for card in cards:
+		var card_number = card["id"]
+		var valid = false
+
+		match booster_type:
+			"Primes":
+				valid = is_prime(card_number)
+			"Evens":
+				valid = is_even(card_number)
+			"Odds":
+				valid = is_odd(card_number)
+			"Triples":
+				valid = is_triple(card_number)
+			_:  # Default case
+				valid = true  # Include all cards
+
+		if valid:
+			filtered_cards.append(card)
+
+	# If filter results in too few cards, return original array
+	if filtered_cards.size() < 2:
+		return cards
+
+	return filtered_cards
 
 # Apply random effects and grading to a card
 func apply_card_properties(card: Dictionary) -> void:
@@ -117,14 +176,15 @@ func save_cards_to_collection():
 	for card in booster_pack:
 		var id_set = card["id_set"]
 		var effect = card.get("effect", "")
-		var grading = card.get("grading", Global.get_random_grading())  # Get the actual grading from the card
+		var grading = card.get("grading", Global.get_random_grading())
 		var protection = card.get("protection", 0)
-		Global.add_to_collection(id_set, 1, effect, 0, grading, protection)  # Pass the actual grading value
+		Global.add_to_collection(id_set, 1, effect, 0, grading, protection)
 	Global.save_data()
 	update_collection_label()
 
 func add_cards_to_booster(cards: Array, count: int) -> void:
-	for i in range(min(count, cards.size())):
+	var cards_to_add = min(count, cards.size())
+	for i in range(cards_to_add):
 		var card_copy = cards[i].duplicate()
 		apply_card_properties(card_copy)
 		booster_pack.append(card_copy)
@@ -149,86 +209,96 @@ func _sort_by_rarity(card_a, card_b) -> bool:
 	return rarity_order[card_a["rarity"]] < rarity_order[card_b["rarity"]]
 
 func initialize_face_down_cards():
-	if has_node("CardContainer"):
-		var card_container = get_node("CardContainer")
-		for i in range(5):
-			var card_node_name = "Card" + str(i + 1)
-			if card_container.has_node(card_node_name):
-				var card_node = card_container.get_node(card_node_name)
-				if card_node.has_node("Panel"):
-					var panel = card_node.get_node("Panel")
-					panel.pivot_offset = Vector2(panel.size.x / 2, panel.size.y / 2)
-					panel.scale = Vector2(1, 1)
-				if card_node.has_node("Panel/Picture"):
-					var texture_rect = card_node.get_node("Panel/Picture")
-					texture_rect.texture = load("res://gui/backcard.jpg")
-					card_node.get_node("Panel/Picture").position.y = 5
-				if card_node.has_node("Panel/Info"):
-					card_node.get_node("Panel/Info").visible = false
-				var price_label_name = "Price" + str(i + 1)
-				if has_node(price_label_name):
-					get_node(price_label_name).visible = false
+	# Initialize all 9 cards in the new structure
+	for i in range(9):
+		var container_idx = i / 3 + 1
+		var card_idx = i % 3 + 1 + (container_idx - 1) * 3
+		var card_path = "VBoxContainer/CardContainer" + str(container_idx) + "/Card" + str(card_idx)
+
+		if has_node(card_path):
+			var card_node = get_node(card_path)
+			if card_node.has_node("Panel"):
+				var panel = card_node.get_node("Panel")
+				panel.pivot_offset = Vector2(panel.size.x / 2, panel.size.y / 2)
+				panel.scale = Vector2(1, 1)
+			if card_node.has_node("Panel/Picture"):
+				var texture_rect = card_node.get_node("Panel/Picture")
+				texture_rect.texture = load("res://gui/backcard.jpg")
+				card_node.get_node("Panel/Picture").position.y = 5
+			if card_node.has_node("Panel/Info"):
+				card_node.get_node("Panel/Info").visible = false
+
+		# Hide price labels
+		var price_container_idx = (i / 3) + 1
+		var price_idx = i % 3 + 1 + (price_container_idx - 1) * 3
+		var price_path = "VBoxContainer/PriceContainer" + str(price_container_idx) + "/Price" + str(price_idx)
+		if has_node(price_path):
+			get_node(price_path).text= ""
 
 func reveal_card(index: int):
-	if has_node("CardContainer"):
-		var card_container = get_node("CardContainer")
-		var card_node_name = "Card" + str(index + 1)
-		if card_container.has_node(card_node_name):
-			var card_node = card_container.get_node(card_node_name)
-			var card = booster_pack[index]
-			var tween = create_tween()
-			tween.tween_interval(0.10)
-			tween.tween_property(card_node, "scale:x", 0.1, 0.075)
-			tween.tween_callback(func():
-				if card_node.has_node("Panel/Picture"):
-					var texture_rect = card_node.get_node("Panel/Picture")
-					var image_path = card["image"]
-					if ResourceLoader.exists(image_path):
-						texture_rect.texture = load(image_path)
-				if card_node.has_node("Panel/Info"):
-					card_node.get_node("Panel/Info").visible = true
-				_populate_card(card_node, card)
-			)
-			tween.tween_property(card_node, "scale:x", 1.0, 0.075)
-			tween.tween_interval(0.10)
-			tween.tween_callback(func():
-				var price_label_name = "Price" + str(index + 1)
-				if has_node(price_label_name):
-					var price_label = get_node(price_label_name)
-					price_label.visible = true
-					var id_set = card["id_set"]
-					var effect = card.get("effect", "")
-					var base_price = Global.prices.get(id_set, 0.0)
+	var container_idx = index / 3 + 1
+	var card_idx = index % 3 + 1 + (container_idx - 1) * 3
+	var card_path = "VBoxContainer/CardContainer" + str(container_idx) + "/Card" + str(card_idx)
 
-					# Get the card's actual grading (ensure we use the actual value, not a new random one)
-					var card_grading = card.get("grading", 1.0)
+	if has_node(card_path):
+		var card_node = get_node(card_path)
+		var card = booster_pack[index]
+		var tween = create_tween()
+		tween.tween_interval(0.10)
+		tween.tween_property(card_node, "scale:x", 0.1, 0.075)
+		tween.tween_callback(func():
+			if card_node.has_node("Panel/Picture"):
+				var texture_rect = card_node.get_node("Panel/Picture")
+				var image_path = card["image"]
+				if ResourceLoader.exists(image_path):
+					texture_rect.texture = load(image_path)
+			if card_node.has_node("Panel/Info"):
+				card_node.get_node("Panel/Info").visible = true
+			_populate_card(card_node, card)
+		)
+		tween.tween_property(card_node, "scale:x", 1.0, 0.075)
+		tween.tween_interval(0.10)
+		tween.tween_callback(func():
+			var price_container_idx = (index / 3) + 1
+			var price_idx = index % 3 + 1 + (price_container_idx - 1) * 3
+			var price_path = "VBoxContainer/PriceContainer" + str(price_container_idx) + "/Price" + str(price_idx)
 
-					# Calculate effect modifier
-					var effect_modifier = 1.0
-					if effect != "":
-						effect_modifier = get_effect_multiplier(effect)
+			if has_node(price_path):
+				var price_label = get_node(price_path)
+				price_label.visible = true
+				var id_set = card["id_set"]
+				var effect = card.get("effect", "")
+				var base_price = Global.prices.get(id_set, 0.0)
 
-					# Calculate price using grading and effect
-					var price = base_price * effect_modifier
-					price *= 0.2 * (2.7 ** (card_grading - 6))  # Tuned base (2.7)
-					price = int(max(1, round(price/2)))
+				# Get the card's actual grading
+				var card_grading = card.get("grading", 1.0)
 
-					# Display in the label
-					var new_prefix = ""
-					if is_card_new(id_set, effect):
-						new_prefix = "NEW\n"
-					if effect != "":
-						price_label.text = "%s%s\n¥%d" % [new_prefix, effect, price]
-					else:
-						price_label.text = "%s¥%d" % [new_prefix, price]
+				# Calculate effect modifier
+				var effect_modifier = 1.0
+				if effect != "":
+					effect_modifier = get_effect_multiplier(effect)
 
-				# Save after the last card is revealed and labeled
-				if index == 4:
-					save_cards_to_collection()
-					update_collection_label()
+				# Calculate price using grading and effect
+				var price = base_price * effect_modifier
+				price *= 0.2 * (2.7 ** (card_grading - 6))  # Tuned base (2.7)
+				price = int(max(1, round(price/2)))
 
-				_check_all_revealed()
-			)
+				# Display in the label
+				var new_prefix = ""
+				if is_card_new(id_set, effect):
+					new_prefix = "NEW - "
+				if effect != "":
+					price_label.text = "%s%s\n¥%d" % [new_prefix, effect, price]
+				else:
+					price_label.text = "%s¥%d" % [new_prefix, price]
+
+			# Save after the last card is revealed and labeled
+			if index == 8:
+				save_cards_to_collection()
+				update_collection_label()
+
+			_check_all_revealed()
+		)
 
 func assign_card_effect() -> String:
 	var rng = RandomNumberGenerator.new()
@@ -308,6 +378,7 @@ func _populate_card(card_node: Node, card_data: Dictionary) -> void:
 	if card_node.has_method("set_effect"):
 		card_node.set_effect(card_data.get("effect", ""))
 
+# Button handler functions unchanged - just showing one as an example
 func _on_button_1_pressed():
 	if not revealed_cards[0]:
 		reveal_card(0)
@@ -315,6 +386,7 @@ func _on_button_1_pressed():
 		$ButtonReveal.disabled = true
 	else:
 		show_full_card(0)
+
 func _on_button_2_pressed():
 	if not revealed_cards[1]:
 		reveal_card(1)
@@ -322,6 +394,7 @@ func _on_button_2_pressed():
 		$ButtonReveal.disabled = true
 	else:
 		show_full_card(1)
+
 func _on_button_3_pressed():
 	if not revealed_cards[2]:
 		reveal_card(2)
@@ -329,6 +402,7 @@ func _on_button_3_pressed():
 		$ButtonReveal.disabled = true
 	else:
 		show_full_card(2)
+
 func _on_button_4_pressed():
 	if not revealed_cards[3]:
 		reveal_card(3)
@@ -336,6 +410,7 @@ func _on_button_4_pressed():
 		$ButtonReveal.disabled = true
 	else:
 		show_full_card(3)
+
 func _on_button_5_pressed():
 	if not revealed_cards[4]:
 		reveal_card(4)
@@ -344,31 +419,63 @@ func _on_button_5_pressed():
 	else:
 		show_full_card(4)
 
+func _on_button_6_pressed():
+	if not revealed_cards[5]:
+		reveal_card(5)
+		revealed_cards[5] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(5)
+
+func _on_button_7_pressed():
+	if not revealed_cards[6]:
+		reveal_card(6)
+		revealed_cards[6] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(6)
+
+func _on_button_8_pressed():
+	if not revealed_cards[7]:
+		reveal_card(7)
+		revealed_cards[7] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(7)
+
+func _on_button_9_pressed():
+	if not revealed_cards[8]:
+		reveal_card(8)
+		revealed_cards[8] = true
+		$ButtonReveal.disabled = true
+	else:
+		show_full_card(8)
+
 func _on_button_reveal_pressed() -> void:
-	_on_button_1_pressed()
-	$ButtonReveal.disabled = true
-	_on_button_2_pressed()
-	$ButtonReveal.disabled = true
-	_on_button_3_pressed()
-	$ButtonReveal.disabled = true
-	_on_button_4_pressed()
-	$ButtonReveal.disabled = true
-	_on_button_5_pressed()
-	$ButtonReveal.disabled = true
+	# Reveal all cards
+	for i in range(9):
+		if not revealed_cards[i]:
+			reveal_card(i)
+			revealed_cards[i] = true
+		$ButtonReveal.disabled = true
+
 	_check_all_revealed()
 
 func _show_effects() -> void:
 	for i in range(booster_pack.size()):
-		var price_label_name = "Price" + str(i + 1)
-		if has_node(price_label_name):
-			var price_label = get_node(price_label_name)
+		var container_idx = i / 3 + 1
+		var price_idx = i % 3 + 1 + (container_idx - 1) * 3
+		var price_path = "VBoxContainer/PriceContainer" + str(container_idx) + "/Price" + str(price_idx)
+
+		if has_node(price_path):
+			var price_label = get_node(price_path)
 			var effect = booster_pack[i].get("effect", "")
 			price_label.text = effect if effect != "" else "No Effect"
 			price_label.visible = true
 
-
 func _on_button_hide_pressed() -> void:
 	$FullCard.visible = false
+	$VBoxContainer.visible = true
 
 func show_full_card(index: int):
 	var card_data = booster_pack[index]
@@ -392,6 +499,7 @@ func show_full_card(index: int):
 	elif $FullCard.has_node("Panel") and $FullCard.get_node("Panel").has_method("set_effect"):
 		$FullCard.get_node("Panel").set_effect(card_data.get("effect", ""))
 	$FullCard.visible = true
+	$VBoxContainer.visible = false
 
 func _check_all_revealed():
 	var all_revealed = true
@@ -401,9 +509,9 @@ func _check_all_revealed():
 			break
 
 	if all_revealed:
-		# Change button from "Reveal" to "Again (¥500)"
+		# Change button from "Reveal" to "Again (¥1000)"
 		$ButtonReveal.disabled = false
-		$ButtonReveal.text = "Again (¥500)"
+		$ButtonReveal.text = "Again (¥1000)"
 		# Change button's functionality to open new pack instead of revealing cards
 		if $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_reveal_pressed")):
 			$ButtonReveal.disconnect("pressed", Callable(self, "_on_button_reveal_pressed"))
@@ -414,14 +522,14 @@ func _check_all_revealed():
 
 func _on_button_again_pressed() -> void:
 	# Check if player has enough money
-	if Global.money >= 500:
+	if Global.money >= 1000:
 		# Deduct money
-		Global.money -= 500
+		Global.money -= 1000
 		Global.save_data()
 
 		# Reset card state
 		revealed_cards = []
-		for i in range(5):
+		for i in range(9):
 			revealed_cards.append(false)
 
 		# Generate new booster pack
@@ -429,21 +537,24 @@ func _on_button_again_pressed() -> void:
 
 		# Reset UI
 		initialize_face_down_cards()
-				# Reset card effects when showing backcard
-		if has_node("CardContainer"):
-			var card_container = get_node("CardContainer")
-			for i in range(5):
-				var card_node_name = "Card" + str(i + 1)
-				if card_container.has_node(card_node_name):
-					var card_node = card_container.get_node(card_node_name)
+
+		# Reset card effects for all cards
+		for container_idx in range(1, 4):
+			for card_idx in range(1, 4):
+				var actual_card_idx = (container_idx - 1) * 3 + card_idx
+				var card_path = "VBoxContainer/CardContainer" + str(container_idx) + "/Card" + str(actual_card_idx)
+
+				if has_node(card_path):
+					var card_node = get_node(card_path)
 					if card_node.has_method("set_effect"):
-						card_node.set_effect("")  # Remove effect by setting empty string
+						card_node.set_effect("")
 					elif card_node.has_node("Panel") and card_node.get_node("Panel").has_method("set_effect"):
-						card_node.get_node("Panel").set_effect("")  # Remove effect from Panel if method exists there
+						card_node.get_node("Panel").set_effect("")
 					if card_node.has_node("Panel/Info/Overlay"):
 						var overlay = card_node.get_node("Panel/Info/Overlay")
 						overlay.material = null
-					card_node.get_node("Panel/Picture").position.y = 0
+					if card_node.has_node("Panel/Picture"):
+						card_node.get_node("Panel/Picture").position.y = 0
 
 		# Reset button
 		$ButtonReveal.text = "Reveal"
@@ -453,10 +564,13 @@ func _on_button_again_pressed() -> void:
 			$ButtonReveal.connect("pressed", Callable(self, "_on_button_reveal_pressed"))
 
 		# Hide all price labels
-		for i in range(5):
-			var price_label_name = "Price" + str(i + 1)
-			if has_node(price_label_name):
-				get_node(price_label_name).visible = false
+		for container_idx in range(1, 4):
+			for price_idx in range(1, 4):
+				var actual_price_idx = (container_idx - 1) * 3 + price_idx
+				var price_path = "VBoxContainer/PriceContainer" + str(container_idx) + "/Price" + str(actual_price_idx)
+
+				if has_node(price_path):
+					get_node(price_path).text = ""
 
 		# Disable Ok button until all cards are revealed again
 		$ButtonOk.disabled = true
@@ -464,21 +578,6 @@ func _on_button_again_pressed() -> void:
 		$NotMoney.visible = true
 		await get_tree().create_timer(1).timeout
 		$NotMoney.visible = false
-
-func _on_button_1_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.
-
-func _on_button_2_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.
-
-func _on_button_3_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.
-
-func _on_button_4_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.
-
-func _on_button_5_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_accept"):
