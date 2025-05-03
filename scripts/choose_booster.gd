@@ -153,6 +153,8 @@ func check_booster_availability():
 	if current_day % 3 == 0:
 		available_types.append("Triples")
 
+	# available_types = ["Primes", "Evens", "Odds", "Triples"]  # Uncomment this line to enable all types
+
 	# Check if the current booster type is available
 	if Global.boostertype in available_types:
 		if has_node("OutStock"):
@@ -187,6 +189,7 @@ func _on_button_open_booster_pressed() -> void:
 	var price = booster_types[Global.boostertype]["price"]
 	if Global.money >= price:
 		Global.money -= price  # Deduct the cost of the booster pack
+		Global.money_spent += price  # Track the money spent
 		Global.save_data()  # Save the remaining money
 		get_tree().change_scene_to_file("res://scenes/openbooster.tscn")
 	else:

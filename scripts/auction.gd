@@ -84,7 +84,7 @@ func update_prices():
 	var id_set = auction_card["id_set"]
 	var base_price = Global.prices.get(id_set, 100)
 	var effect_multiplier = get_effect_multiplier(auction_effect)
-	market_price = int(base_price * effect_multiplier * (0.2 * (2.7 ** (auction_grading - 6))))
+	market_price = int(base_price * effect_multiplier * (0.2 * (1.3 ** (auction_grading - 6))))
 	bid_price = int(market_price * (0.5 + randf() * 0.2)) # Start at 50-70% of market price
 
 func update_ui():
@@ -183,6 +183,7 @@ func finish_auction():
 	if player_is_winner and Global.money >= bid_price:
 		$Notif/Label.text = "Congratulations! You won the auction!\nFinal Price: ¥%d" % bid_price
 		Global.money -= bid_price
+		Global.money_spent += bid_price
 		# Add to collection with grading and effect!
 		Global.add_to_collection(auction_card["id_set"], 1, auction_effect, 0, auction_grading, 0)
 		Global.save_data()

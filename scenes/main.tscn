@@ -28,7 +28,7 @@ theme = ExtResource("1_sugp2")
 script = ExtResource("1_o5qli")
 
 [node name="Background2" type="Sprite2D" parent="."]
-position = Vector2(540, 950)
+position = Vector2(540, 960)
 texture = ExtResource("3_jyhfs")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -101,6 +101,7 @@ text = "Decks"
 
 [node name="ButtonLab" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -320,7 +321,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
-text = "v0.35"
+text = "v0.36"
 horizontal_alignment = 2
 
 [node name="Ginme" type="Button" parent="Version"]
@@ -351,6 +352,23 @@ theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
 text = "Time Played: 00:00"
+
+[node name="MoneySpent" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -528.0
+offset_top = 1802.0
+offset_right = 285.0
+offset_bottom = 1873.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 48
+text = "Money Spent: ¥0"
 
 [connection signal="pressed" from="VBoxContainer/OpenBooster" to="." method="_on_open_booster_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonAuction" to="." method="_on_button_auction_pressed"]

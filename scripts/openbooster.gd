@@ -280,7 +280,7 @@ func reveal_card(index: int):
 
 				# Calculate price using grading and effect
 				var price = base_price * effect_modifier
-				price *= 0.2 * (2.7 ** (card_grading - 6))  # Tuned base (2.7)
+				price *= 0.2 * (1.3 ** (card_grading - 6))  # Tuned base (1.7)
 				price = int(max(1, round(price/2)))
 
 				# Display in the label
@@ -509,10 +509,28 @@ func _check_all_revealed():
 			break
 
 	if all_revealed:
-		# Change button from "Reveal" to "Again (¥1000)"
+		# Change button from "Reveal" to "Again (¥XXX)" with the correct cost
 		$ButtonReveal.disabled = false
-		$ButtonReveal.text = "Again (¥1000)"
-		# Change button's functionality to open new pack instead of revealing cards
+		if Global.unlock < 5:
+			$ButtonReveal.disabled = true
+			$ButtonReveal.text = "Reveal (L)"
+		else:
+			# Determine the cost based on the booster type
+			var booster_cost = 1000  # Default cost
+			match Global.boostertype:
+				"Primes":
+					booster_cost = 800
+				"Triples":
+					booster_cost = 900
+				"Evens":
+					booster_cost = 1100
+				"Odds":
+					booster_cost = 1000
+
+			$ButtonReveal.disabled = false
+			$ButtonReveal.text = "Again (¥%d)" % booster_cost
+
+		# Change button's functionality to open a new pack instead of revealing cards
 		if $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_reveal_pressed")):
 			$ButtonReveal.disconnect("pressed", Callable(self, "_on_button_reveal_pressed"))
 		if not $ButtonReveal.is_connected("pressed", Callable(self, "_on_button_again_pressed")):
@@ -521,10 +539,23 @@ func _check_all_revealed():
 	$ButtonOk.disabled = not all_revealed
 
 func _on_button_again_pressed() -> void:
+	# Determine the cost based on the booster type
+	var booster_cost = 1000  # Default cost
+	match Global.boostertype:
+		"Primes":
+			booster_cost = 800
+		"Triples":
+			booster_cost = 900
+		"Evens":
+			booster_cost = 1100
+		"Odds":
+			booster_cost = 1000
+
 	# Check if player has enough money
-	if Global.money >= 1000:
+	if Global.money >= booster_cost:
 		# Deduct money
-		Global.money -= 1000
+		Global.money -= booster_cost
+		Global.money_spent += booster_cost
 		Global.save_data()
 
 		# Reset card state
@@ -575,6 +606,7 @@ func _on_button_again_pressed() -> void:
 		# Disable Ok button until all cards are revealed again
 		$ButtonOk.disabled = true
 	else:
+		# Show "Not enough money" message
 		$NotMoney.visible = true
 		await get_tree().create_timer(1).timeout
 		$NotMoney.visible = false

@@ -20,7 +20,7 @@ theme = ExtResource("3_4k4yi")
 script = ExtResource("1_rsvmj")
 
 [node name="Background2" type="Sprite2D" parent="."]
-position = Vector2(540, 950)
+position = Vector2(540, 960)
 texture = ExtResource("3_uwart")
 
 [node name="ButtonOpenBooster" type="TextureButton" parent="."]

@@ -125,6 +125,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sy11y")
 
 [node name="name" type="Label" parent="Panel/Info"]
+visible = false
 layout_mode = 0
 offset_left = 100.0
 offset_top = 66.0
@@ -140,17 +141,17 @@ uppercase = true
 
 [node name="number" type="Label" parent="Panel/Info"]
 layout_mode = 0
-offset_left = 527.0
-offset_top = 39.0
-offset_right = 704.0
-offset_bottom = 138.0
+offset_left = 109.0
+offset_top = 75.0
+offset_right = 429.0
+offset_bottom = 152.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_ktuci")
 theme_override_font_sizes/font_size = 64
 text = "99"
-horizontal_alignment = 2
+horizontal_alignment = 1
 
 [node name="set" type="Label" parent="Panel/Info"]
 visible = false
@@ -255,8 +256,9 @@ offset_left = 94.0
 offset_top = 909.0
 offset_right = 698.0
 offset_bottom = 1071.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 16
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 24
 theme_override_font_sizes/font_size = 136
 text = "OG : 10"
 horizontal_alignment = 1

@@ -1,13 +1,14 @@
 extends Control
 
-const CARDS_PER_PAGE = 12
+const CARDS_PER_PAGE = 16
 
 enum SortMode {
-	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NAME_UP, NAME_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN  # Add these new sort modes
+	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN  # Add these new sort modes
 }
+
 var sort_modes = [
 	SortMode.NONE, SortMode.PRICE_UP, SortMode.PRICE_DOWN, SortMode.RARITY_UP, SortMode.RARITY_DOWN,
-	SortMode.NAME_UP, SortMode.NAME_DOWN, SortMode.NUMBER_UP, SortMode.NUMBER_DOWN,
+	SortMode.NUMBER_UP, SortMode.NUMBER_DOWN,
 	SortMode.GRADE_UP, SortMode.GRADE_DOWN  # Add the new sort modes
 ]
 var sort_mode: int = SortMode.NONE
@@ -24,7 +25,9 @@ var card_node_paths = [
 	"VBoxContainer/HBoxContainer2/Card1", "VBoxContainer/HBoxContainer2/Card2", "VBoxContainer/HBoxContainer2/Card3",
 	"VBoxContainer/HBoxContainer2/Card4",
 	"VBoxContainer/HBoxContainer3/Card1", "VBoxContainer/HBoxContainer3/Card2", "VBoxContainer/HBoxContainer3/Card3",
-	"VBoxContainer/HBoxContainer3/Card4"
+	"VBoxContainer/HBoxContainer3/Card4",
+	"VBoxContainer/HBoxContainer4/Card1", "VBoxContainer/HBoxContainer4/Card2", "VBoxContainer/HBoxContainer4/Card3",
+	"VBoxContainer/HBoxContainer4/Card4"
 ]
 
 # To remember which card is being shown in FullCard for selling
@@ -113,10 +116,6 @@ func update_sort_label():
 				label.text = "Rarity Asc"
 			SortMode.RARITY_DOWN:
 				label.text = "Rarity Desc"
-			SortMode.NAME_UP:
-				label.text = "Name Asc"
-			SortMode.NAME_DOWN:
-				label.text = "Name Desc"
 			SortMode.NUMBER_UP:
 				label.text = "Number Asc"
 			SortMode.NUMBER_DOWN:
@@ -164,10 +163,6 @@ func sort_card_keys():
 			card_keys.sort_custom(Callable(self, "_sort_by_rarity_asc"))
 		SortMode.RARITY_DOWN:
 			card_keys.sort_custom(Callable(self, "_sort_by_rarity_desc"))
-		SortMode.NAME_UP:
-			card_keys.sort_custom(Callable(self, "_sort_by_name_asc"))
-		SortMode.NAME_DOWN:
-			card_keys.sort_custom(Callable(self, "_sort_by_name_desc"))
 		SortMode.NUMBER_UP:
 			card_keys.sort_custom(Callable(self, "_sort_by_number_asc"))
 		SortMode.NUMBER_DOWN:
@@ -267,6 +262,7 @@ func _sort_by_grade_desc(a, b):
 # Helper function to calculate the full price with all modifiers
 func _get_full_card_price(card_entry):
 	var base_price = Global.prices.get(card_entry["id_set"], 0)
+	var protection = card_entry.get("protection", 0)
 	if base_price == 0:
 		return 0
 
@@ -274,9 +270,13 @@ func _get_full_card_price(card_entry):
 	var multiplier = Global.get_effect_multiplier(card_entry["effect"])
 	var price = base_price * multiplier
 
+	# Apply protection modifier
+	if protection == 2:
+		price *= 1.5 # Adjust price based on protection PSA
+
 	# Apply grading modifier
 	var grading = card_entry.get("grading", 8)
-	price *= 0.2 * (2.7 ** (grading - 6))  # Grading formula
+	price *= 0.2 * (1.3 ** (grading - 6))  # Grading formula
 
 	# Final adjustment and rounding
 	price = int(max(1, round(price/2)))
@@ -293,7 +293,7 @@ func get_card_price(id_set, effect, grading = 8):
 	price *= multiplier
 
 	# Apply grading modifier
-	price *= 0.2 * (2.7 ** (grading - 6))  # Same grading formula
+	price *= 0.2 * (1.3 ** (grading - 6))  # Same grading formula
 
 	# Final adjustment and rounding
 	price = int(max(1, round(price/2)))
@@ -690,7 +690,15 @@ func _on_confirm_sell():
 			get_node("ButtonProtect").visible = false
 		if has_node("ButtonSacrifice"):
 			get_node("ButtonSacrifice").visible = false
+
+		$ButtonDupe.visible = true
+		$ButtonFilters.visible = true
+		$HBoxContainer.visible = true
+		$Sets.visible = true
+		$Sort.visible = true
+
 	else:
+
 		print("ERROR: Could not find specific card to sell")
 		$VBoxContainer.visible = true
 		$Panel.visible = false
@@ -703,6 +711,12 @@ func _on_confirm_sell():
 			get_node("ButtonProtect").visible = false
 		if has_node("ButtonSacrifice"):
 			get_node("ButtonSacrifice").visible = false
+
+		$ButtonDupe.visible = true
+		$ButtonFilters.visible = true
+		$HBoxContainer.visible = true
+		$Sets.visible = true
+		$Sort.visible = true
 
 func _on_button_left_pressed():
 	if has_node("FullCard") and get_node("FullCard").visible:
@@ -861,6 +875,7 @@ func _on_confirm_protect_card() -> void:
 		return
 
 	Global.money -= 100
+	Global.money_spent += 100
 
 	var entry = Global.collection[fullcard_id_set]
 	var cards_array = entry.get("cards", [])
@@ -959,30 +974,8 @@ func _on_button_sacrifice_pressed() -> void:
 	full_card_original_position = full_card.position
 	full_card_original_scale = full_card.scale
 	full_card_original_rotation = full_card.rotation_degrees
-	# After removing the card, before saving data
-	var rarity = "D"
-	var effect = ""
-	if Global.cards.has(fullcard_id_set):
-		rarity = Global.cards[fullcard_id_set].get("rarity", "D")
-	if Global.collection.has(fullcard_id_set):
-		effect = Global.collection[fullcard_id_set].get("effect", "")
-	var souls_gained = 1
-	match rarity:
-		"D":
-			souls_gained = 1
-		"C":
-			souls_gained = 2
-		"B":
-			souls_gained = 5
-		"A":
-			souls_gained = 10
-		"S":
-			souls_gained = 15
-		"X":
-			souls_gained = 20
 
-
-	Global.souls += souls_gained
+	# Check if we have a valid card selected
 	if fullcard_id_set == null:
 		print("ERROR: No card selected for sacrifice!")
 		return
@@ -990,46 +983,91 @@ func _on_button_sacrifice_pressed() -> void:
 		print("ERROR: Card not found in collection for sacrifice!")
 		return
 
+	# After removing the card, before saving data
+	var rarity = "D"
+	if Global.cards.has(fullcard_id_set):
+		rarity = Global.cards[fullcard_id_set].get("rarity", "D")
+
+	# Calculate base souls from rarity
+	var souls_gained = 1
+	match rarity:
+		"D": souls_gained = 1
+		"C": souls_gained = 2
+		"B": souls_gained = 5
+		"A": souls_gained = 10
+		"S": souls_gained = 15
+		"X": souls_gained = 20
+
 	# Remove only the specific card instance
 	var entry = Global.collection[fullcard_id_set]
 	var cards_array = entry.get("cards", [])
 	var found_card_index = -1
 
-	for i in range(cards_array.size()):
-		if cards_array[i].get("effect", "") == fullcard_effect:
-			found_card_index = i
-			break
+	# FIXED: Improved card identification by using the card instance reference or matching multiple attributes
+	if fullcard_card_instance != null:
+		# Use direct instance reference if available
+		for i in range(cards_array.size()):
+			if cards_array[i] == fullcard_card_instance:
+				found_card_index = i
+				break
 
-	match fullcard_effect:
-		"Silver":
-			souls_gained += 1
-		"Gold":
-			souls_gained += 2
-		"Holo":
-			souls_gained += 3
-		"Full Art":
-			souls_gained += 5
-		"Full Silver":
-			souls_gained += 7
-		"Full Gold":
-			souls_gained += 8
-		"Full Holo":
-			souls_gained += 10
-	Global.souls += souls_gained
+	# Fallback: match by effect AND grading if we couldn't find by reference
+	if found_card_index == -1 and fullcard_card_instance != null:
+		var target_effect = fullcard_card_instance.get("effect", "")
+		var target_grading = fullcard_card_instance.get("grading", 8)
+		var target_protection = fullcard_card_instance.get("protection", 0)
 
+		for i in range(cards_array.size()):
+			var card = cards_array[i]
+			if card.get("effect", "") == target_effect and \
+			   card.get("grading", 8) == target_grading and \
+			   card.get("protection", 0) == target_protection:
+				found_card_index = i
+				break
+
+	# Final fallback: just match by effect (original behavior)
+	if found_card_index == -1:
+		print("DEBUG: Fallback to matching by effect only")
+		for i in range(cards_array.size()):
+			if cards_array[i].get("effect", "") == fullcard_effect:
+				found_card_index = i
+				break
+
+	# Get the effect for souls calculation from the actual found card
+	var effect = ""
 	if found_card_index != -1:
-		cards_array.remove_at(found_card_index)
-		if cards_array.size() == 0:
-			Global.collection.erase(fullcard_id_set)
+		effect = cards_array[found_card_index].get("effect", "")
 	else:
 		print("ERROR: Could not find specific card to sacrifice!")
 		return
 
+	# Calculate additional souls from effect
+	match effect:
+		"Silver": souls_gained += 1
+		"Gold": souls_gained += 2
+		"Holo": souls_gained += 3
+		"Full Art": souls_gained += 5
+		"Full Silver": souls_gained += 7
+		"Full Gold": souls_gained += 8
+		"Full Holo": souls_gained += 10
+
+	# Add souls and remove the card
+	Global.souls += souls_gained
+	print("DEBUG: Sacrificed card at index", found_card_index, "with effect", effect, "- Souls gained:", souls_gained)
+
+	# Remove the card from collection
+	cards_array.remove_at(found_card_index)
+	if cards_array.size() == 0:
+		Global.collection.erase(fullcard_id_set)
+
+	# Save and update
 	Global.save_data()
 	var prev_page = current_page
 	update_card_keys()
 	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
+
+	# Animation
 	var target_y = -full_card.size.y
 	var tween = create_tween()
 	tween.set_parallel(true)
@@ -1088,6 +1126,9 @@ func _on_full_view_pressed() -> void:
 	var effect_overlay = $FullCard/Panel/Info/Overlay
 	var picture = $FullCard/Panel/Picture
 
+	# Check if the card is "Full Art"
+	var is_full_art = (fullcard_effect == "Full Art")
+
 	if info_panel.visible:
 		# Hide info panel and effect overlay
 		info_panel.visible = false
@@ -1100,9 +1141,11 @@ func _on_full_view_pressed() -> void:
 		# Set picture position Y to 0
 		picture.position.y = 0
 	else:
-		# Show info panel and effect overlay
+		# Show info panel
 		info_panel.visible = true
-		effect_overlay.visible = true
+
+		# Show effect overlay only if the card is not "Full Art"
+		effect_overlay.visible = not is_full_art
 
 		# Restore original position of the picture if it was stored
 		if picture.has_meta("original_position"):

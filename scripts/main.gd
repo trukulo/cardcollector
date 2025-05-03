@@ -54,6 +54,7 @@ func _ready() -> void:
 
 
 	$Playtime.text = "Playtime: " + Global.format_playtime()
+	$MoneySpent.text = "Money spent: ¥%d" % Global.money_spent
 
 	if Global.unlock == 0:
 		await _narrator("In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation.")

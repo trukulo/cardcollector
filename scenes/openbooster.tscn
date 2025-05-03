@@ -20,7 +20,7 @@ theme = ExtResource("1_ysxdp")
 script = ExtResource("1_g08gs")
 
 [node name="Background2" type="Sprite2D" parent="."]
-position = Vector2(540, 950)
+position = Vector2(540, 960)
 texture = ExtResource("3_mm8m7")
 
 [node name="ButtonOk" type="Button" parent="."]

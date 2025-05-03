@@ -6,6 +6,7 @@ var prices: Dictionary = {}
 var collection: Dictionary = {}
 
 var money: int = 0
+var money_spent: int = 0
 var souls: int = 0
 var last_connection: int = 0
 var deck_names: Dictionary = { 0: "Out of deck" }
@@ -92,7 +93,7 @@ func generate_cards_with_seed(seed: int = 12345):  # Default seed is 12345
 
 	var rarity_points = {"D": 9, "C": 11, "B": 13, "A": 15, "S": 17, "X": 19}
 	var base_price = {
-		"D": [1, 49], "C": [50, 99], "B": [100, 499],
+		"D": [1, 24], "C": [25, 49], "B": [50, 499],
 		"A": [500, 999], "S": [1000, 4999], "X": [5000, 10000]
 	}
 
@@ -354,7 +355,8 @@ func save_data():
 		"info": info,  # Save the info variable
 		"unlock": unlock,
 		"playtime": playtime,  # Save the playtime
-		"last_playtime_save": last_playtime_save  # Save the last timestamp
+		"last_playtime_save": last_playtime_save,  # Save the last timestamp
+		"money_spent": money_spent
 	}
 	f.store_var(data)
 	f.close()
@@ -375,7 +377,8 @@ func load_data():
 		info = data.get("info", true)  # Load the info variable
 		unlock = data.get("unlock", 0)  # Load the unlock variable
 		playtime = data.get("playtime", 0)  # Load the playtime, default to 0
-		last_playtime_save = data.get("last_playtime_save", Time.get_unix_time_from_system())  # Load the last timestamp
+		last_playtime_save = data.get("last_playtime_save", Time.get_unix_time_from_system())
+		money_spent = data.get("money_spent", 0)  # Load the money spent
 	else:
 		collection = {}
 		money = 10000
@@ -386,6 +389,8 @@ func load_data():
 		selected_set = 1
 		playtime = 0
 		last_playtime_save = Time.get_unix_time_from_system()
+		unlock = 0
+		money_spent = 0
 		# Initialize available_sets as in reset_game
 		for set_id in range(1, 101):
 			available_sets[set_id] = true
@@ -399,7 +404,7 @@ func load_data():
 func update_money_by_time():
 	var now = Time.get_unix_time_from_system()
 	var seconds_passed = now - last_connection
-	var dollars_earned = int(seconds_passed / 12)  # Earn 1 dollar every 1200 seconds
+	var dollars_earned = int(seconds_passed / 60)  # Earn 1 dollar every 6000 seconds
 	money += dollars_earned
 	last_connection = now
 	save_data()  # Save the updated money and last connection time
@@ -590,21 +595,22 @@ func protect_card_instance(id_set: String, grading: int = -1, effect: String = "
 func get_effect_multiplier(effect: String) -> float:
 	match effect:
 		"Silver":
-			return 2.0
+			return 1.5
 		"Gold":
-			return 3.0
+			return 2.0
 		"Holo":
-			return 4.0
+			return 2.5
 		"Full Art":
-			return 5.0
+			return 3.0
 		"Full Silver":
-			return 6.0
+			return 5.0
 		"Full Gold":
-			return 8.0
+			return 7.0
 		"Full Holo":
 			return 10.0
 		_:
 			return 1.0
+
 
 func update_playtime():
 	var current_time = Time.get_unix_time_from_system()

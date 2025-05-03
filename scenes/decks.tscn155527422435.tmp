@@ -32,15 +32,15 @@ grow_vertical = 2
 script = ExtResource("1_43i6p")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(540, 960)
+position = Vector2(540, 950)
 texture = ExtResource("1_hcl2w")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 9.00001
+offset_top = -6.99999
 offset_right = 4138.0
-offset_bottom = 4753.0
+offset_bottom = 4401.0
 scale = Vector2(0.33, 0.33)
 theme_override_constants/separation = 120
 alignment = 1
@@ -520,9 +520,9 @@ autowrap_mode = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 657.0
-offset_top = 1777.0
+offset_top = 1761.0
 offset_right = 1070.0
-offset_bottom = 1889.0
+offset_bottom = 1873.0
 
 [node name="ButtonLeft" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -557,9 +557,9 @@ text = ">"
 [node name="Sets" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 13.0
-offset_top = 1632.0
+offset_top = 1616.0
 offset_right = 429.0
-offset_bottom = 1744.0
+offset_bottom = 1728.0
 
 [node name="SetLeft" type="Button" parent="Sets"]
 layout_mode = 2
@@ -596,9 +596,9 @@ text = ">"
 [node name="Sort" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 13.0
-offset_top = 1782.0
+offset_top = 1766.0
 offset_right = 429.0
-offset_bottom = 1894.0
+offset_bottom = 1878.0
 
 [node name="SortLeft" type="Button" parent="Sort"]
 layout_mode = 2
@@ -674,9 +674,9 @@ flat = true
 [node name="ButtonDupe" type="Button" parent="."]
 layout_mode = 0
 offset_left = 657.0
-offset_top = 1630.0
+offset_top = 1614.0
 offset_right = 857.0
-offset_bottom = 1758.0
+offset_bottom = 1742.0
 size_flags_horizontal = 3
 theme = ExtResource("4_5b8sw")
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -688,9 +688,9 @@ text = "DUPES"
 [node name="ButtonFilters" type="Button" parent="."]
 layout_mode = 0
 offset_left = 869.0
-offset_top = 1630.0
+offset_top = 1614.0
 offset_right = 1069.0
-offset_bottom = 1758.0
+offset_bottom = 1742.0
 size_flags_horizontal = 3
 theme = ExtResource("7_xkufl")
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
