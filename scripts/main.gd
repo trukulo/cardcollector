@@ -235,3 +235,7 @@ func _on_button_junk_pressed() -> void:
 
 func _on_button_lab_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/lab.tscn")
+
+
+func _on_button_cards_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/cardview.tscn")

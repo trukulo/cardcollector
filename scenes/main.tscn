@@ -99,6 +99,20 @@ theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Decks"
 
+[node name="ButtonCards" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("6_85g3d")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Cards
+"
+
 [node name="ButtonLab" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 visible = false
@@ -321,7 +335,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
-text = "v0.36"
+text = "v0.37"
 horizontal_alignment = 2
 
 [node name="Ginme" type="Button" parent="Version"]
@@ -374,6 +388,7 @@ text = "Money Spent: ¥0"
 [connection signal="pressed" from="VBoxContainer/ButtonAuction" to="." method="_on_button_auction_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonCollection" to="." method="_on_button_collection_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonDecks" to="." method="_on_button_decks_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonCards" to="." method="_on_button_cards_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonLab" to="." method="_on_button_lab_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonPlay" to="." method="_on_button_play_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonShortDuel" to="." method="_on_button_short_duel_pressed"]
