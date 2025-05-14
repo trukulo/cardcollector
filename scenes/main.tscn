@@ -110,7 +110,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
-text = "Cards
+text = "Gallery
 "
 
 [node name="ButtonLab" type="Button" parent="VBoxContainer"]
@@ -154,6 +154,19 @@ theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 72
 text = "Memory"
+
+[node name="ButtonGravity" type="Button" parent="VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("7_choun")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_0wfyh")
+theme_override_font_sizes/font_size = 72
+text = "Gravity Mem"
 
 [node name="ButtonShortDuel" type="Button" parent="VBoxContainer2"]
 unique_name_in_owner = true
@@ -325,9 +338,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 56.0
+offset_left = 62.0
 offset_top = 1858.0
-offset_right = 520.0
+offset_right = 526.0
 offset_bottom = 1929.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -335,7 +348,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
-text = "v0.37"
+text = "v0.38"
 horizontal_alignment = 2
 
 [node name="Ginme" type="Button" parent="Version"]
@@ -391,6 +404,7 @@ text = "Money Spent: ¥0"
 [connection signal="pressed" from="VBoxContainer/ButtonCards" to="." method="_on_button_cards_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonLab" to="." method="_on_button_lab_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonPlay" to="." method="_on_button_play_pressed"]
+[connection signal="pressed" from="VBoxContainer2/ButtonGravity" to="." method="_on_button_gravity_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonShortDuel" to="." method="_on_button_short_duel_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonDuels" to="." method="_on_button_duels_pressed"]
 [connection signal="pressed" from="VBoxContainer2/ButtonSacrifice" to="." method="_on_button_sacrifice_pressed"]

@@ -89,9 +89,6 @@ func _on_button_reset_pressed() -> void:
 func _on_reset_confirmed() -> void:
 	Global.reset_game()
 	update_money_label()
-	%ButtonDuels.visible = false
-	%ButtonShortDuel.visible = false
-	# Optionally, you can update UI or notify the player here
 
 func _on_button_decks_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/decks.tscn")
@@ -198,6 +195,9 @@ func _unlock() -> void:
 	if Global.unlock < 4:
 		$VBoxContainer2/ButtonShortDuel.disabled = true
 		$VBoxContainer2/ButtonShortDuel.text = "Duel (L)"
+	if Global.unlock < 5:
+		$VBoxContainer2/ButtonGravity.disabled = true
+		$VBoxContainer2/ButtonGravity.text = "Gravity (L)"
 	if Global.unlock < 7:
 		$VBoxContainer2/ButtonDuels.disabled = true
 		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
@@ -239,3 +239,7 @@ func _on_button_lab_pressed() -> void:
 
 func _on_button_cards_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/cardview.tscn")
+
+
+func _on_button_gravity_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/gravity.tscn")

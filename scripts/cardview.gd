@@ -28,67 +28,51 @@ func load_set(set_id: int) -> void:
 		print("Set %d is not unlocked." % set_id)
 		return
 
-	# Collect all cards for the selected set
-	var cards_array = []
+	# Collect all unique cards in the player's collection for the selected set
+	var unique_cards = []
+	var seen_ids = {}
 	for id_set in Global.collection.keys():
-		if id_set.ends_with("_%d" % set_id):  # Check if the card belongs to the selected set
-			for card_instance in Global.collection[id_set]["cards"]:
-				cards_array.append({"id_set": id_set, "card_instance": card_instance})
+		if id_set.ends_with("_%d" % set_id) and not seen_ids.has(id_set):
+			unique_cards.append(Global.cards[id_set])
+			seen_ids[id_set] = true
 
-	# Sort the cards by their number (id)
-	cards_array.sort_custom(Callable(self, "_sort_by_card_number"))
+	# Sort the unique cards by their number (id)
+	unique_cards.sort_custom(Callable(self, "_sort_by_card_number"))
 
-
-	# Add the cards to the grid
-	var cards_loaded = false
-	for card_data in cards_array:
-		var id_set = card_data["id_set"]
-		var card_instance = card_data["card_instance"]
-
-		# Ensure the id_set matches a key in Global.cards
-		if not Global.cards.has(id_set):
-			print("Warning: id_set '%s' not found in Global.cards!" % id_set)
-			continue
-
-		# Load card data from Global.cards
-		var card_details = Global.cards[id_set]
-
+	# Add the unique cards to the grid
+	for card_data in unique_cards:
+		print("Adding card to grid:", card_data["id"])  # Debugging
 		# Duplicate the template
 		var card_node = card_template.duplicate()
 		card_node.visible = true
 		grid_container.add_child(card_node)
 
 		# Populate card details
-		card_node.get_node("Panel/Info/name").text = card_details.get("name", "Unknown").to_upper()
-		card_node.get_node("Panel/Info/number").text = str(card_details.get("id", 0))
-		card_node.get_node("Panel/Info/red").text = str(card_details.get("red", 0))
-		card_node.get_node("Panel/Info/blue").text = str(card_details.get("blue", 0))
-		card_node.get_node("Panel/Info/yellow").text = str(card_details.get("yellow", 0))
+		card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
+		card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
+		card_node.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
+		card_node.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
+		card_node.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
+
+		 # Disable the Panel/Info section
+		var info_panel = card_node.get_node("Panel/Info")
+		if info_panel:
+			info_panel.visible = false  # Disable the Info panel
+			card_node.get_node("Panel/Picture").position.y = 0
 
 		# Load the texture for the card picture
-		var image_path = card_details.get("image", "")
+		var image_path = card_data.get("image", "")
 		if ResourceLoader.exists(image_path):
 			card_node.get_node("Panel/Picture").texture = load(image_path)
 		else:
-			print("Warning: Image not found for card:", card_details.get("name", "Unknown"))
-
-		# Set the effect for the card (from card instance)
-		var effect = card_instance.get("effect", "")
-
-		if card_node.has_method("set_effect"):
-			card_node.set_effect(effect)
+			print("Warning: Image not found for card:", card_data.get("name", "Unknown"))
 
 		# Connect the card button to show the FullCard
 		var button = card_node.get_node("Button")  # Adjust the path if necessary
 		if button:
-			button.connect("pressed", Callable(self, "_on_card_pressed").bind(id_set, card_instance))
+			button.connect("pressed", Callable(self, "_on_card_pressed").bind(card_data["id_set"], {}))
 		else:
 			print("Warning: Button node not found in card_node!")
-
-		cards_loaded = true
-
-	if not cards_loaded:
-		print("No cards from set %d in the player's collection." % set_id)
 
 	# Update the set label
 	update_set_label()
@@ -114,7 +98,6 @@ func _on_set_right_pressed() -> void:
 func _on_card_pressed(id_set: String, card_instance: Dictionary) -> void:
 	# Make FullCard visible
 	var full_card = $FullCard
-	full_card.visible = true
 
 	# Get card data from Global.cards
 	var card_data = Global.cards[id_set]
@@ -135,18 +118,20 @@ func _on_card_pressed(id_set: String, card_instance: Dictionary) -> void:
 
 	# Retrieve and set the effect for the FullCard from card_instance
 	var effect = card_instance.get("effect", "")
-	print("Effect retrieved for FullCard from collection:", effect)  # Debug: Print the effect being set
+
 	if full_card.has_method("set_effect"):
 		full_card.set_effect(effect)
 	else:
 		print("Warning: FullCard does not have a set_effect() method!")
 
-func _sort_by_card_number(a: Dictionary, b: Dictionary) -> int:
-	# Extract the numeric part (card ID) from id_set
-	var card_id_a = int(a["id_set"].split("_")[0])
-	var card_id_b = int(b["id_set"].split("_")[0])
+	var info_panel = full_card.get_node("Panel/Info")
+	info_panel.visible = false  # Disable the Info panel
+	$FullCard/Panel/Picture.position.y = 0
+	full_card.visible = true
 
-	# Compare the card IDs as integers
+func _sort_by_card_number(a: Dictionary, b: Dictionary) -> int:
+	var card_id_a = int(a["id_set"].split("_")[0].strip_edges())
+	var card_id_b = int(b["id_set"].split("_")[0].strip_edges())
 	return card_id_a - card_id_b
 
 func _on_button_ok_pressed() -> void:

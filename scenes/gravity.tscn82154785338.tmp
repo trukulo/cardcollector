@@ -1,0 +1,376 @@
+[gd_scene load_steps=8 format=3 uid="uid://b7idehoiceks2"]
+
+[ext_resource type="Script" uid="uid://bcagay6lhvy12" path="res://scripts/gravity.gd" id="1_4ba0n"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_a6pud"]
+[ext_resource type="Texture2D" uid="uid://bnwfd2uyb8wi7" path="res://gui/boosterpack_empty.png" id="2_0cvqw"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="3_lptuc"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="4_ndkqr"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_0cvqw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
+
+[node name="Memory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4ba0n")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(540, 960)
+texture = ExtResource("1_a6pud")
+
+[node name="PicBooster" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -384.0
+offset_top = 482.0
+offset_right = 422.0
+offset_bottom = 1655.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.341094, 0.350113)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = 46.0
+offset_right = 2261.0
+offset_bottom = 2606.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+theme_override_constants/separation = 32
+
+[node name="VBoxContainer1" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 2
+
+[node name="Slot1" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot2" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot3" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot4" parent="HBoxContainer/VBoxContainer1" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer1/Slot4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 2
+
+[node name="Slot5" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot6" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot7" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot8" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/Slot8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 2
+
+[node name="Slot9" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot10" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot10"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot11" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot11"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot12" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer3/Slot12"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 2
+
+[node name="Slot13" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot13"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot14" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot14"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot15" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot15"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Slot16" parent="HBoxContainer/VBoxContainer4" instance=ExtResource("4_ndkqr")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer4/Slot16"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Attempts" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 22.0
+offset_top = 1459.0
+offset_right = 391.0
+offset_bottom = 1575.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_lptuc")
+theme_override_font_sizes/font_size = 72
+text = "Attempts: 10"
+
+[node name="BoosterTemplate" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 1424.0
+offset_right = 562.0
+offset_bottom = 2063.0
+scale = Vector2(0.682187, 0.700225)
+mouse_filter = 2
+texture = ExtResource("2_0cvqw")
+
+[node name="title" type="Label" parent="BoosterTemplate"]
+visible = false
+layout_mode = 0
+offset_left = -3.0
+offset_top = -14.0
+offset_right = 409.0
+offset_bottom = 161.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("3_lptuc")
+theme_override_font_sizes/font_size = 48
+text = "NAKAMA TCG"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="set" type="Label" parent="BoosterTemplate"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 466.0
+offset_right = 409.0
+offset_bottom = 641.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("3_lptuc")
+theme_override_font_sizes/font_size = 48
+text = "Set #1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonHome" type="Button" parent="."]
+layout_mode = 2
+offset_left = 671.0
+offset_top = 1636.0
+offset_right = 802.0
+offset_bottom = 1759.25
+size_flags_horizontal = 3
+theme = ExtResource("6_0cvqw")
+theme_override_fonts/font = ExtResource("3_lptuc")
+theme_override_font_sizes/font_size = 72
+text = "x"
+
+[node name="Win" type="Label" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_0cvqw")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -497.0
+offset_top = -457.0
+offset_right = 514.0
+offset_bottom = -101.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("3_lptuc")
+theme_override_font_sizes/font_size = 300
+text = "WINNER!!!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ButtonHome" to="." method="_on_button_home_pressed"]
