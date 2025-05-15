@@ -347,7 +347,7 @@ size_flags_horizontal = 3
 theme = ExtResource("6_0cvqw")
 theme_override_fonts/font = ExtResource("3_lptuc")
 theme_override_font_sizes/font_size = 72
-text = "x"
+text = "CLOSE"
 
 [node name="Win" type="Label" parent="."]
 visible = false

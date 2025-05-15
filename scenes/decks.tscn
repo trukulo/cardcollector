@@ -519,9 +519,9 @@ autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 657.0
+offset_left = 545.0
 offset_top = 1777.0
-offset_right = 1070.0
+offset_right = 1066.0
 offset_bottom = 1889.0
 
 [node name="ButtonLeft" type="Button" parent="HBoxContainer"]
@@ -542,7 +542,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 72
-text = "x"
+text = "CLOSE"
 
 [node name="ButtonRight" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -558,8 +558,8 @@ text = ">"
 layout_mode = 0
 offset_left = 13.0
 offset_top = 1632.0
-offset_right = 429.0
-offset_bottom = 1744.0
+offset_right = 531.0
+offset_bottom = 1755.0
 
 [node name="SetLeft" type="Button" parent="Sets"]
 layout_mode = 2
@@ -596,9 +596,9 @@ text = ">"
 [node name="Sort" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 13.0
-offset_top = 1782.0
-offset_right = 429.0
-offset_bottom = 1894.0
+offset_top = 1776.0
+offset_right = 529.0
+offset_bottom = 1888.0
 
 [node name="SortLeft" type="Button" parent="Sort"]
 layout_mode = 2
@@ -673,9 +673,9 @@ flat = true
 
 [node name="ButtonDupe" type="Button" parent="."]
 layout_mode = 0
-offset_left = 657.0
+offset_left = 545.0
 offset_top = 1630.0
-offset_right = 857.0
+offset_right = 809.0
 offset_bottom = 1758.0
 size_flags_horizontal = 3
 theme = ExtResource("4_5b8sw")
@@ -687,7 +687,7 @@ text = "DUPES"
 
 [node name="ButtonFilters" type="Button" parent="."]
 layout_mode = 0
-offset_left = 869.0
+offset_left = 816.0
 offset_top = 1630.0
 offset_right = 1069.0
 offset_bottom = 1758.0
@@ -980,7 +980,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_bvnak")
 theme_override_font_sizes/font_size = 72
-text = "x"
+text = "CLOSE"
 
 [connection signal="pressed" from="HBoxContainer/ButtonLeft" to="." method="_on_button_left_pressed"]
 [connection signal="pressed" from="HBoxContainer/ButtonHome" to="." method="_on_button_home_pressed"]

@@ -38,7 +38,7 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_mg36t")
 theme_override_font_sizes/font_size = 72
-text = "X"
+text = "CLOSE"
 
 [node name="ButtonJunk" type="Button" parent="."]
 custom_minimum_size = Vector2(400, 0)
