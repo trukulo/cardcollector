@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dlmsh8tycmvo4"]
+[gd_scene load_steps=12 format=3 uid="uid://djhk2xod75muq"]
 
 [ext_resource type="Script" uid="uid://bq5hofq71vy35" path="res://scripts/decks.gd" id="1_43i6p"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_hcl2w"]
@@ -88,7 +88,6 @@ flat = true
 
 [node name="Price" type="Label" parent="ScrollContainer/CenterContainer/GridContainer/Card1"]
 custom_minimum_size = Vector2(200, 0)
-layout_mode = 0
 offset_left = 42.9999
 offset_top = 1169.5
 offset_right = 757.0

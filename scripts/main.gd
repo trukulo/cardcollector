@@ -2,6 +2,19 @@ extends Control
 
 var reset_dialog: ConfirmationDialog
 
+var scene_choose_booster := preload("res://scenes/choose_booster.tscn")
+var scene_collection := preload("res://scenes/collection.tscn")
+var scene_decks := preload("res://scenes/decks.tscn")
+var scene_battle := preload("res://scenes/battle.tscn")
+var scene_memory := preload("res://scenes/memory.tscn")
+var scene_auction := preload("res://scenes/auction.tscn")
+var scene_short_duel := preload("res://scenes/battle.tscn") # Same as battle
+var scene_sacrifice := preload("res://scenes/sacrifice.tscn")
+var scene_junk := preload("res://scenes/junk.tscn")
+var scene_cardview := preload("res://scenes/cardview.tscn")
+var scene_gravity := preload("res://scenes/gravity.tscn")
+var scene_sequence := preload("res://scenes/sequence.tscn")
+
 func _ready() -> void:
 
 	print(Global.collection.size())
@@ -63,7 +76,7 @@ func _ready() -> void:
 		await _narrator("Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction.")
 		await _narrator("Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds.")
 		await _enarrator("This is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack. The type of the booster means the type of cards you will get more frequently.")
-		
+
 		Global.unlock = 1
 		Global.save_data()
 
@@ -77,10 +90,10 @@ func update_money_label() -> void:
 		$MoneyLabel.text = "¥%d" % Global.money
 
 func _on_open_booster_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/choose_booster.tscn")
+	get_tree().change_scene_to_packed(scene_choose_booster)
 
 func _on_button_collection_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/collection.tscn")
+	get_tree().change_scene_to_packed(scene_collection)
 
 func _on_button_reset_pressed() -> void:
 	reset_dialog.popup_centered()
@@ -91,7 +104,7 @@ func _on_reset_confirmed() -> void:
 	update_money_label()
 
 func _on_button_decks_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/decks.tscn")
+	get_tree().change_scene_to_packed(scene_decks)
 
 func _on_button_duels_pressed() -> void:
 	if Global.collection.size() < 21:
@@ -101,10 +114,10 @@ func _on_button_duels_pressed() -> void:
 		Global.rounds = 4
 		Global.lostcards = 0
 		Global.woncards = 0
-		get_tree().change_scene_to_file("res://scenes/battle.tscn")
+		get_tree().change_scene_to_packed(scene_battle)
 
 func _on_button_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/memory.tscn")
+	get_tree().change_scene_to_packed(scene_memory)
 
 func _on_button_quit_pressed() -> void:
 	get_tree().quit()
@@ -117,7 +130,7 @@ func show_notification(msg: String) -> void:
 	notif.popup_centered()
 
 func _on_button_auction_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/auction.tscn")
+	get_tree().change_scene_to_packed(scene_auction)
 
 func _on_button_short_duel_pressed() -> void:
 	if Global.collection.size() < 5:
@@ -127,7 +140,7 @@ func _on_button_short_duel_pressed() -> void:
 		Global.rounds = 5
 		Global.lostcards = 0
 		Global.woncards = 0
-		get_tree().change_scene_to_file("res://scenes/battle.tscn")
+		get_tree().change_scene_to_packed(scene_short_duel)
 
 func _narrator(message: String) -> void:
 	$Message/Label.text = message
@@ -160,10 +173,10 @@ func _unlock() -> void:
 		_enarrator("You have unlocked a Memory Game!")
 	if total_cards >= 100 and Global.unlock < 4:
 		Global.unlock += 1
-		_enarrator("You have unlocked Duels and a new set!")
+		_enarrator("You have unlocked Gravity, Duels and a new set!")
 	if total_cards >= 150 and Global.unlock < 5:
 		Global.unlock += 1
-		_enarrator("You have unlocked Reveal!")
+		_enarrator("You have unlocked Sequence, Reveal and a new set!")
 	if total_cards >= 200 and Global.unlock < 6:
 		Global.unlock += 1
 		_enarrator("You have unlocked Auctions and a new set!")
@@ -175,7 +188,7 @@ func _unlock() -> void:
 		_enarrator("You have unlocked Selling cards and new set!")
 	if total_cards >= 500 and Global.unlock < 9:
 		Global.unlock += 1
-		_enarrator("You have unlocked Protecting cards and new set!")
+		_enarrator("You have unlocked Auction, Protecting cards and new set!")
 	if total_cards >= 600 and Global.unlock < 10:
 		Global.unlock += 1
 		_enarrator("You have unlocked Sacrifice!")
@@ -189,9 +202,12 @@ func _unlock() -> void:
 	if Global.unlock < 3:
 		$VBoxContainer2/ButtonPlay.disabled = true
 		$VBoxContainer2/ButtonPlay.text = "Memory (L)"
-	if Global.unlock < 6:
+	if Global.unlock < 9:
 		$VBoxContainer/ButtonAuction.disabled = true
 		$VBoxContainer/ButtonAuction.text = "Auction (L)"
+	if Global.unlock < 6:
+		$VBoxContainer2/ButtonSequence.disabled = true
+		$VBoxContainer2/ButtonSequence.text = "Sequence (L)"
 	if Global.unlock < 4:
 		$VBoxContainer2/ButtonShortDuel.disabled = true
 		$VBoxContainer2/ButtonShortDuel.text = "Duel (L)"
@@ -202,8 +218,8 @@ func _unlock() -> void:
 		$VBoxContainer2/ButtonDuels.disabled = true
 		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
 	if Global.unlock < 8:
-		$VBoxContainer2/ButtonJunk.disabled = true
-		$VBoxContainer2/ButtonJunk.text = "Junk (L)"  # Updated text for ButtonJunk
+		$VBoxContainer/ButtonJunk.disabled = true
+		$VBoxContainer/ButtonJunk.text = "Junk (L)"  # Updated text for ButtonJunk
 	if Global.unlock < 10:
 		$VBoxContainer2/ButtonSacrifice.disabled = true
 		$VBoxContainer2/ButtonSacrifice.text = "Sacrifice (L)"
@@ -221,7 +237,7 @@ func get_total_card_count() -> int:
 
 
 func _on_button_sacrifice_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/sacrifice.tscn")
+	get_tree().change_scene_to_packed(scene_sacrifice)
 
 
 func _on_ginme_pressed() -> void:
@@ -230,16 +246,16 @@ func _on_ginme_pressed() -> void:
 	Global.save_data()
 
 func _on_button_junk_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/junk.tscn")
-
-
-func _on_button_lab_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/lab.tscn")
+	get_tree().change_scene_to_packed(scene_junk)
 
 
 func _on_button_cards_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/cardview.tscn")
+	get_tree().change_scene_to_packed(scene_cardview)
 
 
 func _on_button_gravity_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/gravity.tscn")
+	get_tree().change_scene_to_packed(scene_gravity)
+
+
+func _on_button_sequence_pressed() -> void:
+	get_tree().change_scene_to_packed(scene_sequence)

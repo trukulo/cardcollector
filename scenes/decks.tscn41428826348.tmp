@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dlmsh8tycmvo4"]
+[gd_scene load_steps=12 format=3 uid="uid://djhk2xod75muq"]
 
 [ext_resource type="Script" uid="uid://bq5hofq71vy35" path="res://scripts/decks.gd" id="1_43i6p"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_hcl2w"]
@@ -44,7 +44,7 @@ anchor_bottom = 1.0
 offset_left = 28.0
 offset_top = 25.0
 offset_right = 1513.0
-offset_bottom = 1812.0
+offset_bottom = 2072.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.4, 0.4)
@@ -66,15 +66,12 @@ theme = ExtResource("4_5qcsl")
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer/CenterContainer"]
 layout_mode = 2
 theme = ExtResource("4_5qcsl")
-theme_override_constants/h_separation = 16
-theme_override_constants/v_separation = 0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 columns = 3
 
 [node name="Card1" parent="ScrollContainer/CenterContainer/GridContainer" instance=ExtResource("2_ojrkc")]
-custom_minimum_size = Vector2(800, 1290)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="Button" type="Button" parent="ScrollContainer/CenterContainer/GridContainer/Card1"]
@@ -86,13 +83,480 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Price" type="Label" parent="ScrollContainer/CenterContainer/GridContainer/Card1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 5.0
+offset_top = 9.00001
+offset_right = 4138.0
+offset_bottom = 4753.0
+scale = Vector2(0.33, 0.33)
+theme_override_constants/separation = 120
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 0
-offset_left = 42.9999
-offset_top = 1169.5
-offset_right = 757.0
-offset_bottom = 1321.5
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer2/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer3/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Card1" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer4/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer4/Card1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer4/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer4/Card2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer4/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer4/Card3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("5_bvnak")
+theme_override_font_sizes/font_size = 128
+text = "999"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ojrkc")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer4/Card4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Price" type="Label" parent="VBoxContainer/HBoxContainer4/Card4"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 1067.64
+offset_right = 742.0
+offset_bottom = 1219.64
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
@@ -110,7 +574,6 @@ offset_right = 1066.0
 offset_bottom = 1889.0
 
 [node name="ButtonLeft" type="Button" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_5b8sw")
@@ -131,7 +594,6 @@ theme_override_font_sizes/font_size = 72
 text = "CLOSE"
 
 [node name="ButtonRight" type="Button" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_5b8sw")

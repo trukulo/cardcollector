@@ -1,22 +1,18 @@
 extends Control
 
-const CARDS_PER_PAGE = 16
-
 enum SortMode {
-	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN  # Add these new sort modes
+	NONE, PRICE_UP, PRICE_DOWN, RARITY_UP, RARITY_DOWN, NUMBER_UP, NUMBER_DOWN, GRADE_UP, GRADE_DOWN
 }
 
 var sort_modes = [
 	SortMode.NONE, SortMode.PRICE_UP, SortMode.PRICE_DOWN, SortMode.RARITY_UP, SortMode.RARITY_DOWN,
 	SortMode.NUMBER_UP, SortMode.NUMBER_DOWN,
-	SortMode.GRADE_UP, SortMode.GRADE_DOWN  # Add the new sort modes
+	SortMode.GRADE_UP, SortMode.GRADE_DOWN
 ]
 var sort_mode: int = SortMode.NONE
 var rarity_order = {"D": 0, "C": 1, "B": 2, "A": 3, "S": 4, "X": 5}
 
 var card_keys := [] # Now an array of dictionaries: [{id_set, effect}]
-var current_page := 0
-var total_pages := 0
 var current_set := 0  # 0 = all sets, otherwise set number
 var set_ids := []
 var card_node_paths = [
@@ -43,7 +39,6 @@ var full_card_original_position: Vector2
 var full_card_original_scale: Vector2
 var full_card_original_rotation: float
 
-var prev_page := current_page
 var current_fullcard_index: int = -1
 
 enum FilterMode { DUPLICATES, PROTECTED, ALL }
@@ -53,6 +48,8 @@ var filter_grading := [true, true, true, true, true]  # Grading: 6-10
 var filter_rarity := [true, true, true, true, true, true]  # Rarity: D, C, B, A, S, X
 var filter_effect := [true, true, true, true, true, true, true, true]  # Effects: B, S, G, H, FA, FS, FG, FH
 
+var _populate_version := 0
+
 func _ready():
 	confirm_dialog = ConfirmationDialog.new()
 	confirm_dialog.dialog_text = "Are you sure you want to sell this card?"
@@ -61,13 +58,12 @@ func _ready():
 	confirm_dialog.connect("confirmed", Callable(self, "_on_confirm_sell"))
 	add_child(confirm_dialog)
 	Global.load_data()
-	$ButtonDupe.text = "Dupes"  # Add this line to set initial text
-	set_ids = [0] + Global.set_editions.keys()
+	$ButtonDupe.text = "Dupes"
+	set_ids = Global.set_editions.keys()
 	set_ids.sort()
-	current_set = 0
+	current_set = set_ids[0]  # Start with set 1 by default
 	update_set_label()
 	update_card_keys()
-	current_page = 0
 	populate_cards()
 	_unlock()
 	# Print debug info for prices
@@ -90,7 +86,7 @@ func _ready():
 		get_node("Sort/SortRight").connect("pressed", Callable(self, "_on_sort_right_pressed"))
 	update_sort_label()
 	# Connect card button signals
-	for i in range(CARDS_PER_PAGE):
+	for i in range(len(card_node_paths)):
 		if has_node(card_node_paths[i] + "/Button"):
 			var btn = get_node(card_node_paths[i] + "/Button")
 			if not btn.is_connected("pressed", Callable(self, "_on_card_button_pressed")):
@@ -133,9 +129,7 @@ func _on_sort_left_pressed():
 	else:
 		sort_mode = sort_modes[-1]
 	update_sort_label()
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_sort_right_pressed():
@@ -145,9 +139,7 @@ func _on_sort_right_pressed():
 	else:
 		sort_mode = sort_modes[0]
 	update_sort_label()
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 # Sorting implementation
@@ -219,14 +211,14 @@ func _sort_by_rarity_desc(a, b):
 
 func _sort_by_name_asc(a, b):
 	var name_a = a["card_data"].get("name", "").to_lower()
-	var name_b = b["card_data"].get("name", "").to_lower()
+	var name_b = a["card_data"].get("name", "").to_lower()
 	if name_a < name_b:
 		return true
 	return false
 
 func _sort_by_name_desc(a, b):
 	var name_a = a["card_data"].get("name", "").to_lower()
-	var name_b = b["card_data"].get("name", "").to_lower()
+	var name_b = a["card_data"].get("name", "").to_lower()
 	if name_a > name_b:
 		return true
 	return false
@@ -319,26 +311,21 @@ func update_card_keys():
 			var effect = card_instance.get("effect", "")
 			var rarity = card_data.get("rarity", "D")
 
-			print("DEBUG: Evaluating card - Grading:", grading, "Rarity:", rarity, "Effect:", effect)
-
-			# Determine if the card passes the filters
 			if not _passes_filters(grading, rarity, effect):
 				continue
 
-			# Determine if the card should be added based on the current filter mode
 			var add_card = false
 			match current_filter_mode:
 				FilterMode.DUPLICATES:
-					add_card = (total_owned > 1)  # Show all instances of duplicated cards
+					add_card = (total_owned > 1)
 				FilterMode.PROTECTED:
-					add_card = (protection == 1)  # Show only protected cards
+					add_card = (protection == 1)
 				FilterMode.ALL:
-					add_card = true  # Show all cards
+					add_card = true
 
 			if not add_card:
 				continue
 
-			# Add the card to the list
 			card_keys.append({
 				"id_set": id_set,
 				"effect": effect,
@@ -348,11 +335,7 @@ func update_card_keys():
 				"card_instance_index": i
 			})
 
-	# Apply sorting after building the array
 	sort_card_keys()
-
-	total_pages = int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) if card_keys.size() > 0 else 1
-	current_page = 0
 	print("DEBUG: Total cards after filtering:", card_keys.size())
 
 func _passes_filters(grading: int, rarity: String, effect: String) -> bool:
@@ -390,78 +373,87 @@ func _get_effect_index(effect: String) -> int:
 func update_set_label():
 	if has_node("Sets/Set"):
 		var label = get_node("Sets/Set")
-		if current_set == 0:
-			label.text = "All Sets"
-		else:
-			var edition = Global.set_editions.get(current_set, "")
-			label.text = "Set #%d%s" % [current_set, " - " + edition if edition != "" else ""]
+		var edition = Global.set_editions.get(current_set, "")
+		label.text = "Set #%d%s" % [current_set, " - " + edition if edition != "" else ""]
 
 func populate_cards():
-	var start_index = current_page * CARDS_PER_PAGE
-	var end_index = min(start_index + CARDS_PER_PAGE, card_keys.size())
-	var cards_on_page = end_index - start_index
+	_populate_version += 1
+	var this_version = _populate_version
 
-	for i in range(CARDS_PER_PAGE):
-		var card_node = get_node(card_node_paths[i]) if has_node(card_node_paths[i]) else null
-		if card_node:
-			if i < cards_on_page:
-				var card_entry = card_keys[start_index + i]
-				var id_set = card_entry["id_set"]
-				var effect = card_entry["effect"]
-				var grading = card_entry["grading"]
-				var protection = card_entry["protection"]
-				var card_data = card_entry["card_data"]  # This should be already included in your card_entry
+	var grid_container = $ScrollContainer/CenterContainer/GridContainer
+	var card_template = grid_container.get_node("Card1")
+	if not card_template:
+		print("Card template not found!")
+		return
 
-				if card_data:
-					# Set the card's specific properties
-					card_node.set_effect(effect)
-					card_node.set_protection(protection)
+	# Remove all cards except the template
+	for child in grid_container.get_children():
+		if child != card_template:
+			child.queue_free()
+	if card_template:
+		card_template.visible = false
 
-					# Implement a method to set grading if it doesn't exist
-					if card_node.has_method("set_grading"):
-						card_node.set_grading(grading)
+	# Limit to 200 cards max
+	var max_cards = min(card_keys.size(), 200)
+	for i in range(max_cards):
+		# Abort if a new populate_cards() has started
+		if this_version != _populate_version:
+			return
+		if i >= 10:
+			await get_tree().create_timer(0.1).timeout
+			# Abort if a new populate_cards() has started (after await)
+			if this_version != _populate_version:
+				return
+		if i >= card_keys.size():
+			return # Prevent out-of-bounds if card_keys changed
+		var card_entry = card_keys[i]
+		var id_set = card_entry["id_set"]
+		var effect = card_entry["effect"]
+		var grading = card_entry["grading"]
+		var protection = card_entry["protection"]
+		var card_data = card_entry["card_data"]
 
-					if card_node.has_node("Panel/Info/name"):
-						card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
-					if card_node.has_node("Panel/Info/number"):
-						card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
-					if card_node.has_node("Panel/Info/red"):
-						card_node.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
-					if card_node.has_node("Panel/Info/blue"):
-						card_node.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
-					if card_node.has_node("Panel/Info/yellow"):
-						card_node.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
-					if card_node.has_node("Panel/Picture"):
-						var image_path = card_data.get("image", "")
-						if ResourceLoader.exists(image_path):
-							card_node.get_node("Panel/Picture").texture = load(image_path)
-						else:
-							card_node.get_node("Panel/Picture").texture = null
-					if card_node.has_method("update_card_appearance"):
-						card_node.update_card_appearance()
-					card_node.visible = true
+		var card_node = card_template.duplicate()
+		card_node.visible = true
+		grid_container.add_child(card_node)
 
-					# Set the Price label in each card grid slot
-					if card_node.has_node("Price"):
-						var price = get_card_price(id_set, effect, grading)
-						var price_text = "unknown"
-						if price != null:
-							price_text = "¥%d" % price
-						card_node.get_node("Price").text = "%s" % price_text
-
-					# Optionally, display grading information on each card
-					if card_node.has_node("Grading"):
-						card_node.get_node("Grading").text = "Grade: %d" % grading
-				else:
-					card_node.visible = false
+		if card_node.has_method("set_effect"):
+			card_node.set_effect(effect)
+		if card_node.has_method("set_protection"):
+			card_node.set_protection(protection)
+		if card_node.has_method("set_grading"):
+			card_node.set_grading(grading)
+		if card_node.has_node("Panel/Info/name"):
+			card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
+		if card_node.has_node("Panel/Info/number"):
+			card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
+		if card_node.has_node("Panel/Info/red"):
+			card_node.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
+		if card_node.has_node("Panel/Info/blue"):
+			card_node.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
+		if card_node.has_node("Panel/Info/yellow"):
+			card_node.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
+		if card_node.has_node("Panel/Picture"):
+			var image_path = card_data.get("image", "")
+			if ResourceLoader.exists(image_path):
+				card_node.get_node("Panel/Picture").texture = load(image_path)
 			else:
-				card_node.visible = false
+				card_node.get_node("Panel/Picture").texture = null
+
+		if card_node.has_node("Price"):
+			var price = get_card_price(id_set, effect, grading)
+			card_node.get_node("Price").text = "¥%d" % price if price != null else "unknown"
+
+		if card_node.has_node("Button"):
+			var btn = card_node.get_node("Button")
+			btn.connect("pressed", Callable(self, "_on_card_button_pressed").bind(i))
+
+	card_template.visible = false
 
 func _on_card_button_pressed(card_index):
-	var start_index = current_page * CARDS_PER_PAGE
-	if card_index >= 0 and (start_index + card_index) < card_keys.size():
-		var card_entry = card_keys[start_index + card_index]
-		current_fullcard_index = start_index + card_index
+	if card_index >= 0 and card_index < card_keys.size():
+		var card_entry = card_keys[card_index]
+		current_fullcard_index = card_index
 		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
 
 func show_full_card(id_set, effect = "", card_instance_index = -1):
@@ -517,9 +509,10 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
 		var full_card = get_node("FullCard")
-		full_card.get_node("Panel/Info/Overlay").visible = true
+		if full_card.has_node("Panel/Info/Overlay"):
+			full_card.get_node("Panel/Info/Overlay").visible = true
 		full_card.set_effect("")
-		$VBoxContainer.visible = false
+		$ScrollContainer.visible = false
 		$Panel.visible = true
 		$Price.visible = true
 		full_card.visible = true
@@ -610,7 +603,7 @@ func _on_full_card_button_pressed():
 	if has_node("FullCard"):
 		get_node("FullCard").visible = false
 		$Panel.visible = false
-		$VBoxContainer.visible = true
+		$ScrollContainer.visible = true
 		$Price.visible = false
 	if has_node("ButtonSell"):
 		get_node("ButtonSell").visible = false
@@ -673,9 +666,7 @@ func _on_confirm_sell():
 			print("DEBUG: Sold card for ¥%d, new money: %s" % [price, str(Global.money)])
 
 		Global.save_data()
-		var prev_page = current_page
 		update_card_keys()
-		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 		populate_cards()
 
 		# Hide FullCard and buttons after selling
@@ -718,36 +709,6 @@ func _on_confirm_sell():
 		$Sets.visible = true
 		$Sort.visible = true
 
-func _on_button_left_pressed():
-	if has_node("FullCard") and get_node("FullCard").visible:
-		# Fullcard navigation
-		if current_fullcard_index > 0:
-			current_fullcard_index -= 1
-		else:
-			current_fullcard_index = card_keys.size() - 1  # wrap around
-		var card_entry = card_keys[current_fullcard_index]
-		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
-	else:
-		# Grid navigation
-		if current_page > 0:
-			current_page -= 1
-			populate_cards()
-
-func _on_button_right_pressed():
-	if has_node("FullCard") and get_node("FullCard").visible:
-		# Fullcard navigation
-		if current_fullcard_index < card_keys.size() - 1:
-			current_fullcard_index += 1
-		else:
-			current_fullcard_index = 0  # wrap around
-		var card_entry = card_keys[current_fullcard_index]
-		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
-	else:
-		# Grid navigation
-		if current_page < total_pages - 1:
-			current_page += 1
-			populate_cards()
-
 func _on_button_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
@@ -758,9 +719,7 @@ func _on_set_left_pressed():
 	else:
 		current_set = set_ids[-1]  # Wrap around to last
 	update_set_label()
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_set_right_pressed():
@@ -770,9 +729,7 @@ func _on_set_right_pressed():
 	else:
 		current_set = set_ids[0]  # Wrap around to first (all)
 	update_set_label()
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_button_dupe_pressed():
@@ -789,9 +746,7 @@ func _on_button_dupe_pressed():
 			$ButtonDupe.text = "All"
 
 	# Refresh the displayed cards
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 func _on_button_protect_pressed() -> void:
@@ -902,9 +857,7 @@ func _on_confirm_protect_card() -> void:
 
 	if card_found:
 		Global.save_data()
-		var prev_page = current_page
 		update_card_keys()
-		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 		populate_cards()
 		var notif = AcceptDialog.new()
 		notif.dialog_text = "This card is now protected!"
@@ -945,9 +898,7 @@ func _on_confirm_unprotect_card() -> void:
 
 	if card_found:
 		Global.save_data()
-		var prev_page = current_page
 		update_card_keys()
-		current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 		populate_cards()
 		var notif = AcceptDialog.new()
 		notif.dialog_text = "This card is no longer protected!"
@@ -1062,9 +1013,7 @@ func _on_button_sacrifice_pressed() -> void:
 
 	# Save and update
 	Global.save_data()
-	var prev_page = current_page
 	update_card_keys()
-	current_page = clamp(prev_page, 0, max(0, int(ceil(float(card_keys.size()) / CARDS_PER_PAGE)) - 1))
 	populate_cards()
 
 	# Animation
@@ -1084,14 +1033,7 @@ func _on_full_card_animation_finished(full_card):
 	_on_full_card_button_pressed()
 
 func _unhandled_input(event):
-	if event.is_action_pressed("ui_left"):
-		_on_button_left_pressed()
-		# Optionally, accept the event to prevent further propagation:
-		# get_tree().set_input_as_handled()
-	elif event.is_action_pressed("ui_right"):
-		_on_button_right_pressed()
-		# get_tree().set_input_as_handled()
-	elif event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel"):
 		_on_button_home_pressed()
 
 func _on_close_filters_pressed():

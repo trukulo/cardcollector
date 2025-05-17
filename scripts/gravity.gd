@@ -217,7 +217,7 @@ func check_flipped_cards() -> void:
 		# Si los intentos llegan a 0, mostrar todas las cartas y reiniciar
 		if attempts <= 0:
 			if $Win:
-				$Win.text = "Game Over"  # Mostrar mensaje de derrota
+				$Win.text = "Game\nOver"  # Mostrar mensaje de derrota
 				$Win.visible = true
 			await flip_all_remaining_cards()  # Realizar la animación de flip para todas las cartas
 			await get_tree().create_timer(5.0).timeout  # Esperar 5 segundos

@@ -108,7 +108,8 @@ func load_set(set_id: int):
 			child.queue_free()
 
 	# Add cards to the grid
-	for card_data in cards_in_set:
+	for i in range(cards_in_set.size()):
+		var card_data = cards_in_set[i]
 		# Duplicate the template
 		var card_node = card_template.duplicate()
 		card_node.visible = true
@@ -150,6 +151,10 @@ func load_set(set_id: int):
 			if button.is_connected("pressed", Callable(self, "_on_card_button_pressed")):
 				button.disconnect("pressed", Callable(self, "_on_card_button_pressed"))
 			button.connect("pressed", Callable(self, "_on_card_button_pressed").bind(cards_in_set.find(card_data)))
+
+		# Add delay after the 10th card
+		if i >= 10:
+			await get_tree().create_timer(0.1).timeout
 
 	# Update collection count display
 	update_collection_count()

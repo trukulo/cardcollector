@@ -40,7 +40,8 @@ func load_set(set_id: int) -> void:
 	unique_cards.sort_custom(Callable(self, "_sort_by_card_number"))
 
 	# Add the unique cards to the grid
-	for card_data in unique_cards:
+	for i in range(unique_cards.size()):
+		var card_data = unique_cards[i]
 		print("Adding card to grid:", card_data["id"])  # Debugging
 		# Duplicate the template
 		var card_node = card_template.duplicate()
@@ -54,7 +55,7 @@ func load_set(set_id: int) -> void:
 		card_node.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
 		card_node.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
 
-		 # Disable the Panel/Info section
+		# Disable the Panel/Info section
 		var info_panel = card_node.get_node("Panel/Info")
 		if info_panel:
 			info_panel.visible = false  # Disable the Info panel
@@ -73,6 +74,10 @@ func load_set(set_id: int) -> void:
 			button.connect("pressed", Callable(self, "_on_card_pressed").bind(card_data["id_set"], {}))
 		else:
 			print("Warning: Button node not found in card_node!")
+
+		# Add delay after the 10th card
+		if i >= 10:
+			await get_tree().create_timer(0.1).timeout
 
 	# Update the set label
 	update_set_label()

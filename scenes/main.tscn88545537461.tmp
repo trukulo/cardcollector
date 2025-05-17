@@ -361,7 +361,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("2_0wfyh")
 theme_override_font_sizes/font_size = 48
-text = "v0.41"
+text = "v0.40"
 horizontal_alignment = 2
 
 [node name="Ginme" type="Button" parent="Version"]

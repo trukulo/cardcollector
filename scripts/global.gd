@@ -404,7 +404,7 @@ func load_data():
 func update_money_by_time():
 	var now = Time.get_unix_time_from_system()
 	var seconds_passed = now - last_connection
-	var dollars_earned = int(seconds_passed / 60)  # Earn 1 dollar every 6000 seconds
+	var dollars_earned = int(seconds_passed / 30)  # Earn 1 dollar every 6000 seconds
 	money += dollars_earned
 	last_connection = now
 	save_data()  # Save the updated money and last connection time
