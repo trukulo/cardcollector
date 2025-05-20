@@ -14,6 +14,7 @@ var scene_junk := preload("res://scenes/junk.tscn")
 var scene_cardview := preload("res://scenes/cardview.tscn")
 var scene_gravity := preload("res://scenes/gravity.tscn")
 var scene_sequence := preload("res://scenes/sequence.tscn")
+var scene_slots := preload("res://scenes/slots.tscn")
 
 func _ready() -> void:
 
@@ -191,7 +192,17 @@ func _unlock() -> void:
 		_enarrator("You have unlocked Auction, Protecting cards and new set!")
 	if total_cards >= 600 and Global.unlock < 10:
 		Global.unlock += 1
-		_enarrator("You have unlocked Sacrifice!")
+		_enarrator("You have unlocked Sacrifice and new set!")
+	if total_cards >= 700 and Global.unlock < 11:
+		Global.unlock += 1
+		_enarrator("You have unlocked Slots and new set!")
+	if total_cards >= 700 and Global.unlock < 11:
+		Global.unlock += 1
+		_enarrator("You have unlocked a new set!")
+	if total_cards >= 800 and Global.unlock < 12:
+		Global.unlock += 1
+		_enarrator("You have unlocked a new set!")
+
 	#Unlocked
 	if Global.unlock < 1:
 		$VBoxContainer/ButtonCollection.disabled = true
@@ -221,8 +232,8 @@ func _unlock() -> void:
 		$VBoxContainer/ButtonJunk.disabled = true
 		$VBoxContainer/ButtonJunk.text = "Junk (L)"  # Updated text for ButtonJunk
 	if Global.unlock < 10:
-		$VBoxContainer2/ButtonSacrifice.disabled = true
-		$VBoxContainer2/ButtonSacrifice.text = "Sacrifice (L)"
+		$VBoxContainer/ButtonSacrifice.disabled = true
+		$VBoxContainer/ButtonSacrifice.text = "Sacrifice (L)"
 
 func get_total_card_count() -> int:
 	var total = 0
@@ -259,3 +270,6 @@ func _on_button_gravity_pressed() -> void:
 
 func _on_button_sequence_pressed() -> void:
 	get_tree().change_scene_to_packed(scene_sequence)
+
+func _on_button_slots_pressed() -> void:
+	get_tree().change_scene_to_packed(scene_slots)

@@ -100,7 +100,7 @@ func update_card_appearance() -> void:
 
 	# Adjust Picture position based on overlay visibility
 	if $Panel/Info/Overlay.visible and Global.info == true:
-		$Panel/Picture.position.y = 100
+		$Panel/Picture.position.y = 0
 		$Panel/Info/red.add_theme_color_override("font_color", Color8(255, 255, 255))
 		$Panel/Info/blue.add_theme_color_override("font_color", Color8(255, 255, 255))
 		$Panel/Info/yellow.add_theme_color_override("font_color", Color8(255, 255, 255))

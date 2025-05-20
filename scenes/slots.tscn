@@ -1,0 +1,303 @@
+[gd_scene load_steps=10 format=3 uid="uid://b7jnrvb4lxemt"]
+
+[ext_resource type="Script" uid="uid://b4a4370onm7gr" path="res://scripts/slots.gd" id="1_ls14r"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="2_6kwmw"]
+[ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_wmvve"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_r14jf"]
+[ext_resource type="Texture2D" uid="uid://bnwfd2uyb8wi7" path="res://gui/boosterpack_empty.png" id="5_dlq1d"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_5hphk"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="7_xxxxx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6kwmw"]
+
+[node name="SlotMachine" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ls14r")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(540, 960)
+texture = ExtResource("2_6kwmw")
+
+[node name="SetImage" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 181.0
+offset_top = -478.0
+offset_right = 981.0
+offset_bottom = 618.0
+grow_vertical = 0
+scale = Vector2(0.33, 0.33)
+
+[node name="Header" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 50.0
+offset_bottom = 250.0
+grow_horizontal = 2
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 10.0
+offset_right = 300.0
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 90
+text = "SLOT MACHINE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MoneyDisplay" type="Label" parent="Header"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 120.0
+offset_right = 200.0
+offset_bottom = 180.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 48
+text = "Money: ¥1000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReelsContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -405.0
+offset_top = -408.0
+offset_right = 1515.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.42, 0.42)
+theme_override_constants/separation = 600
+alignment = 1
+
+[node name="Reel1" type="Control" parent="ReelsContainer"]
+custom_minimum_size = Vector2(240, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -55.0
+offset_right = -47.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" parent="ReelsContainer/Reel1" instance=ExtResource("3_wmvve")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -171.0
+offset_right = 120.0
+offset_bottom = 171.0
+
+[node name="Reel2" type="Control" parent="ReelsContainer"]
+custom_minimum_size = Vector2(240, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" parent="ReelsContainer/Reel2" instance=ExtResource("3_wmvve")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -171.0
+offset_right = 120.0
+offset_bottom = 171.0
+
+[node name="Reel3" type="Control" parent="ReelsContainer"]
+custom_minimum_size = Vector2(240, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" parent="ReelsContainer/Reel3" instance=ExtResource("3_wmvve")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -171.0
+offset_right = 120.0
+offset_bottom = 171.0
+
+[node name="SpinButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -509.0
+offset_top = 210.0
+offset_right = 516.0
+offset_bottom = 413.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("7_xxxxx")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 80
+text = "SPIN (¥50)"
+
+[node name="BoosterTemplate" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 171.0
+offset_top = 1424.0
+offset_right = 578.0
+offset_bottom = 2063.0
+scale = Vector2(0.682187, 0.700225)
+mouse_filter = 2
+texture = ExtResource("5_dlq1d")
+
+[node name="set" type="Label" parent="BoosterTemplate"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 466.0
+offset_right = 409.0
+offset_bottom = 641.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 48
+text = "Set #1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonHome" type="Button" parent="."]
+layout_mode = 2
+offset_left = 671.0
+offset_top = 1636.0
+offset_right = 802.0
+offset_bottom = 1759.25
+size_flags_horizontal = 3
+theme = ExtResource("6_5hphk")
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 72
+text = "CLOSE"
+
+[node name="WinDisplay" type="Label" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_0cvqw")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -506.0
+offset_top = -655.0
+offset_right = 505.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 300
+text = "WIN!
+¥500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PaytablePanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -503.0
+offset_top = -970.0
+offset_right = 513.0
+offset_bottom = -773.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6kwmw")
+
+[node name="PaytableLabel" type="Label" parent="PaytablePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 16.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("4_r14jf")
+theme_override_font_sizes/font_size = 64
+text = "2 MATCHING CARDS = ¥1000
+3 MATCHING CARDS = ¥2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="SpinButton" to="." method="_on_spin_button_pressed"]
+[connection signal="pressed" from="ButtonHome" to="." method="_on_button_home_pressed"]

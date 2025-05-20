@@ -9,7 +9,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
 
-[node name="Memory" type="Control"]
+[node name="Sequence" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

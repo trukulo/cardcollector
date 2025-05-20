@@ -218,7 +218,7 @@ func game_over() -> void:
 	
 	# Si el jugador ha completado al menos 5 niveles, recibe una recompensa
 	if current_level >= 5:
-		var reward = 500 + (current_level - 5) * 100
+		var reward = 100 + (current_level - 5) * 100
 		Global.money += reward
 		Global.save_data()
 		if $Win:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://fb5vdvanauck" path="res://scripts/card.gd" id="1_ktuci"]
 [ext_resource type="Texture2D" uid="uid://dk1ujwj7e4t7y" path="res://cards/1/1.jpg" id="2_kg30u"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="2_ktuci"]
-[ext_resource type="Texture2D" uid="uid://dkcl2xxk124si" path="res://gui/overlay.png" id="3_kg30u"]
+[ext_resource type="Texture2D" uid="uid://lgkbtffxg62n" path="res://gui/overlay_gold.png" id="3_6ligt"]
 [ext_resource type="Texture2D" uid="uid://c020rv0pwrqcv" path="res://gui/posible.png" id="5_sy11y"]
 [ext_resource type="Texture2D" uid="uid://dphyuyqoavia8" path="res://gui/psa_protection.png" id="6_6ligt"]
 
@@ -42,8 +42,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1120.0
-offset_bottom = 16.0
+offset_left = -399.0
+offset_top = -4.0
+offset_right = -679.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(400, 0)
@@ -109,9 +111,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sy11y")
 
 [node name="Overlay" type="Sprite2D" parent="Panel/Info"]
 material = SubResource("ShaderMaterial_8w5pg")
-position = Vector2(400.102, 551.5)
-scale = Vector2(0.999746, 1.00274)
-texture = ExtResource("3_kg30u")
+position = Vector2(398.5, 553.194)
+scale = Vector2(1.00625, 1.00512)
+texture = ExtResource("3_6ligt")
 
 [node name="border" type="Panel" parent="Panel/Info"]
 visible = false
@@ -141,10 +143,10 @@ uppercase = true
 
 [node name="number" type="Label" parent="Panel/Info"]
 layout_mode = 0
-offset_left = 109.0
-offset_top = 75.0
-offset_right = 429.0
-offset_bottom = 152.0
+offset_left = 605.0
+offset_top = 120.0
+offset_right = 720.0
+offset_bottom = 263.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
@@ -156,15 +158,16 @@ horizontal_alignment = 1
 [node name="set" type="Label" parent="Panel/Info"]
 visible = false
 layout_mode = 0
-offset_left = 73.0
-offset_top = 784.0
-offset_right = 651.0
-offset_bottom = 883.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+offset_left = 100.0
+offset_top = 80.0
+offset_right = 195.0
+offset_bottom = 179.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_ktuci")
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 64
+text = "1"
 
 [node name="rarity" type="Label" parent="Panel/Info"]
 visible = false
@@ -184,10 +187,10 @@ vertical_alignment = 1
 
 [node name="yellow" type="Label" parent="Panel/Info"]
 layout_mode = 0
-offset_left = 531.0
-offset_top = 839.0
-offset_right = 716.0
-offset_bottom = 1014.0
+offset_left = 530.0
+offset_top = 809.0
+offset_right = 715.0
+offset_bottom = 984.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
@@ -199,10 +202,10 @@ vertical_alignment = 1
 
 [node name="blue" type="Label" parent="Panel/Info"]
 layout_mode = 0
-offset_left = 298.0
-offset_top = 839.0
-offset_right = 498.0
-offset_bottom = 1014.0
+offset_left = 306.0
+offset_top = 809.0
+offset_right = 506.0
+offset_bottom = 984.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
@@ -214,10 +217,10 @@ vertical_alignment = 1
 
 [node name="red" type="Label" parent="Panel/Info"]
 layout_mode = 0
-offset_left = 77.0
-offset_top = 839.0
-offset_right = 269.0
-offset_bottom = 1014.0
+offset_left = 83.0
+offset_top = 809.0
+offset_right = 275.0
+offset_bottom = 984.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
