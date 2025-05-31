@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b17iw1xmmn5km"]
+[gd_scene load_steps=12 format=3 uid="uid://b17iw1xmmn5km"]
 
 [ext_resource type="Script" uid="uid://dko5ayn4c1a0n" path="res://scripts/memory.gd" id="1_0cvqw"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_a6pud"]
@@ -6,6 +6,10 @@
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="3_lptuc"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="4_ndkqr"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_0cvqw"]
+[ext_resource type="AudioStream" uid="uid://ndp5hjtj8ggv" path="res://sounds/flipcard.mp3" id="7_lptuc"]
+[ext_resource type="AudioStream" uid="uid://crobi4ep3be8p" path="res://sounds/fullprize.mp3" id="8_ndkqr"]
+[ext_resource type="AudioStream" uid="uid://djw3k8eoeeadb" path="res://sounds/gameover.mp3" id="9_rxhmg"]
+[ext_resource type="AudioStream" uid="uid://cp7wcadjrpmvm" path="res://sounds/plop.mp3" id="10_d5su1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
 
@@ -372,5 +376,22 @@ theme_override_font_sizes/font_size = 300
 text = "WINNER!!!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Flipcard" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_lptuc")
+pitch_scale = 2.0
+
+[node name="Fullprize" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ndkqr")
+pitch_scale = 1.1
+
+[node name="Gameover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_rxhmg")
+pitch_scale = 1.1
+
+[node name="Plop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_d5su1")
+pitch_scale = 1.9
+max_polyphony = 10
 
 [connection signal="pressed" from="ButtonHome" to="." method="_on_button_home_pressed"]

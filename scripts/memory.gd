@@ -149,7 +149,7 @@ func reveal_card(card_node: Node, card_data: Dictionary) -> void:
 # Realiza la animación de flip para una carta
 func flip_card(card_node: Node, card_data: Dictionary) -> void:
 	var tween = create_tween()
-
+	$Flipcard.play()
 	# Primera mitad del flip (escala hacia 0 en X)
 	tween.tween_property(card_node, "scale:x", 0.1, 0.075)
 
@@ -161,7 +161,7 @@ func flip_card(card_node: Node, card_data: Dictionary) -> void:
 		if card_node.has_node("Panel/Info"):
 			var info_panel = card_node.get_node("Panel/Info")
 			if Global.info == true:
-				info_panel.visible = true  # Mostrar la información
+				info_panel.visible = false  # Mostrar la información
 	)
 
 	# Segunda mitad del flip (escala hacia 1 en X)
@@ -196,6 +196,7 @@ func check_flipped_cards() -> void:
 			var card_node = flipped_card["node"]
 			hide_card(card_node)  # Ocultar la carta (sin eliminarla)
 			revealed_cards.erase(flipped_card["index"])  # Eliminar del estado de cartas reveladas
+		$Plop.play()  # Reproducir sonido de éxito
 		matched_pairs += 1  # Incrementar el contador de parejas correctas
 
 		# Verificar si todas las parejas están correctas
@@ -204,6 +205,7 @@ func check_flipped_cards() -> void:
 			Global.save_data()
 			if $Win:
 				$Win.text = "Winner!\n¥500"  # Mostrar mensaje de victoria
+				$Fullprize.play() 
 				$Win.visible = true
 			hide_ui_elements()  # Ocultar elementos de la UI al ganar
 			await get_tree().create_timer(2.0).timeout  # Esperar 2 segundos
@@ -217,6 +219,7 @@ func check_flipped_cards() -> void:
 		# Si los intentos llegan a 0, mostrar todas las cartas y reiniciar
 		if attempts <= 0:
 			if $Win:
+				$Gameover.play()
 				$Win.text = "Game\nOver"  # Mostrar mensaje de derrota
 				$Win.visible = true
 			await flip_all_remaining_cards()  # Realizar la animación de flip para todas las cartas

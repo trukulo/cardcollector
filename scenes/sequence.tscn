@@ -1,11 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://cmk55gsy54qsx"]
+[gd_scene load_steps=12 format=3 uid="uid://cmk55gsy54qsx"]
 
 [ext_resource type="Script" uid="uid://dfannkdvin8hh" path="res://scripts/sequence.gd" id="1_0ed5g"]
+[ext_resource type="AudioStream" uid="uid://djw3k8eoeeadb" path="res://sounds/gameover.mp3" id="2_fve8x"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="2_goh3r"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_2fofq"]
+[ext_resource type="AudioStream" uid="uid://cp7wcadjrpmvm" path="res://sounds/plop.mp3" id="3_8htxv"]
+[ext_resource type="AudioStream" uid="uid://b60eurhbmg7nd" path="res://sounds/smallprize.mp3" id="4_70dct"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_s7cep"]
 [ext_resource type="Texture2D" uid="uid://bnwfd2uyb8wi7" path="res://gui/boosterpack_empty.png" id="5_fve8x"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_8htxv"]
+[ext_resource type="AudioStream" uid="uid://ndp5hjtj8ggv" path="res://sounds/flipcard.mp3" id="10_3j6pc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
 
@@ -17,6 +21,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0ed5g")
+
+[node name="Gameover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_fve8x")
+
+[node name="Plop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8htxv")
+
+[node name="Smallprize" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_70dct")
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(540, 960)
@@ -276,5 +289,9 @@ theme_override_font_sizes/font_size = 300
 text = "WINNER!!!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Flipcard" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_3j6pc")
+pitch_scale = 2.0
 
 [connection signal="pressed" from="ButtonHome" to="." method="_on_button_home_pressed"]

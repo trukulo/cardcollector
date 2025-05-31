@@ -1,12 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://b7jnrvb4lxemt"]
+[gd_scene load_steps=17 format=3 uid="uid://b7jnrvb4lxemt"]
 
 [ext_resource type="Script" uid="uid://b4a4370onm7gr" path="res://scripts/slots.gd" id="1_ls14r"]
+[ext_resource type="AudioStream" uid="uid://dqxo41i1ixmo1" path="res://sounds/click.mp3" id="2_5g6lb"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="2_6kwmw"]
+[ext_resource type="AudioStream" uid="uid://ndp5hjtj8ggv" path="res://sounds/flipcard.mp3" id="3_unm37"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_wmvve"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_r14jf"]
+[ext_resource type="AudioStream" uid="uid://crobi4ep3be8p" path="res://sounds/fullprize.mp3" id="4_xnm1a"]
+[ext_resource type="AudioStream" uid="uid://djw3k8eoeeadb" path="res://sounds/gameover.mp3" id="5_btrhw"]
 [ext_resource type="Texture2D" uid="uid://bnwfd2uyb8wi7" path="res://gui/boosterpack_empty.png" id="5_dlq1d"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="6_5hphk"]
+[ext_resource type="AudioStream" uid="uid://cvisvr28drbwc" path="res://sounds/holo.mp3" id="6_r414r"]
 [ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="7_xxxxx"]
+[ext_resource type="AudioStream" uid="uid://cp7wcadjrpmvm" path="res://sounds/plop.mp3" id="7_yh7e8"]
+[ext_resource type="AudioStream" uid="uid://b60eurhbmg7nd" path="res://sounds/smallprize.mp3" id="8_qkc46"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cvqw"]
 
@@ -20,6 +27,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ls14r")
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_5g6lb")
+
+[node name="Flipcard" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_unm37")
+pitch_scale = 2.0
+max_polyphony = 3
+
+[node name="Fullprize" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_xnm1a")
+
+[node name="Gameover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_btrhw")
+
+[node name="Holo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_r414r")
+
+[node name="Plop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_yh7e8")
+max_polyphony = 100
+
+[node name="Smallprize" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_qkc46")
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(540, 960)
@@ -107,6 +138,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel1"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,6 +169,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel2"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -163,6 +196,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ReelBorder" type="Panel" parent="ReelsContainer/Reel3"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

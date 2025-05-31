@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b668jjds6nx61"]
+
+[ext_resource type="AudioStream" uid="uid://dqxo41i1ixmo1" path="res://sounds/click.mp3" id="1_8o7k4"]
+[ext_resource type="Script" uid="uid://c0j1v6lnudfe0" path="res://scripts/click_manager.gd" id="1_pgwyh"]
+
+[node name="ClickManager" type="Node2D"]
+script = ExtResource("1_pgwyh")
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_8o7k4")
+max_polyphony = 1000

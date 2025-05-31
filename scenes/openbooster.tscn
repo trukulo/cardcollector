@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c656wt8q4lbp4"]
+[gd_scene load_steps=10 format=3 uid="uid://c656wt8q4lbp4"]
 
 [ext_resource type="Script" uid="uid://d0yhgl1rcjtyx" path="res://scripts/openbooster.gd" id="1_g08gs"]
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="1_ysxdp"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_ysxdp"]
 [ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="4_xnfyq"]
 [ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="6_si4a3"]
+[ext_resource type="AudioStream" uid="uid://ndp5hjtj8ggv" path="res://sounds/flipcard.mp3" id="8_si4a3"]
+[ext_resource type="AudioStream" uid="uid://cvisvr28drbwc" path="res://sounds/holo.mp3" id="9_mwiwp"]
 
 [node name="Openbooster" type="Control"]
 layout_mode = 3
@@ -408,6 +410,15 @@ theme_override_font_sizes/font_size = 136
 text = "NOT ENOUGH MONEY"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Flipcard" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_si4a3")
+pitch_scale = 2.0
+max_polyphony = 9
+
+[node name="Holo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_mwiwp")
+pitch_scale = 1.1
 
 [connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
 [connection signal="pressed" from="ButtonReveal" to="." method="_on_button_reveal_pressed"]

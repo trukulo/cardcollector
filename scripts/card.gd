@@ -2,6 +2,7 @@ extends Control
 
 var effect: String = "" # Effect of the card
 var protection: int = 0 # Protection status of the card
+var hover_tween: Tween # Tween for smooth hover animation
 
 func _ready() -> void:
 	# Show or hide the Info panel and adjust Picture position
@@ -14,6 +15,61 @@ func _ready() -> void:
 	update_card_appearance()
 	if Global.info == false:
 		$Panel/Picture.position.y = 0
+
+	# Create tween for hover animation
+	hover_tween = create_tween()
+	hover_tween.kill() # Stop it initially
+
+	# Connect mouse signals for hover detection
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
+
+# Get the card's id_set from its image path
+func get_card_id_set() -> String:
+	var texture = $Panel/Picture.texture
+	if texture == null:
+		return ""
+
+	var path = texture.resource_path
+	# Extract from path like "res://cards/1/5.jpg" -> "5_1"
+	var parts = path.split("/")
+	if parts.size() >= 3:
+		var set_id = parts[parts.size() - 2] # Second to last part (set number)
+		var filename = parts[parts.size() - 1] # Last part (filename)
+		var card_id = filename.get_basename() # Remove .jpg extension
+		return card_id + "_" + set_id
+	return ""
+
+# Check if the player owns this card
+func is_card_owned() -> bool:
+	var id_set = get_card_id_set()
+	if id_set != "":
+		return Global.get_amount(id_set) > 0
+	return false
+
+# Handle mouse entering the card area
+func _on_mouse_entered() -> void:
+	if is_card_owned():
+		animate_scale(Vector2(1.1, 1.1))
+
+# Handle mouse leaving the card area
+func _on_mouse_exited() -> void:
+	if is_card_owned():
+		animate_scale(Vector2(1.0, 1.0))
+
+# Animate the card scale smoothly
+func animate_scale(target_scale: Vector2) -> void:
+	# Kill any existing tween
+	if hover_tween:
+		hover_tween.kill()
+
+	# Create new tween
+	hover_tween = create_tween()
+	hover_tween.set_ease(Tween.EASE_OUT)
+	hover_tween.set_trans(Tween.TRANS_BACK)
+
+	# Animate the scale
+	hover_tween.tween_property(self, "scale", target_scale, 0.2)
 
 # Setter for the effect variable
 func set_effect(new_effect: String) -> void:

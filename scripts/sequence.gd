@@ -32,13 +32,13 @@ func _ready() -> void:
 
 	# Inicializar las cartas disponibles (ahora son 9 cartas)
 	available_cards = range(9)  # 0-8
-	
+
 	# Seleccionar 9 cartas aleatorias del set
 	card_data = get_random_cards_from_set(random_set, 9)
 
 	# Inicializar las cartas en los slots
 	initialize_cards()
-	
+
 	# Comenzar el juego después de una pequeña pausa
 	await get_tree().create_timer(1.0).timeout
 	start_next_level()
@@ -46,9 +46,11 @@ func _ready() -> void:
 # Obtiene un set aleatorio disponible
 func get_random_set() -> int:
 	var available_sets = Global.available_sets.keys().filter(func(set_id): return Global.available_sets[set_id])
+	$BoosterTemplate/set.text = "Set: %d" % random_set
 	if available_sets.size() == 0:
 		return -1
 	return available_sets[randi() % available_sets.size()]
+
 
 # Obtiene un número específico de cartas aleatorias de un set
 func get_random_cards_from_set(set_id: int, count: int) -> Array:
@@ -62,7 +64,7 @@ func initialize_cards() -> void:
 		# Determinar en qué VBoxContainer está y qué número de slot es dentro de ese container
 		var container_index = int(i / 3) + 1  # VBoxContainer1 a VBoxContainer3
 		var slot_index = i + 1  # Slot1 a Slot9
-		
+
 		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 
 		if has_node(card_node_path):
@@ -98,11 +100,11 @@ func start_next_level() -> void:
 	is_player_turn = false
 	can_click = false
 	update_level_text()
-	
+
 	# Añadir una nueva carta a la secuencia
 	if current_level > sequence.size():
 		sequence.append(available_cards[randi() % available_cards.size()])
-	
+
 	# Mostrar la secuencia al jugador
 	is_showing_sequence = true
 	show_sequence()
@@ -111,24 +113,24 @@ func start_next_level() -> void:
 func show_sequence() -> void:
 	# Deshabilitar los botones durante la demostración
 	can_click = false
-	
+
 	# Mostrar cada carta en la secuencia con un pequeño retraso entre ellas
 	for i in range(sequence.size()):
 		await get_tree().create_timer(0.5).timeout  # Espera antes de mostrar la siguiente carta
-		
+
 		var card_index = sequence[i]
 		# Determinar en qué VBoxContainer está y qué número de slot es
 		var container_index = int(card_index / 3) + 1  # VBoxContainer1 a VBoxContainer3
 		var slot_index = card_index + 1  # Slot1 a Slot9
-		
+
 		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
 			flash_card(card_node, card_data[card_index])
-	
+
 	# Esperar un poco después de mostrar la secuencia completa
 	await get_tree().create_timer(0.7).timeout
-	
+
 	# Ahora es el turno del jugador
 	is_showing_sequence = false
 	is_player_turn = true
@@ -138,7 +140,7 @@ func show_sequence() -> void:
 func flash_card(card_node: Node, card_data: Dictionary) -> void:
 	# Mostrar la carta
 	flip_card(card_node, card_data)
-	
+
 	# Ocultar la carta después de un tiempo
 	await get_tree().create_timer(0.5).timeout
 	flip_to_reverse(card_node)
@@ -147,30 +149,30 @@ func flash_card(card_node: Node, card_data: Dictionary) -> void:
 func _on_card_pressed(card_index: int) -> void:
 	if is_showing_sequence or not is_player_turn or not can_click:
 		return  # No permitir interacción durante la demostración
-	
+
 	# Determinar en qué VBoxContainer está y qué número de slot es
 	var container_index = int(card_index / 3) + 1  # VBoxContainer1 a VBoxContainer3
 	var slot_index = card_index + 1  # Slot1 a Slot9
-	
+
 	var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 	if has_node(card_node_path):
 		var card_node = get_node(card_node_path)
-		
+
 		# Mostrar brevemente la carta
 		flip_card(card_node, card_data[card_index])
 		await get_tree().create_timer(0.3).timeout
 		flip_to_reverse(card_node)
-		
+
 		# Añadir la carta a la secuencia del jugador
 		player_sequence.append(card_index)
-		
+
 		# Comprobar si la secuencia es correcta hasta el momento
 		if player_sequence.size() <= sequence.size():
 			if player_sequence[player_sequence.size() - 1] != sequence[player_sequence.size() - 1]:
 				# Secuencia incorrecta
 				game_over()
 				return
-		
+
 		# Comprobar si el jugador ha completado la secuencia actual
 		if player_sequence.size() == sequence.size():
 			# El jugador ha completado correctamente la secuencia
@@ -193,18 +195,20 @@ func player_wins(complete_game: bool, reward: int = 0) -> void:
 	game_active = false
 	if complete_game:
 		reward = 900  # Victoria completa (9 niveles): 500 + (4 * 100) = 900
-	
+
 	Global.money += reward  # Añadir recompensa de dinero
 	Global.save_data()
-	
+
 	if $Win:
 		if complete_game:
 			# Victoria completa (9 niveles)
 			$Win.text = "PERFECT!\n¥" + str(reward)
+			$Fullprize.play()
 		else:
 			$Win.text = "WIN\n¥" + str(reward)
+			$Smallprize.play()
 		$Win.visible = true
-	
+
 	if complete_game:
 		hide_ui_elements()  # Ocultar elementos de la UI al ganar completamente
 		await get_tree().create_timer(3.0).timeout  # Esperar 3 segundos
@@ -215,7 +219,7 @@ func game_over() -> void:
 	game_active = false
 	can_click = false
 	is_player_turn = false
-	
+
 	# Si el jugador ha completado al menos 5 niveles, recibe una recompensa
 	if current_level >= 5:
 		var reward = 100 + (current_level - 5) * 100
@@ -223,17 +227,19 @@ func game_over() -> void:
 		Global.save_data()
 		if $Win:
 			$Win.text = "WIN\n¥" + str(reward)
+			$Smallprize.play()
 	else:
 		if $Win:
+			$Gameover.play()
 			$Win.text = "Game\nOver"
-	
+
 	if $Win:
 		$Win.visible = true
-	
+
 	# Mostrar la secuencia correcta
 	await get_tree().create_timer(1.0).timeout
 	show_correct_sequence()
-	
+
 	# Esperar antes de reiniciar
 	await get_tree().create_timer(3.0).timeout
 	reset_scene()
@@ -244,16 +250,16 @@ func show_correct_sequence() -> void:
 		if not game_active:
 			return
 		await get_tree().create_timer(0.5).timeout
-		
+
 		var card_index = sequence[i]
 		# Determinar en qué VBoxContainer está y qué número de slot es
 		var container_index = int(card_index / 3) + 1
 		var slot_index = card_index + 1
-		
+
 		var card_node_path = "HBoxContainer/VBoxContainer%d/Slot%d" % [container_index, slot_index]
 		if has_node(card_node_path):
 			var card_node = get_node(card_node_path)
-			
+
 			# Destacar la carta correcta
 			if i < player_sequence.size():
 				# El jugador acertó esta carta
@@ -266,7 +272,7 @@ func show_correct_sequence() -> void:
 				await get_tree().create_timer(0.5).timeout
 				tween = create_tween()
 				tween.tween_property(card_node, "modulate", Color(1, 1, 1), 0.2)  # Volver al color normal
-			
+
 			await get_tree().create_timer(0.3).timeout
 			flip_to_reverse(card_node)
 
@@ -276,7 +282,7 @@ func flip_card(card_node: Node, card_data: Dictionary) -> void:
 		return
 
 	var tween = create_tween()
-
+	$Flipcard.play()
 	# Primera mitad del flip (escala hacia 0 en X)
 	tween.tween_property(card_node, "scale:x", 0.1, 0.075)
 
@@ -288,7 +294,7 @@ func flip_card(card_node: Node, card_data: Dictionary) -> void:
 		if card_node.has_node("Panel/Info"):
 			var info_panel = card_node.get_node("Panel/Info")
 			if Global.info == true:
-				info_panel.visible = true  # Mostrar la información
+				info_panel.visible = false  # Mostrar la información
 			if info_panel.has_node("name"):
 				info_panel.get_node("name").text = card_data.get("name", "Unknown")
 			if info_panel.has_node("number"):

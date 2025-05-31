@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://j0vtjt8mhtlx"]
 
-[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_2no26"]
+[ext_resource type="Texture2D" uid="uid://mkaked2rx28n" path="res://gui/background.jpg" id="1_2no26"]
 [ext_resource type="Script" uid="uid://buoxro2jgixa4" path="res://scripts/auction.gd" id="1_gjsic"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="3_gap3f"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_8gxxa"]

@@ -670,7 +670,7 @@ func _on_confirm_sell():
 		populate_cards()
 
 		# Hide FullCard and buttons after selling
-		$VBoxContainer.visible = true
+		$ScrollContainer.visible = true
 		$Panel.visible = false
 		$Price.visible = false
 		if has_node("FullCard"):

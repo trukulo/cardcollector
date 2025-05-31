@@ -114,18 +114,52 @@ func generate_booster_pack(set_id: int) -> void:
 		rare_pool.append({"card": card, "weight": 1})
 	rare_pool.shuffle()
 
-	# 6. Add 2 rare cards (weighted random)
+	# 6. Add 2 rare cards (weighted random) - ensure they're different
 	if rare_pool.size() > 0:
-		for i in range(2):
-			var selected_card = weighted_random_selection(rare_pool)
-			if selected_card:
-				var card_copy = selected_card.duplicate()
-				apply_card_properties(card_copy)
-				booster_pack.append(card_copy)
+		# Get first rare card
+		var first_rare_card = weighted_random_selection(rare_pool)
+		if first_rare_card:
+			var card_copy = first_rare_card.duplicate()
+			apply_card_properties(card_copy)
+			booster_pack.append(card_copy)
+			
+			# Get second rare card - make sure it's different from the first
+			var second_rare_card = null
+			var attempts = 0
+			var max_attempts = 50  # Prevent infinite loop
+			
+			while attempts < max_attempts:
+				second_rare_card = weighted_random_selection(rare_pool)
+				if second_rare_card and second_rare_card["id"] != first_rare_card["id"]:
+					break
+				attempts += 1
+			
+			# If we couldn't find a different card after max attempts, use any available card
+			if not second_rare_card or second_rare_card["id"] == first_rare_card["id"]:
+				# Try to find any different card in the pool
+				for item in rare_pool:
+					if item["card"]["id"] != first_rare_card["id"]:
+						second_rare_card = item["card"]
+						break
+			
+			# Add the second card (will be different if possible)
+			if second_rare_card:
+				var second_card_copy = second_rare_card.duplicate()
+				apply_card_properties(second_card_copy)
+				booster_pack.append(second_card_copy)
 
 	# 7. Sort and debug
 	booster_pack.sort_custom(Callable(self, "_sort_by_rarity"))
 	print("Booster Pack: Generated with " + str(booster_pack.size()) + " cards (Type: " + booster_type + ")")
+	
+	# Debug: Check if last two cards are different
+	if booster_pack.size() >= 2:
+		var last_card = booster_pack[booster_pack.size() - 1]
+		var second_last_card = booster_pack[booster_pack.size() - 2]
+		if last_card["id"] == second_last_card["id"]:
+			print("Warning: Last two cards are the same: " + str(last_card["id"]))
+		else:
+			print("Success: Last two cards are different: " + str(second_last_card["id"]) + " and " + str(last_card["id"]))
 
 # Filter cards based on booster type
 func filter_cards_by_type(cards: Array, booster_type: String) -> Array:
@@ -244,6 +278,8 @@ func reveal_card(index: int):
 		var card_node = get_node(card_path)
 		var card = booster_pack[index]
 		var tween = create_tween()
+		$Flipcard.play()
+
 		tween.tween_interval(0.10)
 		tween.tween_property(card_node, "scale:x", 0.1, 0.075)
 		tween.tween_callback(func():
@@ -268,6 +304,8 @@ func reveal_card(index: int):
 				price_label.visible = true
 				var id_set = card["id_set"]
 				var effect = card.get("effect", "")
+				if effect == "Full Holo":
+					$Holo.play()
 				var base_price = Global.prices.get(id_set, 0.0)
 
 				# Get the card's actual grading
@@ -458,6 +496,7 @@ func _on_button_reveal_pressed() -> void:
 			reveal_card(i)
 			revealed_cards[i] = true
 		$ButtonReveal.disabled = true
+		$Flipcard.play()
 
 	_check_all_revealed()
 

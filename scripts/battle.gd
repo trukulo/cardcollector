@@ -206,7 +206,6 @@ func _reveal_random_rival_card():
 		$Notif.text = "Rival reveals their card..."
 		$Notif.visible = true
 	await _flip_card(card_instance, rival_card, effect)
-	_animate_card_reveal(card_instance)
 	await get_tree().create_timer(0.5).timeout # 1 second less
 	await _resolve_battle()
 
@@ -248,12 +247,14 @@ func _resolve_battle():
 		player_card_data[selected_player_index]["lost"] = false
 		rival_card_data[revealed_rival_index]["revealed"] = true
 	elif outcome == "player_win":
+		$Plop.play()
 		await _animate_win(player_cards[selected_player_index], rival_cards[revealed_rival_index])
 		_add_card_to_collection(rival["card"], rival["effect"])
 		cards_won.append({"card": rival["card"], "effect": rival["effect"]})
 		player_card_data[selected_player_index]["lost"] = false
 		rival_card_data[revealed_rival_index]["won"] = true
 	elif outcome == "rival_win":
+		$Badplop.play()
 		await _animate_loss(player_cards[selected_player_index], rival_cards[revealed_rival_index])
 		_remove_card_from_collection(player["card"], player["effect"], player["grading"])
 		cards_lost.append({"card": player["card"], "effect": player["effect"], "grading": player["grading"]})
@@ -465,6 +466,7 @@ func _flip_card(card_node, card, effect):
 	if card_node.has_method("set_effect"):
 		card_node.set_effect(effect)
 	var tween2 = create_tween()
+	$Flipcard.play()
 	tween2.tween_property(card_node, "scale:x", 1.0, 0.2).set_trans(Tween.TRANS_SINE)
 	await tween2.finished
 
@@ -549,9 +551,6 @@ func _remove_card_from_collection(card, effect="", grading=8):
 			Global.collection.erase(id_set)
 
 func _animate_card_selected(card_node):
-	pass
-
-func _animate_card_reveal(card_node):
 	pass
 
 func _animate_win(player_card, rival_card):

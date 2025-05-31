@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://brcs5ib6ce7dg"]
+[gd_scene load_steps=10 format=3 uid="uid://brcs5ib6ce7dg"]
 
 [ext_resource type="Script" uid="uid://d4eugq7w7hhq8" path="res://scripts/battle.gd" id="1_4k1nj"]
 [ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="1_th188"]
 [ext_resource type="PackedScene" uid="uid://ce178nojpif7d" path="res://scenes/card.tscn" id="2_p1qf1"]
+[ext_resource type="AudioStream" uid="uid://ndp5hjtj8ggv" path="res://sounds/flipcard.mp3" id="3_6vh42"]
 [ext_resource type="Theme" uid="uid://6shp5ck1tnja" path="res://gui/FlatUI4/kenneyUI.tres" id="4_lpir7"]
+[ext_resource type="AudioStream" uid="uid://cp7wcadjrpmvm" path="res://sounds/plop.mp3" id="7_4k1nj"]
 [ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="8_f4pi3"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4k1nj"]
@@ -22,6 +24,10 @@ script = ExtResource("1_4k1nj")
 [node name="Background2" type="Sprite2D" parent="."]
 position = Vector2(540, 960)
 texture = ExtResource("1_th188")
+
+[node name="Flipcard" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_6vh42")
+pitch_scale = 2.0
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(1895, 2291)
@@ -280,6 +286,16 @@ text = "Notif"
 horizontal_alignment = 1
 vertical_alignment = 2
 autowrap_mode = 3
+
+[node name="Plop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_4k1nj")
+pitch_scale = 1.9
+max_polyphony = 10
+
+[node name="Badplop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_4k1nj")
+pitch_scale = 0.7
+max_polyphony = 10
 
 [connection signal="pressed" from="FullCard/Hide" to="." method="_on_hide_pressed"]
 [connection signal="pressed" from="End" to="." method="_on_end_pressed"]

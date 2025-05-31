@@ -41,9 +41,9 @@ func _ready() -> void:
 	if has_node("SetImage"):
 		$SetImage.texture = load("res://cards/%d/1.jpg" % random_set)
 
-	# Mostrar el nombre del set
-	if has_node("Header/SetName"):
-		$Header/SetName.text = "Set: %d" % random_set
+	# After selecting the set (random_set)
+	if has_node("BoosterTemplate/set"):
+		get_node("BoosterTemplate/set").text = "Set: %d" % random_set
 
 	# Actualizar el contador de dinero
 	update_money_display()
@@ -95,6 +95,7 @@ func update_reel_display() -> void:
 	var reel_nodes = [reel1, reel2, reel3]
 
 	for i in range(3):
+
 		var card_index = reels[i]
 		var reel_node = reel_nodes[i]
 
@@ -122,9 +123,6 @@ func update_reel_display() -> void:
 func update_money_display() -> void:
 	$Header/MoneyDisplay.text = "Money: ¥" + str(Global.money)
 
-# Evento al pulsar el botón de girar
-# IMPORTANTE: Asegúrate de que este nombre coincida exactamente con lo conectado en el editor
-# El nombre generado por el editor probablemente es "_on_spin_button_pressed"
 func _on_spin_button_pressed() -> void:
 	print("Spin button pressed")  # Debug print
 	if spinning or Global.money < spin_cost:
@@ -158,6 +156,8 @@ func spin_reels() -> void:
 
 	# Crear efecto visual de giro rápido
 	for i in range(10):
+		$Plop.play()
+
 		await get_tree().create_timer(0.1).timeout
 
 		for j in range(3):
@@ -167,8 +167,11 @@ func spin_reels() -> void:
 			if reel_node != null and reel_node.has_node("Card/Panel/Picture"):
 				var picture = reel_node.get_node("Card/Panel/Picture")
 				reel_node.get_node("Card/Panel/Info").visible = false
+
 				if picture != null and temp_card_index < card_data.size():
 					picture.texture = load(card_data[temp_card_index]["image"])
+
+
 
 	# Generar y mostrar los resultados finales
 	reels = [
@@ -197,6 +200,7 @@ func spin_reels() -> void:
 
 # Crea una animación de flip para una carta
 func flip_card_animation(reel_node: Node, card_info: Dictionary) -> void:
+	$Flipcard.play()
 	if reel_node == null:
 		print("Error: Cannot flip a null reel_node")
 		return
@@ -253,11 +257,13 @@ func check_win() -> void:
 
 	if highest_count == 3:
 		# Tres cartas iguales
+		$Fullprize.play()
 		money_won = 2500
 		show_win_animation(3)
 		update_money_display()
 	elif highest_count == 2:
 		# Dos cartas iguales
+		$Smallprize.play()
 		money_won = 1000
 		show_win_animation(2)
 		update_money_display()
@@ -265,9 +271,10 @@ func check_win() -> void:
 	# Añadir el dinero ganado
 	if money_won > 0:
 		Global.money += money_won
-		Global.save_data()
 		update_money_display()
 
+	Global.save_data()
+	
 # Muestra la animación de victoria
 func show_win_animation(match_count: int) -> void:
 	if !has_node("WinDisplay"):
