@@ -20,276 +20,344 @@ const EFFECT_ABBR = {
 	"Full Holo": "FH"
 }
 
-const FILTER_ALL = "ALL"  # Special value for showing all effects
+const FILTER_ALL = "ALL"
+const CARDS_PER_BATCH = 6  # Load cards in batches for smooth performance
+const BATCH_DELAY = 0.05   # Delay between batches in seconds
 
 var current_set_id: int = 1
 var current_fullcard_index: int = -1
-var current_filter: String = "ALL"  # Track the current effect filter
+var current_filter: String = "ALL"
 var cards_in_set: Array = []
+var unique_cards: Dictionary = {}  # Store unique cards by ID to prevent duplicates
 var card_template = null
+var grid_container = null
+var is_loading: bool = false
 
 func _ready():
 	Global.load_data()
-
-	# Get the card template - this should be a Card node that's already in your scene
-	card_template = $ScrollContainer/CenterContainer/GridContainer/Card1
+	
+	# Cache frequently accessed nodes
+	grid_container = $ScrollContainer/CenterContainer/GridContainer
+	card_template = grid_container.get_node("Card1")
+	
 	if not card_template:
-		print("Card template not found!")
+		push_error("Card template not found!")
 		return
-	card_template.visible = false  # Hide the template
-
-	# Connect UI buttons - with null checks
-	if has_node("SetControls/SetLeft"):
-		$SetControls/SetLeft.connect("pressed", Callable(self, "_on_set_left_pressed"))
-	if has_node("SetControls/SetRight"):
-		$SetControls/SetRight.connect("pressed", Callable(self, "_on_set_right_pressed"))
-
-	# Connect effect filter buttons - with null checks
-	if has_node("Effects/EfAll"):
-		$Effects/EfAll.connect("pressed", Callable(self, "_on_ef_all_pressed"))
-	if has_node("Effects/EfB"):
-		$Effects/EfB.connect("pressed", Callable(self, "_on_ef_b_pressed"))
-	if has_node("Effects/EfS"):
-		$Effects/EfS.connect("pressed", Callable(self, "_on_ef_s_pressed"))
-	if has_node("Effects/EfG"):
-		$Effects/EfG.connect("pressed", Callable(self, "_on_ef_g_pressed"))
-	if has_node("Effects/EfH"):
-		$Effects/EfH.connect("pressed", Callable(self, "_on_ef_h_pressed"))
-	if has_node("Effects2/EfFA"):
-		$Effects2/EfFA.connect("pressed", Callable(self, "_on_ef_fa_pressed"))
-	if has_node("Effects2/EfFS"):
-		$Effects2/EfFS.connect("pressed", Callable(self, "_on_ef_fs_pressed"))
-	if has_node("Effects2/EfFG"):
-		$Effects2/EfFG.connect("pressed", Callable(self, "_on_ef_fg_pressed"))
-	if has_node("Effects2/EfFH"):
-		$Effects2/EfFH.connect("pressed", Callable(self, "_on_ef_fh_pressed"))
-
-	# Connect HideFull button to close the popup
-	if has_node("HideFull"):
-		$HideFull.connect("pressed", Callable(self, "_on_hide_full_pressed"))
-
-	# Connect home button
-	if has_node("HBoxContainer/ButtonHome"):
-		$HBoxContainer/ButtonHome.connect("pressed", Callable(self, "_on_button_home_pressed"))
-
+	
+	card_template.visible = false
+	
+	# Set up grid container for 3 columns
+	if grid_container.columns != 3:
+		grid_container.columns = 3
+	
+	_connect_ui_signals()
+	
 	if Global.info == false:
 		if has_node("BoosterTemplate"):
 			$BoosterTemplate.visible = false
 		if has_node("FullCards"):
 			$FullCards.scale = Vector2(0.90, 0.90)
-
+	
 	# Load the initial set
 	load_set(current_set_id)
 
+func _connect_ui_signals():
+	# Connect UI buttons with error checking
+	var connections = [
+		["SetControls/SetLeft", "_on_set_left_pressed"],
+		["SetControls/SetRight", "_on_set_right_pressed"],
+		["Effects/EfAll", "_on_ef_all_pressed"],
+		["Effects/EfB", "_on_ef_b_pressed"],
+		["Effects/EfS", "_on_ef_s_pressed"],
+		["Effects/EfG", "_on_ef_g_pressed"],
+		["Effects/EfH", "_on_ef_h_pressed"],
+		["Effects2/EfFA", "_on_ef_fa_pressed"],
+		["Effects2/EfFS", "_on_ef_fs_pressed"],
+		["Effects2/EfFG", "_on_ef_fg_pressed"],
+		["Effects2/EfFH", "_on_ef_fh_pressed"],
+		["HideFull", "_on_hide_full_pressed"],
+		["HBoxContainer/ButtonHome", "_on_button_home_pressed"]
+	]
+	
+	for connection in connections:
+		if has_node(connection[0]):
+			var button = get_node(connection[0])
+			if not button.is_connected("pressed", Callable(self, connection[1])):
+				button.connect("pressed", Callable(self, connection[1]))
+
 func load_set(set_id: int):
-	# Filter cards for the specified set
-	cards_in_set = Global.cards.values().filter(func(card):
-		return card["set"] == set_id
-	)
-
-	# Sort cards by ID
-	cards_in_set.sort_custom(Callable(self, "_sort_by_id"))
-
-	# Update set display elements
+	if is_loading:
+		return
+	
+	is_loading = true
 	current_set_id = set_id
+	
+	# Clear previous data
+	unique_cards.clear()
+	cards_in_set.clear()
+	
+	# Filter and organize cards for the specified set
+	_prepare_unique_cards(set_id)
+	
+	# Update set display elements
+	_update_set_display(set_id)
+	
+	# Clear existing cards (except template)
+	_clear_existing_cards()
+	
+	# Load cards in batches for smooth performance
+	await _load_cards_in_batches()
+	
+	# Update collection count display
+	update_collection_count()
+	
+	is_loading = false
+
+func _prepare_unique_cards(set_id: int):
+	# First pass: collect unique cards by ID for this set
+	for card_data in Global.cards.values():
+		if card_data.get("set", 0) == set_id:
+			var card_id = card_data.get("id", 0)
+			
+			# Only keep the first occurrence of each card ID
+			if not unique_cards.has(card_id):
+				unique_cards[card_id] = card_data
+	
+	# Convert to sorted array by card number (1, 2, 3, ...)
+	cards_in_set = unique_cards.values()
+	cards_in_set.sort_custom(_sort_by_id)
+
+func _update_set_display(set_id: int):
 	var set_folder = "res://cards/" + str(set_id)
 	var booster_image_path = set_folder + "/1.jpg"
+	
 	if ResourceLoader.exists(booster_image_path):
 		$Booster.texture = load(booster_image_path)
 	else:
-		print("Error: Booster pack image not found for set", set_id)
+		push_warning("Booster pack image not found for set " + str(set_id))
+	
+	if has_node("BoosterTemplate/set"):
+		$BoosterTemplate/set.text = "Set #" + str(set_id)
 
-	$BoosterTemplate/set.text = "Set #" + str(set_id)
-
-	# Clear existing cards in the GridContainer (except the template)
-	var grid_container = $ScrollContainer/CenterContainer/GridContainer
+func _clear_existing_cards():
+	var children_to_remove = []
+	
+	# Collect children to remove (can't modify during iteration)
 	for child in grid_container.get_children():
 		if child != card_template:
-			child.queue_free()
+			children_to_remove.append(child)
+	
+	# Remove children
+	for child in children_to_remove:
+		child.queue_free()
+	
+	# Wait a frame to ensure cleanup
+	await get_tree().process_frame
 
-	# Add cards to the grid
-	for i in range(cards_in_set.size()):
-		var card_data = cards_in_set[i]
-		# Duplicate the template
-		var card_node = card_template.duplicate()
-		card_node.visible = true
-		grid_container.add_child(card_node)
+func _load_cards_in_batches():
+	var total_cards = cards_in_set.size()
+	var cards_loaded = 0
+	
+	while cards_loaded < total_cards:
+		var batch_end = min(cards_loaded + CARDS_PER_BATCH, total_cards)
+		
+		# Load batch of cards
+		for i in range(cards_loaded, batch_end):
+			_create_card_node(i)
+		
+		cards_loaded = batch_end
+		
+		# Small delay between batches to keep UI responsive
+		if cards_loaded < total_cards:
+			await get_tree().create_timer(BATCH_DELAY).timeout
 
-		# Populate card details
-		if card_node.has_node("Panel/Info/name"):
-			card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
-		if card_node.has_node("Panel/Info/number"):
-			card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
-		if card_node.has_node("Panel/Info/red"):
-			card_node.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
-		if card_node.has_node("Panel/Info/blue"):
-			card_node.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
-		if card_node.has_node("Panel/Info/yellow"):
-			card_node.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
+func _create_card_node(card_index: int):
+	if card_index >= cards_in_set.size():
+		return
+	
+	var card_data = cards_in_set[card_index]
+	var card_node = card_template.duplicate()
+	card_node.visible = true
+	
+	# Add to grid container
+	grid_container.add_child(card_node)
+	
+	# Populate card details efficiently
+	_populate_card_data(card_node, card_data)
+	
+	# Get the card ID set
+	var id_set = card_data.get("id_set", str(card_data.get("id", "")))
+	
+	# Apply current filter and effects
+	apply_card_filter(card_node, id_set)
+	update_effects_text(card_node, id_set)
+	
+	# Connect card button
+	_connect_card_button(card_node, card_index)
 
-		# Load the card image
-		if card_node.has_node("Panel/Picture"):
-			var image_path = card_data.get("image", "")
-			if ResourceLoader.exists(image_path):
-				card_node.get_node("Panel/Picture").texture = load(image_path)
-			else:
-				card_node.get_node("Panel/Picture").texture = null
-				print("Warning: Image not found:", image_path)
+func _populate_card_data(card_node: Node, card_data: Dictionary):
+	# Efficiently populate card information
+	var info_mappings = [
+		["Panel/Info/name", card_data.get("name", "Unknown").to_upper()],
+		["Panel/Info/number", str(card_data.get("id", 0))],
+		["Panel/Info/red", str(card_data.get("red", 0))],
+		["Panel/Info/blue", str(card_data.get("blue", 0))],
+		["Panel/Info/yellow", str(card_data.get("yellow", 0))]
+	]
+	
+	for mapping in info_mappings:
+		if card_node.has_node(mapping[0]):
+			card_node.get_node(mapping[0]).text = mapping[1]
+	
+	# Load card image
+	if card_node.has_node("Panel/Picture"):
+		var image_path = card_data.get("image", "")
+		if ResourceLoader.exists(image_path):
+			card_node.get_node("Panel/Picture").texture = load(image_path)
+		else:
+			card_node.get_node("Panel/Picture").texture = null
+			if image_path != "":
+				push_warning("Image not found: " + image_path)
 
-		# Get the card ID set
-		var id_set = card_data.get("id_set", card_data.get("id", ""))
-
-		# Setup the card based on current filter
-		apply_card_filter(card_node, id_set)
-
-		# Update effects text display for this card
-		update_effects_text(card_node, id_set)
-
-		# Connect the card button to show the FullCard view
-		var button = card_node.get_node("Button")
-		if button:
-			if button.is_connected("pressed", Callable(self, "_on_card_button_pressed")):
-				button.disconnect("pressed", Callable(self, "_on_card_button_pressed"))
-			button.connect("pressed", Callable(self, "_on_card_button_pressed").bind(cards_in_set.find(card_data)))
-
-		# Add delay after the 10th card
-		if i >= 10:
-			await get_tree().create_timer(0.1).timeout
-
-	# Update collection count display
-	update_collection_count()
+func _connect_card_button(card_node: Node, card_index: int):
+	var button = card_node.get_node("Button")
+	if not button:
+		return
+	
+	# Disconnect if already connected
+	if button.is_connected("pressed", Callable(self, "_on_card_button_pressed")):
+		button.disconnect("pressed", Callable(self, "_on_card_button_pressed"))
+	
+	# Connect with card index
+	button.connect("pressed", Callable(self, "_on_card_button_pressed").bind(card_index))
 
 # Apply the current filter to a card
 func apply_card_filter(card_node, id_set):
-	# Determine if the card is owned with the current filter effect
-	var owned
-	if current_filter == FILTER_ALL:  # Special "All" case
-		owned = is_any_effect_owned_for_card(id_set)
-	else:  # Specific effect (including Basic "")
-		owned = is_effect_owned_for_card(id_set, current_filter)
-
-	# Apply the visual effect based on filter and ownership
+	var owned = _check_card_ownership(id_set)
+	
+	# Apply visual effects
 	if card_node.has_method("set_effect"):
 		if owned:
-			if current_filter == FILTER_ALL:
-				card_node.set_effect("")  # Default to basic effect for "All" view
-			else:
-				card_node.set_effect(current_filter)
+			var effect_to_apply = "" if current_filter == FILTER_ALL else current_filter
+			card_node.set_effect(effect_to_apply)
 		else:
-			# Remove shader effect for unowned cards
 			card_node.set_effect("")
 			if current_filter in ["Full Art", "Full Silver", "Full Gold", "Full Holo"]:
 				card_node.set_effect("Full Art")
-
-	# Set the card's brightness based on ownership
+	
+	# Set brightness based on ownership
 	if card_node.has_node("Panel/Picture"):
-		card_node.get_node("Panel/Picture").modulate = Color(1, 1, 1) if owned else Color(0.2, 0.2, 0.2)
-
-	# Update the card appearance if it has that method
+		var brightness = 1.0 if owned else 0.2
+		card_node.get_node("Panel/Picture").modulate = Color(brightness, brightness, brightness)
+	
+	# Update appearance if method exists
 	if card_node.has_method("update_card_appearance"):
 		card_node.update_card_appearance()
 
+func _check_card_ownership(id_set: String) -> bool:
+	if current_filter == FILTER_ALL:
+		return is_any_effect_owned_for_card(id_set)
+	else:
+		return is_effect_owned_for_card(id_set, current_filter)
+
 # Update the effects text display
 func update_effects_text(card_node, id_set):
-	if card_node.has_node("Effects"):
-		var effects_text = ""
-		var effects_owned = []
+	if not card_node.has_node("Effects"):
+		return
+	
+	var effects_owned = []
+	
+	# Check which effects are owned for this card
+	for effect in FULL_CARD_EFFECTS:
+		if is_effect_owned_for_card(id_set, effect):
+			effects_owned.append(EFFECT_ABBR[effect])
+	
+	# Update the Effects text node
+	card_node.get_node("Effects").text = "-".join(effects_owned)
 
-		# Check which effects are owned for this card
-		for effect in FULL_CARD_EFFECTS:
-			if is_effect_owned_for_card(id_set, effect):
-				effects_owned.append(EFFECT_ABBR[effect])
+# Optimized ownership checking
+func is_any_effect_owned_for_card(id_set: String) -> bool:
+	var collection_data = Global.collection.get(id_set, {})
+	var cards = collection_data.get("cards", [])
+	return cards.size() > 0
 
-		# Join with dash separator
-		effects_text = "-".join(effects_owned)
-
-		# Update the Effects text node
-		card_node.get_node("Effects").text = effects_text
-
-# Check if any effect is owned for this card
-func is_any_effect_owned_for_card(id_set):
-	if not Global.collection.has(id_set):
-		return false
-	if not Global.collection[id_set].has("cards"):
-		return false
-	return Global.collection[id_set]["cards"].size() > 0
-
-# Check if a specific effect is owned for this card
-func is_effect_owned_for_card(id_set, effect):
-	if not Global.collection.has(id_set):
-		return false
-	if not Global.collection[id_set].has("cards"):
-		return false
-	for card_instance in Global.collection[id_set]["cards"]:
+# Optimized specific effect ownership checking
+func is_effect_owned_for_card(id_set: String, effect: String) -> bool:
+	var collection_data = Global.collection.get(id_set, {})
+	var cards = collection_data.get("cards", [])
+	
+	for card_instance in cards:
 		if card_instance.get("effect", "") == effect:
 			return true
 	return false
 
+# Improved sorting function
+func _sort_by_id(card_a: Dictionary, card_b: Dictionary) -> bool:
+	var id_a = card_a.get("id", 0)
+	var id_b = card_b.get("id", 0)
+	return id_a < id_b
+
 # Show the full card view when a card is clicked
-func _on_card_button_pressed(card_index):
+func _on_card_button_pressed(card_index: int):
 	if card_index < 0 or card_index >= cards_in_set.size():
 		return
-
+	
 	var card_data = cards_in_set[card_index]
-	var id_set = card_data.get("id_set", card_data.get("id", ""))
-
+	var id_set = card_data.get("id_set", str(card_data.get("id", "")))
+	
 	if not is_any_effect_owned_for_card(id_set):
 		return
+	
+	_setup_full_card_display(card_data, id_set)
+	_show_full_card_view()
 
+func _setup_full_card_display(card_data: Dictionary, id_set: String):
 	# Show only the effects you own, hide others
 	for i in range(8):
 		var effect = FULL_CARD_EFFECTS[i]
 		var full_card_path = get_full_card_path(i)
-		if has_node(full_card_path):
-			var full_card = get_node(full_card_path)
-			var owned = is_effect_owned_for_card(id_set, effect)
-			full_card.visible = owned
+		
+		if not has_node(full_card_path):
+			continue
+		
+		var full_card = get_node(full_card_path)
+		var owned = is_effect_owned_for_card(id_set, effect)
+		full_card.visible = owned
+		
+		if owned:
+			_configure_full_card(full_card, card_data, id_set, effect)
 
-			if owned:
-				if full_card.has_method("set_effect"):
-					full_card.set_effect(effect)
+func _configure_full_card(full_card: Node, card_data: Dictionary, id_set: String, effect: String):
+	if full_card.has_method("set_effect"):
+		full_card.set_effect(effect)
+	
+	# Set protection from the first matching card instance
+	if full_card.has_method("set_protection"):
+		var protection = _get_card_protection(id_set, effect, card_data)
+		full_card.set_protection(protection)
+	
+	# Update card details
+	_populate_card_data(full_card, card_data)
+	
+	if full_card.has_method("update_card_appearance"):
+		full_card.update_card_appearance()
 
-				# Set protection from the first matching card instance
-				if full_card.has_method("set_protection"):
-					var protection = 0
-					if Global.collection.has(id_set) and Global.collection[id_set].has("cards"):
-						for card_instance in Global.collection[id_set]["cards"]:
-							if card_instance.get("effect", "") == effect:
-								protection = card_instance.get("protection", 0)
-								break
-					else:
-						protection = card_data.get("protection", 0)
-					full_card.set_protection(protection)
+func _get_card_protection(id_set: String, effect: String, card_data: Dictionary) -> int:
+	var collection_data = Global.collection.get(id_set, {})
+	var cards = collection_data.get("cards", [])
+	
+	for card_instance in cards:
+		if card_instance.get("effect", "") == effect:
+			return card_instance.get("protection", 0)
+	
+	return card_data.get("protection", 0)
 
-				# Update card details
-				if full_card.has_node("Panel/Info/name"):
-					full_card.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
-				if full_card.has_node("Panel/Info/number"):
-					full_card.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
-				if full_card.has_node("Panel/Info/red"):
-					full_card.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
-				if full_card.has_node("Panel/Info/blue"):
-					full_card.get_node("Panel/Info/blue").text = str(card_data.get("blue", 0))
-				if full_card.has_node("Panel/Info/yellow"):
-					full_card.get_node("Panel/Info/yellow").text = str(card_data.get("yellow", 0))
-
-				# Load card image
-				if full_card.has_node("Panel/Picture"):
-					var image_path = card_data.get("image", "")
-					if ResourceLoader.exists(image_path):
-						full_card.get_node("Panel/Picture").texture = load(image_path)
-					else:
-						full_card.get_node("Panel/Picture").texture = null
-
-				if full_card.has_method("update_card_appearance"):
-					full_card.update_card_appearance()
-
-	# Show FullCards and HideFull buttons
+func _show_full_card_view():
 	$FullCards.visible = true
 	$ScrollContainer.visible = false
 	$HideFull.visible = true
 	$Effects.visible = false
-	$Effects2.visible = false  # Hide the second Effects container too
+	$Effects2.visible = false
 
 # Get the path to a full card by index
 func get_full_card_path(index: int) -> String:
@@ -301,13 +369,16 @@ func get_full_card_path(index: int) -> String:
 # Hide the full card view
 func _on_hide_full_pressed():
 	$Effects.visible = true
-	$Effects2.visible = true  # Show the second Effects container too
+	$Effects2.visible = true
 	$FullCards.visible = false
 	$ScrollContainer.visible = true
 	$HideFull.visible = false
 
 # Navigate to previous set
 func _on_set_left_pressed() -> void:
+	if is_loading:
+		return
+	
 	current_set_id -= 1
 	if current_set_id < 1:
 		current_set_id = Global.set_editions.size()
@@ -315,14 +386,13 @@ func _on_set_left_pressed() -> void:
 
 # Navigate to next set
 func _on_set_right_pressed() -> void:
+	if is_loading:
+		return
+	
 	current_set_id += 1
 	if current_set_id > Global.set_editions.size():
 		current_set_id = 1
 	load_set(current_set_id)
-
-# Sort cards by ID
-func _sort_by_id(card_a: Dictionary, card_b: Dictionary) -> bool:
-	return card_a["id"] < card_b["id"]
 
 # Return to home scene
 func _on_button_home_pressed() -> void:
@@ -331,39 +401,32 @@ func _on_button_home_pressed() -> void:
 # Update collection count display based on the current filter
 func update_collection_count() -> void:
 	if current_filter == FILTER_ALL:
-		_cards_in_collection()  # Show count for all effects
+		_cards_in_collection()
 	else:
-		_cards_in_collection_by_effect(current_filter)  # Show count for specific effect
+		_cards_in_collection_by_effect(current_filter)
 
 # Count all cards in collection for the current set
 func _cards_in_collection() -> void:
-	var owned_id_sets := {}
-	for key in Global.collection.keys():
-		# key is like "24_1", "15_1", etc.
-		if key.ends_with("_" + str(current_set_id)):
-			owned_id_sets[key] = true
-	var x = owned_id_sets.size()
-	var y = 0
-	for card in Global.cards.values():
-		if card.get("set", 0) == int(current_set_id):
-			y += 1
-	$Collection.text = "Cards: %d/%d" % [x, y]
+	var owned_count = 0
+	var total_count = cards_in_set.size()
+	
+	for card in cards_in_set:
+		var id_set = card.get("id_set", str(card.get("id", "")))
+		if is_any_effect_owned_for_card(id_set):
+			owned_count += 1
+	
+	$Collection.text = "Cards: %d/%d" % [owned_count, total_count]
 
 # Count cards in collection with a specific effect
 func _cards_in_collection_by_effect(effect_type: String) -> void:
-	var owned_count := 0
-	var total_count := 0
-
-	# Count the cards with this effect in the current set
-	for card in Global.cards.values():
-		if card.get("set", 0) == current_set_id:
-			total_count += 1
-
-			# Check if we own this card with this effect
-			var id_set = card.get("id_set", card.get("id", ""))
-			if is_effect_owned_for_card(id_set, effect_type):
-				owned_count += 1
-
+	var owned_count = 0
+	var total_count = cards_in_set.size()
+	
+	for card in cards_in_set:
+		var id_set = card.get("id_set", str(card.get("id", "")))
+		if is_effect_owned_for_card(id_set, effect_type):
+			owned_count += 1
+	
 	$Collection.text = "Cards: %d/%d (%s)" % [owned_count, total_count, EFFECT_ABBR[effect_type]]
 
 # Handle keyboard input
@@ -373,20 +436,40 @@ func _unhandled_input(event):
 
 # Filter functions
 func _filter_by_effect(effect_type: String) -> void:
-	current_filter = effect_type  # Set the current filter
-
-	# Update all card nodes with the new filter
-	var grid_container = $ScrollContainer/CenterContainer/GridContainer
-	for card_node in grid_container.get_children():
-		if card_node == card_template or not card_node.visible:
-			continue
-
-		var card_index = grid_container.get_children().find(card_node) - 1  # -1 for template
-		if card_index >= 0 and card_index < cards_in_set.size():
-			var card_data = cards_in_set[card_index]
-			var id_set = card_data.get("id_set", card_data.get("id", ""))
-			apply_card_filter(card_node, id_set)
-
+	if is_loading:
+		return
+	
+	current_filter = effect_type
+	
+	# Update all existing card nodes with the new filter
+	var card_nodes = []
+	for child in grid_container.get_children():
+		if child != card_template and child.visible:
+			card_nodes.append(child)
+	
+	# Update cards in batches to maintain smooth performance
+	var batch_size = 8
+	var current_batch = 0
+	
+	while current_batch * batch_size < card_nodes.size():
+		var start_idx = current_batch * batch_size
+		var end_idx = min(start_idx + batch_size, card_nodes.size())
+		
+		for i in range(start_idx, end_idx):
+			var card_node = card_nodes[i]
+			var card_index = card_nodes.find(card_node)
+			
+			if card_index < cards_in_set.size():
+				var card_data = cards_in_set[card_index]
+				var id_set = card_data.get("id_set", str(card_data.get("id", "")))
+				apply_card_filter(card_node, id_set)
+		
+		current_batch += 1
+		
+		# Small delay between batches
+		if current_batch * batch_size < card_nodes.size():
+			await get_tree().create_timer(0.02).timeout
+	
 	# Update collection count display
 	update_collection_count()
 
@@ -395,7 +478,7 @@ func _on_ef_all_pressed() -> void:
 	_filter_by_effect(FILTER_ALL)
 
 func _on_ef_b_pressed() -> void:
-	_filter_by_effect("")  # Basic effect
+	_filter_by_effect("")
 
 func _on_ef_s_pressed() -> void:
 	_filter_by_effect("Silver")

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Nakama TCG Phone"
-config/version="0.49"
+config/version="0.51"
 run/main_scene="uid://by66laxewwc5j"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0.197937, 0.197937, 0.197937, 1)
@@ -64,6 +64,15 @@ texture={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locales/es.po")
+locale/translations_pot_files=PackedStringArray("res://scenes/auction.tscn", "res://scenes/battle.tscn", "res://scenes/card.tscn", "res://scenes/cardview.tscn", "res://scenes/choose_booster.tscn", "res://scenes/ClickManager.tscn", "res://scenes/collection.tscn", "res://scenes/decks.tscn", "res://scenes/gravity.tscn", "res://scenes/junk.tscn", "res://scenes/main.tscn", "res://scenes/memory.tscn", "res://scenes/openbooster.tscn", "res://scenes/sacrifice.tscn", "res://scenes/sequence.tscn", "res://scenes/slots.tscn", "res://scripts/auction.gd", "res://scripts/battle.gd", "res://scripts/card.gd", "res://scripts/cardview.gd", "res://scripts/choose_booster.gd", "res://scripts/click_manager.gd", "res://scripts/collection.gd", "res://scripts/decks.gd", "res://scripts/global.gd", "res://scripts/gravity.gd", "res://scripts/junk.gd", "res://scripts/main.gd", "res://scripts/memory.gd", "res://scripts/openbooster.gd", "res://scripts/sacrifice.gd", "res://scripts/scroll_container.gd", "res://scripts/sequence.gd", "res://scripts/slots.gd")
+locale/include_text_server_data=true
+locale/test="es"
+locale/fallback="es"
+rendering/text_driver="ICU / HarfBuzz / Graphite (Built-in)"
 
 [rendering]
 

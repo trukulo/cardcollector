@@ -1,0 +1,753 @@
+# LANGUAGE translation for Nakama TCG Phone for the following files:
+# res://scenes/auction.tscn
+# res://scenes/battle.tscn
+# res://scenes/card.tscn
+# res://scenes/cardview.tscn
+# res://scenes/choose_booster.tscn
+# res://scenes/ClickManager.tscn
+# res://scenes/collection.tscn
+# res://scenes/decks.tscn
+# res://scenes/gravity.tscn
+# res://scenes/junk.tscn
+# res://scenes/main.tscn
+# res://scenes/memory.tscn
+# res://scenes/openbooster.tscn
+# res://scenes/sacrifice.tscn
+# res://scenes/sequence.tscn
+# res://scenes/slots.tscn
+# res://scripts/auction.gd
+# res://scripts/battle.gd
+# res://scripts/card.gd
+# res://scripts/cardview.gd
+# res://scripts/choose_booster.gd
+# res://scripts/click_manager.gd
+# res://scripts/collection.gd
+# res://scripts/decks.gd
+# res://scripts/global.gd
+# res://scripts/gravity.gd
+# res://scripts/junk.gd
+# res://scripts/main.gd
+# res://scripts/memory.gd
+# res://scripts/openbooster.gd
+# res://scripts/sacrifice.gd
+# res://scripts/scroll_container.gd
+# res://scripts/sequence.gd
+# res://scripts/slots.gd
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Nakama TCG Phone\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"Language: es\n"
+
+#: scenes/auction.tscn
+msgid "59"
+msgstr "59"
+
+#: scenes/auction.tscn
+msgid "Market Price:"
+msgstr "Precio de mercado:"
+
+#: scenes/auction.tscn
+msgid "Bid Price:"
+msgstr "Precio de puja:"
+
+#: scenes/auction.tscn
+msgid "x"
+msgstr "x"
+
+#: scenes/auction.tscn
+msgid "Bid +10%"
+msgstr "Puja +10%"
+
+#: scenes/auction.tscn
+msgid "Bid +20%"
+msgstr "Puja +20%"
+
+#: scenes/auction.tscn
+#: scenes/choose_booster.tscn
+#: scenes/openbooster.tscn
+msgid "NOT ENOUGH MONEY"
+msgstr "DINERO INSUFICIENTE"
+
+#: scenes/battle.tscn
+msgid "+"
+msgstr "+"
+
+#: scenes/battle.tscn
+msgid "-"
+msgstr "-"
+
+#: scenes/battle.tscn
+msgid "Prize"
+msgstr "Premio"
+
+#: scenes/battle.tscn
+msgid "Notif"
+msgstr "Notificación"
+
+#: scenes/card.tscn
+msgid "Name"
+msgstr "Nombre"
+
+#: scenes/card.tscn
+msgid "99"
+msgstr "99"
+
+#: scenes/card.tscn
+msgid "1"
+msgstr "1"
+
+#: scenes/card.tscn
+#: scenes/collection.tscn
+msgid "S"
+msgstr "S"
+
+#: scenes/card.tscn
+msgid "OG : 10"
+msgstr "OG : 10"
+
+#: scenes/cardview.tscn
+#: scenes/choose_booster.tscn
+#: scenes/collection.tscn
+#: scenes/decks.tscn
+msgid "<"
+msgstr "<"
+
+#: scenes/cardview.tscn
+#: scenes/choose_booster.tscn
+#: scenes/collection.tscn
+#: scenes/decks.tscn
+#: scenes/gravity.tscn
+#: scenes/memory.tscn
+#: scenes/sequence.tscn
+#: scenes/slots.tscn
+msgid "Set #1"
+msgstr "Set #1"
+
+#: scenes/cardview.tscn
+#: scenes/choose_booster.tscn
+#: scenes/collection.tscn
+#: scenes/decks.tscn
+msgid ">"
+msgstr ">"
+
+#: scenes/cardview.tscn
+#: scenes/choose_booster.tscn
+#: scenes/collection.tscn
+#: scenes/decks.tscn
+#: scenes/gravity.tscn
+#: scenes/junk.tscn
+#: scenes/memory.tscn
+#: scenes/openbooster.tscn
+#: scenes/sacrifice.tscn
+#: scenes/sequence.tscn
+#: scenes/slots.tscn
+msgid "CLOSE"
+msgstr "CERRAR"
+
+#: scenes/choose_booster.tscn
+msgid "XXX"
+msgstr "XXX"
+
+#: scenes/choose_booster.tscn
+msgid "PRICE"
+msgstr "PRECIO"
+
+#: scenes/choose_booster.tscn
+msgid "OUT OF STOCK"
+msgstr "AGOTADO"
+
+#: scenes/collection.tscn
+#: scenes/gravity.tscn
+#: scenes/memory.tscn
+#: scenes/sequence.tscn
+msgid "NAKAMA TCG"
+msgstr "NAKAMA TCG"
+
+#: scenes/collection.tscn
+msgid "Apply Filters"
+msgstr "Aplicar Filtros"
+
+#: scenes/collection.tscn
+msgid "Change Set"
+msgstr "Cambiar Set"
+
+#: scenes/collection.tscn
+msgid "Cards X/X"
+msgstr "Cartas X/X"
+
+#: scenes/collection.tscn
+#: scripts/decks.gd
+msgid "All"
+msgstr "Todos"
+
+#: scenes/collection.tscn
+msgid "B"
+msgstr "B"
+
+#: scenes/collection.tscn
+msgid "G"
+msgstr "G"
+
+#: scenes/collection.tscn
+msgid "H"
+msgstr "H"
+
+#: scenes/collection.tscn
+msgid "FA"
+msgstr "FA"
+
+#: scenes/collection.tscn
+msgid "FS"
+msgstr "FS"
+
+#: scenes/collection.tscn
+msgid "FG"
+msgstr "FG"
+
+#: scenes/collection.tscn
+msgid "FH"
+msgstr "FH"
+
+#: scenes/decks.tscn
+msgid "999"
+msgstr "999"
+
+#: scenes/decks.tscn
+msgid "Sorting"
+msgstr "Ordenar"
+
+#: scenes/decks.tscn
+msgid "DUPES"
+msgstr "DUPLICADOS"
+
+#: scenes/decks.tscn
+msgid "FILTER"
+msgstr "FILTRO"
+
+#: scenes/decks.tscn
+#: scenes/junk.tscn
+msgid "SELL"
+msgstr "VENDER"
+
+#: scenes/decks.tscn
+#: scripts/decks.gd
+msgid "Protect"
+msgstr "Proteger"
+
+#: scenes/decks.tscn
+msgid "SACRIFICE"
+msgstr "SACRIFICIO"
+
+#: scenes/decks.tscn
+msgid "Grading: "
+msgstr "Calificación: "
+
+#: scenes/decks.tscn
+msgid "6 "
+msgstr "6 "
+
+#: scenes/decks.tscn
+msgid "7 "
+msgstr "7 "
+
+#: scenes/decks.tscn
+msgid "8 "
+msgstr "8 "
+
+#: scenes/decks.tscn
+msgid "9 "
+msgstr "9 "
+
+#: scenes/decks.tscn
+msgid "10 "
+msgstr "10 "
+
+#: scenes/decks.tscn
+msgid "Rarity: "
+msgstr "Rareza: "
+
+#: scenes/decks.tscn
+msgid "D "
+msgstr "D "
+
+#: scenes/decks.tscn
+msgid "C "
+msgstr "C "
+
+#: scenes/decks.tscn
+msgid "B "
+msgstr "B "
+
+#: scenes/decks.tscn
+msgid "A "
+msgstr "A "
+
+#: scenes/decks.tscn
+msgid "S "
+msgstr "S "
+
+#: scenes/decks.tscn
+msgid "X "
+msgstr "X "
+
+#: scenes/decks.tscn
+msgid "Type: "
+msgstr "Tipo: "
+
+#: scenes/decks.tscn
+msgid "G "
+msgstr "G "
+
+#: scenes/decks.tscn
+msgid "H "
+msgstr "H "
+
+#: scenes/decks.tscn
+msgid "FA "
+msgstr "FA "
+
+#: scenes/decks.tscn
+msgid "FS "
+msgstr "FS "
+
+#: scenes/decks.tscn
+msgid "FG "
+msgstr "FG "
+
+#: scenes/decks.tscn
+msgid "FH "
+msgstr "FH "
+
+#: scenes/gravity.tscn
+#: scenes/memory.tscn
+msgid "Attempts: 10"
+msgstr "Intentos: 10"
+
+#: scenes/gravity.tscn
+#: scenes/memory.tscn
+#: scenes/sequence.tscn
+msgid "WINNER!!!"
+msgstr "¡GANADOR!"
+
+#: scenes/junk.tscn
+msgid "SELL JUNK"
+msgstr "VENDER BASURA"
+
+#: scenes/main.tscn
+msgid "Open Pack\n"
+msgstr "Abrir Paquete\n"
+
+#: scenes/main.tscn
+msgid "Auction"
+msgstr "Subasta"
+
+#: scenes/main.tscn
+msgid "Collection"
+msgstr "Colección"
+
+#: scenes/main.tscn
+msgid "Decks"
+msgstr "Mazos"
+
+#: scenes/main.tscn
+msgid "Gallery\n"
+msgstr "Galería\n"
+
+#: scenes/main.tscn
+msgid "Laboratory"
+msgstr "Laboratorio"
+
+#: scenes/main.tscn
+msgid "Junk"
+msgstr "Basura"
+
+#: scenes/main.tscn
+msgid "Sacrifice"
+msgstr "Sacrificio"
+
+#: scenes/main.tscn
+msgid "Memory"
+msgstr "Memoria"
+
+#: scenes/main.tscn
+msgid "Gravity Mem"
+msgstr "Mem. Gravedad"
+
+#: scenes/main.tscn
+msgid "Sequence"
+msgstr "Secuencia"
+
+#: scenes/main.tscn
+msgid "Slots"
+msgstr "Tragaperras"
+
+#: scenes/main.tscn
+msgid "Duel"
+msgstr "Duelo"
+
+#: scenes/main.tscn
+msgid "Battle"
+msgstr "Batalla"
+
+#: scenes/main.tscn
+msgid "¥999999999999"
+msgstr "¥999999999999"
+
+#: scenes/main.tscn
+msgid "999 Cards "
+msgstr "999 Cartas "
+
+#: scenes/main.tscn
+msgid "Reset"
+msgstr "Reiniciar"
+
+#: scenes/main.tscn
+msgid "Quit"
+msgstr "Salir"
+
+#: scenes/main.tscn
+msgid "Four dragons were, the Kami. Tsuchi, the worm with wings from the deep. Mizu, one with the water, guarding the oceans and rivers. Hi, the son of the Sun, pure fire. Kaze, just above everthing always watching in the skies."
+msgstr "Hubo cuatro dragones, los Kami. Tsuchi, el gusano alado de las profundidades. Mizu, uno con el agua, guardián de océanos y ríos. Hi, el hijo del Sol, fuego puro. Kaze, justo sobre todo, siempre observando desde los cielos."
+
+#: scenes/main.tscn
+msgid "v0.49"
+msgstr "v0.49"
+
+#: scenes/main.tscn
+msgid "Time Played: 00:00"
+msgstr "Tiempo jugado: 00:00"
+
+#: scenes/main.tscn
+msgid "Money Spent: ¥0"
+msgstr "Dinero gastado: ¥0"
+
+#: scenes/openbooster.tscn
+msgid "REVEAL"
+msgstr "REVELAR"
+
+#: scenes/openbooster.tscn
+msgid "Click cards to open"
+msgstr "Haz clic en las cartas para abrir"
+
+#: scenes/openbooster.tscn
+msgid "Set X: X/X"
+msgstr "Set X: X/X"
+
+#: scenes/sacrifice.tscn
+msgid "Souls: XXXXXX"
+msgstr "Almas: XXXXXX"
+
+#: scenes/sacrifice.tscn
+msgid "3"
+msgstr "3"
+
+#: scenes/sacrifice.tscn
+msgid "7"
+msgstr "7"
+
+#: scenes/sacrifice.tscn
+msgid "13"
+msgstr "13"
+
+#: scenes/sacrifice.tscn
+msgid "23"
+msgstr "23"
+
+#: scenes/sacrifice.tscn
+msgid "31"
+msgstr "31"
+
+#: scenes/sacrifice.tscn
+msgid "NOT ENOUGH SOULS"
+msgstr "ALMAS INSUFICIENTES"
+
+#: scenes/sequence.tscn
+msgid "Repeat Sequence "
+msgstr "Repetir Secuencia "
+
+#: scenes/slots.tscn
+msgid "SLOT MACHINE"
+msgstr "TRAGAPERRAS"
+
+#: scenes/slots.tscn
+msgid "Money: ¥1000"
+msgstr "Dinero: ¥1000"
+
+#: scenes/slots.tscn
+msgid "SPIN (¥50)"
+msgstr "GIRAR (¥50)"
+
+#: scenes/slots.tscn
+msgid ""
+"WIN!\n"
+"¥500"
+msgstr ""
+"¡GANASTE!\n"
+"¥500"
+
+#: scenes/slots.tscn
+msgid ""
+"2 MATCHING CARDS = ¥1000\n"
+"3 MATCHING CARDS = ¥2500"
+msgstr ""
+"2 CARTAS IGUALES = ¥1000\n"
+"3 CARTAS IGUALES = ¥2500"
+
+#: scripts/auction.gd
+msgid "Bid in progress!"
+msgstr "¡Puja en progreso!"
+
+#: scripts/auction.gd
+msgid "You can't leave with an active bid!"
+msgstr "¡No puedes salir con una puja activa!"
+
+#: scripts/battle.gd
+msgid "Your turn: choose one!"
+msgstr "¡Tu turno: elige uno!"
+
+#: scripts/battle.gd
+msgid "Select your card to play!"
+msgstr "¡Selecciona tu carta para jugar!"
+
+#: scripts/battle.gd
+msgid "Rival reveals their card..."
+msgstr "El rival revela su carta..."
+
+#: scripts/battle.gd
+#: scripts/openbooster.gd
+msgid ""
+msgstr ""
+
+#: scripts/decks.gd
+msgid "Sell"
+msgstr "Vender"
+
+#: scripts/decks.gd
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: scripts/decks.gd
+msgid "Dupes"
+msgstr "Duplicados"
+
+#: scripts/decks.gd
+msgid "No Sort"
+msgstr "Sin orden"
+
+#: scripts/decks.gd
+msgid "Price Asc"
+msgstr "Precio Asc"
+
+#: scripts/decks.gd
+msgid "Price Desc"
+msgstr "Precio Desc"
+
+#: scripts/decks.gd
+msgid "Rarity Asc"
+msgstr "Rareza Asc"
+
+#: scripts/decks.gd
+msgid "Rarity Desc"
+msgstr "Rareza Desc"
+
+#: scripts/decks.gd
+msgid "Number Asc"
+msgstr "Número Asc"
+
+#: scripts/decks.gd
+msgid "Number Desc"
+msgstr "Número Desc"
+
+#: scripts/decks.gd
+msgid "Grading Asc"
+msgstr "Calificación Asc"
+
+#: scripts/decks.gd
+msgid "Grading Desc"
+msgstr "Calificación Desc"
+
+#: scripts/decks.gd
+msgid "UNPROTECT"
+msgstr "DESPROTEGER"
+
+#: scripts/decks.gd
+msgid "Protect (L)"
+msgstr "Proteger (L)"
+
+#: scripts/decks.gd
+msgid "Duplicates"
+msgstr "Duplicados"
+
+#: scripts/decks.gd
+msgid "Protected"
+msgstr "Protegidas"
+
+#: scripts/decks.gd
+#: scripts/main.gd
+msgid "Yes"
+msgstr "Sí"
+
+#: scripts/decks.gd
+#: scripts/main.gd
+msgid "No"
+msgstr "No"
+
+#: scripts/decks.gd
+msgid "Sell (L)"
+msgstr "Vender (L)"
+
+#: scripts/decks.gd
+#: scripts/main.gd
+msgid "Sacrifice (L)"
+msgstr "Sacrificio (L)"
+
+#: scripts/gravity.gd
+msgid ""
+"Winner!\n"
+"¥750"
+msgstr ""
+"¡Ganaste!\n"
+"¥750"
+
+#: scripts/gravity.gd
+#: scripts/memory.gd
+#: scripts/sequence.gd
+msgid ""
+"Game\n"
+"Over"
+msgstr ""
+"Juego\n"
+"Terminado"
+
+#: scripts/main.gd
+msgid "Collection (L)"
+msgstr "Colección (L)"
+
+#: scripts/main.gd
+msgid "Decks (L)"
+msgstr "Mazos (L)"
+
+#: scripts/main.gd
+msgid "Memory (L)"
+msgstr "Memoria (L)"
+
+#: scripts/main.gd
+msgid "Auction (L)"
+msgstr "Subasta (L)"
+
+#: scripts/main.gd
+msgid "Sequence (L)"
+msgstr "Secuencia (L)"
+
+#: scripts/main.gd
+msgid "Duel (L)"
+msgstr "Duelo (L)"
+
+#: scripts/main.gd
+msgid "Gravity (L)"
+msgstr "Gravedad (L)"
+
+#: scripts/main.gd
+msgid "Battle (L)"
+msgstr "Batalla (L)"
+
+#: scripts/main.gd
+msgid "Junk (L)"
+msgstr "Basura (L)"
+
+#: scripts/memory.gd
+msgid ""
+"Winner!\n"
+"¥500"
+msgstr ""
+"¡Ganaste!\n"
+"¥500"
+
+#: scripts/openbooster.gd
+msgid "Reveal (L)"
+msgstr "Revelar (L)"
+
+#: scripts/openbooster.gd
+msgid "Reveal"
+msgstr "Revelar"
+
+msgid "Playtime: "
+msgstr "Jugado: "
+
+msgid "Money spent: ¥%d"
+msgstr "Gastado: ¥%d"
+
+# Unlock narration messages
+msgid "You have unlocked the Collection!"
+msgstr "¡Has desbloqueado la Colección!"
+
+msgid "You have unlocked Decks!"
+msgstr "¡Has desbloqueado los Mazos!"
+
+msgid "You have unlocked the Memory Game!"
+msgstr "¡Has desbloqueado el juego de Memoria!"
+
+msgid "You have unlocked Gravity, Duels, and a new set!"
+msgstr "¡Has desbloqueado Gravedad, Duelos y un nuevo set!"
+
+msgid "You have unlocked Sequence, Reveal, and a new set!"
+msgstr "¡Has desbloqueado Secuencia, Revelar y un nuevo set!"
+
+msgid "You have unlocked Auctions and a new set!"
+msgstr "¡Has desbloqueado Subastas y un nuevo set!"
+
+msgid "You have unlocked Battles and a new set!"
+msgstr "¡Has desbloqueado Batallas y un nuevo set!"
+
+msgid "You have unlocked Selling cards and a new set!"
+msgstr "¡Has desbloqueado Venta de cartas y un nuevo set!"
+
+msgid "You have unlocked Auction, Protecting cards, and a new set!"
+msgstr "¡Has desbloqueado Subasta, Protección de cartas y un nuevo set!"
+
+msgid "You have unlocked Sacrifice and a new set!"
+msgstr "¡Has desbloqueado Sacrificio y un nuevo set!"
+
+msgid "You have unlocked Slots and a new set!"
+msgstr "¡Has desbloqueado Tragaperras y un nuevo set!"
+
+msgid "You have unlocked a new set!"
+msgstr "¡Has desbloqueado un nuevo set!"
+
+# Button texts (already present, but ensure they're correct)
+msgid "Collection (L)"
+msgstr "Colección (L)"
+
+msgid "Decks (L)"
+msgstr "Mazos (L)"
+
+msgid "Memory (L)"
+msgstr "Memoria (L)"
+
+msgid "Auction (L)"
+msgstr "Subasta (L)"
+
+msgid "Sequence (L)"
+msgstr "Secuencia (L)"
+
+msgid "Duel (L)"
+msgstr "Duelo (L)"
+
+msgid "Gravity (L)"
+msgstr "Gravedad (L)"
+
+msgid "Battle (L)"
+msgstr "Batalla (L)"
+
+msgid "Junk (L)"
+msgstr "Basura (L)"
+
+msgid "Sacrifice (L)"
+msgstr "Sacrificio (L)"

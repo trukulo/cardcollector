@@ -59,6 +59,7 @@ theme_override_constants/v_separation = 8
 columns = 3
 
 [node name="Card1" parent="ScrollContainer/CenterContainer/GridContainer" instance=ExtResource("5_p8q5u")]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 

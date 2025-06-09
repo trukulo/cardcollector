@@ -17,7 +17,6 @@ var scene_sequence := preload("res://scenes/sequence.tscn")
 var scene_slots := preload("res://scenes/slots.tscn")
 
 func _ready() -> void:
-
 	print(Global.collection.size())
 	# Make sure Global data is loaded
 	if not Global.cards.size():
@@ -67,8 +66,8 @@ func _ready() -> void:
 		%ButtonDuels.visible = true
 
 
-	$Playtime.text = "Playtime: " + Global.format_playtime()
-	$MoneySpent.text = "Money spent: ¥%d" % Global.money_spent
+	$Playtime.text = tr("Playtime: ") + Global.format_playtime()
+	$MoneySpent.text = tr("Money spent: ¥%d") % Global.money_spent
 
 	if Global.unlock == 0:
 		await _narrator("In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation.")
@@ -165,40 +164,37 @@ func _unlock() -> void:
 	# Unlocking
 	if total_cards >= 5 and Global.unlock < 1:
 		Global.unlock += 1
-		_enarrator("You have unlocked Collection!")
+		_enarrator("You have unlocked the Collection!")
 	if total_cards >= 25 and Global.unlock < 2:
 		Global.unlock += 1
 		_enarrator("You have unlocked Decks!")
 	if total_cards >= 50 and Global.unlock < 3:
 		Global.unlock += 1
-		_enarrator("You have unlocked a Memory Game!")
+		_enarrator("You have unlocked the Memory Game!")
 	if total_cards >= 100 and Global.unlock < 4:
 		Global.unlock += 1
-		_enarrator("You have unlocked Gravity, Duels and a new set!")
+		_enarrator("You have unlocked Gravity, Duels, and a new set!")
 	if total_cards >= 150 and Global.unlock < 5:
 		Global.unlock += 1
-		_enarrator("You have unlocked Sequence, Reveal and a new set!")
+		_enarrator("You have unlocked Sequence, Reveal, and a new set!")
 	if total_cards >= 200 and Global.unlock < 6:
 		Global.unlock += 1
 		_enarrator("You have unlocked Auctions and a new set!")
 	if total_cards >= 300 and Global.unlock < 7:
 		Global.unlock += 1
-		_enarrator("You have unlocked Battles and new set!")
+		_enarrator("You have unlocked Battles and a new set!")
 	if total_cards >= 400 and Global.unlock < 8:
 		Global.unlock += 1
-		_enarrator("You have unlocked Selling cards and new set!")
+		_enarrator("You have unlocked Selling cards and a new set!")
 	if total_cards >= 500 and Global.unlock < 9:
 		Global.unlock += 1
-		_enarrator("You have unlocked Auction, Protecting cards and new set!")
+		_enarrator("You have unlocked Auction, Protecting cards, and a new set!")
 	if total_cards >= 600 and Global.unlock < 10:
 		Global.unlock += 1
-		_enarrator("You have unlocked Sacrifice and new set!")
+		_enarrator("You have unlocked Sacrifice and a new set!")
 	if total_cards >= 700 and Global.unlock < 11:
 		Global.unlock += 1
-		_enarrator("You have unlocked Slots and new set!")
-	if total_cards >= 700 and Global.unlock < 11:
-		Global.unlock += 1
-		_enarrator("You have unlocked a new set!")
+		_enarrator("You have unlocked Slots and a new set!")
 	if total_cards >= 800 and Global.unlock < 12:
 		Global.unlock += 1
 		_enarrator("You have unlocked a new set!")
@@ -206,34 +202,34 @@ func _unlock() -> void:
 	#Unlocked
 	if Global.unlock < 1:
 		$VBoxContainer/ButtonCollection.disabled = true
-		$VBoxContainer/ButtonCollection.text = "Collection (L)"
+		$VBoxContainer/ButtonCollection.text = tr("Collection (L)")
 	if Global.unlock < 2:
 		$VBoxContainer/ButtonDecks.disabled = true
-		$VBoxContainer/ButtonDecks.text = "Decks (L)"
+		$VBoxContainer/ButtonDecks.text = tr("Decks (L)")
 	if Global.unlock < 3:
 		$VBoxContainer2/ButtonPlay.disabled = true
-		$VBoxContainer2/ButtonPlay.text = "Memory (L)"
+		$VBoxContainer2/ButtonPlay.text = tr("Memory (L)")
 	if Global.unlock < 9:
 		$VBoxContainer/ButtonAuction.disabled = true
-		$VBoxContainer/ButtonAuction.text = "Auction (L)"
+		$VBoxContainer/ButtonAuction.text = tr("Auction (L)")
 	if Global.unlock < 6:
 		$VBoxContainer2/ButtonSequence.disabled = true
-		$VBoxContainer2/ButtonSequence.text = "Sequence (L)"
+		$VBoxContainer2/ButtonSequence.text = tr("Sequence (L)")
 	if Global.unlock < 4:
 		$VBoxContainer2/ButtonShortDuel.disabled = true
-		$VBoxContainer2/ButtonShortDuel.text = "Duel (L)"
+		$VBoxContainer2/ButtonShortDuel.text = tr("Duel (L)")
 	if Global.unlock < 5:
 		$VBoxContainer2/ButtonGravity.disabled = true
-		$VBoxContainer2/ButtonGravity.text = "Gravity (L)"
+		$VBoxContainer2/ButtonGravity.text = tr("Gravity (L)")
 	if Global.unlock < 7:
 		$VBoxContainer2/ButtonDuels.disabled = true
-		$VBoxContainer2/ButtonDuels.text = "Battle (L)"
+		$VBoxContainer2/ButtonDuels.text = tr("Battle (L)")
 	if Global.unlock < 8:
 		$VBoxContainer/ButtonJunk.disabled = true
-		$VBoxContainer/ButtonJunk.text = "Junk (L)"  # Updated text for ButtonJunk
+		$VBoxContainer/ButtonJunk.text = tr("Junk (L)")  # Updated text for ButtonJunk
 	if Global.unlock < 10:
 		$VBoxContainer/ButtonSacrifice.disabled = true
-		$VBoxContainer/ButtonSacrifice.text = "Sacrifice (L)"
+		$VBoxContainer/ButtonSacrifice.text = tr("Sacrifice (L)")
 
 func get_total_card_count() -> int:
 	var total = 0
