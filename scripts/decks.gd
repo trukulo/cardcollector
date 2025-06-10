@@ -40,14 +40,14 @@ var filter_effect := [true, true, true, true, true, true, true, true]  # Effects
 
 func _ready():
 	confirm_dialog = ConfirmationDialog.new()
-	confirm_dialog.dialog_text = "Are you sure you want to sell this card?"
-	confirm_dialog.get_ok_button().text = "Sell"
-	confirm_dialog.get_cancel_button().text = "Cancel"
+	confirm_dialog.dialog_text = tr("Are you sure you want to sell this card?")
+	confirm_dialog.get_ok_button().text = tr("Sell")
+	confirm_dialog.get_cancel_button().text = tr("Cancel")
 	confirm_dialog.connect("confirmed", Callable(self, "_on_confirm_sell"))
 	add_child(confirm_dialog)
 
 	Global.load_data()
-	$ButtonDupe.text = "Dupes"
+	$ButtonDupe.text = tr("Dupes")
 	set_ids = Global.set_editions.keys()
 	set_ids.sort()
 	current_set = set_ids[0] if set_ids.size() > 0 else 0
@@ -207,7 +207,7 @@ func populate_cards():
 	var grid_container = $ScrollContainer/CenterContainer/GridContainer
 	var card_template = grid_container.get_node("Card1")
 	if not card_template:
-		print("Card template not found!")
+		print(tr("Card template not found!"))
 		return
 	for child in grid_container.get_children():
 		if child != card_template:
@@ -231,9 +231,9 @@ func populate_cards():
 		if card_node.has_method("set_grading"):
 			card_node.set_grading(grading)
 		if card_node.has_node("Panel/Info/name"):
-			card_node.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
+			card_node.get_node("Panel/Info/name").text = tr(card_data.get("name", "Unknown")).to_upper()
 		if card_node.has_node("Panel/Info/number"):
-			card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))  # No (xN) count!
+			card_node.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
 		if card_node.has_node("Panel/Info/red"):
 			card_node.get_node("Panel/Info/red").text = str(card_data.get("red", 0))
 		if card_node.has_node("Panel/Info/blue"):
@@ -248,11 +248,14 @@ func populate_cards():
 				card_node.get_node("Panel/Picture").texture = null
 		if card_node.has_node("Price"):
 			var price = get_card_price(id_set, effect, grading)
-			card_node.get_node("Price").text = "¥%d" % price if price != null else "unknown"
+			if price != null:
+				card_node.get_node("Price").text = "¥%d" % price
+			else:
+				card_node.get_node("Price").text = tr("unknown")
 		if card_node.has_node("Button"):
 			var btn = card_node.get_node("Button")
 			btn.connect("pressed", Callable(self, "_on_card_button_pressed").bind(i))
-	print("DEBUG: Displayed %d card instances" % max_cards)
+	print(tr("DEBUG: Displayed %d card instances") % max_cards)
 
 func update_card_keys():
 	build_all_card_instances_list()
@@ -309,29 +312,29 @@ func update_sort_label():
 		var label = get_node("Sort/Sort")
 		match sort_mode:
 			SortMode.NONE:
-				label.text = "No Sort"
+				label.text = tr("No Sort")
 			SortMode.PRICE_UP:
-				label.text = "Price Asc"
+				label.text = tr("Price Asc")
 			SortMode.PRICE_DOWN:
-				label.text = "Price Desc"
+				label.text = tr("Price Desc")
 			SortMode.RARITY_UP:
-				label.text = "Rarity Asc"
+				label.text = tr("Rarity Asc")
 			SortMode.RARITY_DOWN:
-				label.text = "Rarity Desc"
+				label.text = tr("Rarity Desc")
 			SortMode.NUMBER_UP:
-				label.text = "Number Asc"
+				label.text = tr("Number Asc")
 			SortMode.NUMBER_DOWN:
-				label.text = "Number Desc"
+				label.text = tr("Number Desc")
 			SortMode.GRADE_UP:
-				label.text = "Grading Asc"
+				label.text = tr("Grading Asc")
 			SortMode.GRADE_DOWN:
-				label.text = "Grading Desc"
+				label.text = tr("Grading Desc")
 
 func update_set_label():
 	if has_node("Sets/Set"):
 		var label = get_node("Sets/Set")
 		var edition = Global.set_editions.get(current_set, "")
-		label.text = "Set #%d%s" % [current_set, " - " + edition if edition != "" else ""]
+		label.text = tr("Set #%d%s") % [current_set, " - " + edition if edition != "" else ""]
 
 func _on_sort_left_pressed():
 	var idx = sort_modes.find(sort_mode)
@@ -360,14 +363,14 @@ func _on_card_button_pressed(card_index):
 		show_full_card(card_entry["id_set"], card_entry["effect"], card_entry["card_instance_index"])
 
 func show_full_card(id_set, effect = "", card_instance_index = -1):
-	print("DEBUG: show_full_card called for id_set: %s, effect: %s, instance_index: %s" % [id_set, effect, card_instance_index])
+	print(tr("DEBUG: show_full_card called for id_set: %s, effect: %s, instance_index: %s") % [id_set, effect, card_instance_index])
 	fullcard_id_set = id_set
 	fullcard_effect = effect
 	fullcard_card_instance = null  # Reset before finding new instance
 
 	var card_data = Global.cards.get(id_set, null)
 	if card_data == null:
-		print("ERROR: Card data not found for id_set: %s" % id_set)
+		print(tr("ERROR: Card data not found for id_set: %s") % id_set)
 		return
 
 	# Initialize with default grading and protection
@@ -384,7 +387,7 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 			grading = card_instance.get("grading", 8)
 			protection = card_instance.get("protection", 0)
 			fullcard_card_instance = card_instance
-			print("DEBUG: Found card by index %d with grading %d, protection %d" % [card_instance_index, grading, protection])
+			print(tr("DEBUG: Found card by index %d with grading %d, protection %d") % [card_instance_index, grading, protection])
 		# Otherwise find by effect
 		else:
 			for i in range(cards_array.size()):
@@ -393,21 +396,27 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 					grading = card_instance.get("grading", 8)
 					protection = card_instance.get("protection", 0)
 					fullcard_card_instance = card_instance
-					print("DEBUG: Found card by effect '%s' with grading %d, protection %d" % [effect, grading, protection])
+					print(tr("DEBUG: Found card by effect '%s' with grading %d, protection %d") % [effect, grading, protection])
 					break
 
 	# Update the protect button text based on current protection status
 	if has_node("ButtonProtect"):
 		if protection == 1:
-			get_node("ButtonProtect").text = "UNPROTECT"
+			get_node("ButtonProtect").text = tr("UNPROTECT")
 		else:
 			if Global.unlock < 9:
 				get_node("ButtonProtect").disabled = true
-				get_node("ButtonProtect").text = "Protect (L)"
+				get_node("ButtonProtect").text = tr("Protect (L)")
 			else:
 				get_node("ButtonProtect").disabled = false
-				# Set the text to "Protect" if not protected
-				get_node("ButtonProtect").text = "Protect"
+				get_node("ButtonProtect").text = tr("Protect")
+	# Update Locked/Unlocked button if present
+	if has_node("ButtonLock"):
+		var btn = get_node("ButtonLock")
+		if btn.disabled:
+			btn.text = tr("Locked")
+		else:
+			btn.text = tr("Unlocked")
 
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
@@ -431,7 +440,7 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 			full_card.set_protection(protection)
 
 		if full_card.has_node("Panel/Info/name"):
-			full_card.get_node("Panel/Info/name").text = card_data.get("name", "Unknown").to_upper()
+			full_card.get_node("Panel/Info/name").text = tr(card_data.get("name", "Unknown")).to_upper()
 		if full_card.has_node("Panel/Info/number"):
 			full_card.get_node("Panel/Info/number").text = str(card_data.get("id", 0))
 		if full_card.has_node("Panel/Info/red"):
@@ -452,11 +461,11 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 		# Show price info in FullCard
 		if full_card.has_node("Price"):
 			var price = get_card_price(id_set, effect, grading)
-			var price_text = "unknown"
+			var price_text = tr("unknown")
 			if price != null:
 				price_text = "¥%d" % price
 			full_card.get_node("Price").text = "%s" % price_text
-			print("DEBUG: FullCard price label updated: %s" % price_text)
+			print(tr("DEBUG: FullCard price label updated: %s") % price_text)
 
 		# Show and enable the sell button
 		if has_node("ButtonSell"):
@@ -470,37 +479,27 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 
 	# 2. Update the top-level Price label in the scene
 	if card_data and has_node("Price"):
-		print("DEBUG: Scene has node 'Price'")
+		print(tr("DEBUG: Scene has node 'Price'"))
 		var price_label = get_node("Price")
 		var price = get_card_price(id_set, effect, grading)
-		var price_text = "unknown"
+		var price_text = tr("unknown")
 		if price != null:
 			price_text = "¥%d" % price
-		var rarity = card_data.get("rarity", "Unknown")
-		var set_num = card_data.get("set", "Unknown")
-		var effect_str = "None"
+		var rarity = card_data.get("rarity", tr("Unknown"))
+		var set_num = card_data.get("set", tr("Unknown"))
+		var effect_str = tr("None")
 		if effect != "":
-			effect_str = effect
+			effect_str = tr(effect)
 
 		# Display protection status
-		var protection_text = "No"
+		var protection_text = tr("No")
 		if protection == 1:
-			protection_text = "Yes"
+			protection_text = tr("Yes")
 
 		if Global.info == true:
-			price_label.text = "Grading: %s\nSet: %s\nRarity: %s\nEffect: %s\nPrice: %s" % [
-				grading,
-				str(set_num),
-				rarity,
-				effect_str,
-				price_text
-			]
+			price_label.text = tr("Grading: %s\nSet: %s\nRarity: %s\nEffect: %s\nPrice: %s") % [grading, str(set_num), tr(rarity), effect_str, price_text]
 		else:
-			price_label.text = "Set: %s\nRarity: %s\nPrice: %s" % [
-				str(set_num),
-				rarity,
-				price_text
-			]
+			price_label.text = tr("Set: %s\nRarity: %s\nPrice: %s") % [str(set_num), tr(rarity), price_text]
 
 func _on_full_card_button_pressed():
 	if has_node("FullCard"):
@@ -523,7 +522,7 @@ func _on_full_card_button_pressed():
 func _on_button_sell_pressed() -> void:
 	pending_sell_id_set = fullcard_id_set
 	pending_sell_effect = fullcard_effect
-	confirm_dialog.dialog_text = "\nAre you sure you want to sell this card?\n"
+	confirm_dialog.dialog_text = "\n" + tr("Are you sure you want to sell this card?") + "\n"
 	confirm_dialog.popup_centered()
 
 func _on_confirm_sell():
@@ -534,7 +533,7 @@ func _on_confirm_sell():
 	var effect = pending_sell_effect
 
 	if not Global.collection.has(id_set):
-		print("ERROR: Card not found in collection for selling!")
+		print(tr("ERROR: Card not found in collection for selling!"))
 		return
 
 	var entry = Global.collection[id_set]
@@ -566,7 +565,7 @@ func _on_confirm_sell():
 		# Apply price increase
 		if price != null:
 			Global.money += price
-			print("DEBUG: Sold card for ¥%d, new money: %s" % [price, str(Global.money)])
+			print(tr("DEBUG: Sold card for ¥%d, new money: %s") % [price, str(Global.money)])
 
 		Global.save_data()
 		update_card_keys()
@@ -593,7 +592,7 @@ func _on_confirm_sell():
 
 	else:
 
-		print("ERROR: Could not find specific card to sell")
+		print(tr("ERROR: Could not find specific card to sell"))
 		$VBoxContainer.visible = true
 		$Panel.visible = false
 		$Price.visible = false
@@ -642,11 +641,11 @@ func _on_button_dupe_pressed():
 	# Update the button text based on the current mode
 	match current_filter_mode:
 		FilterMode.ALL:
-			$ButtonDupe.text = "Duplicates"
+			$ButtonDupe.text = tr("Duplicates")
 		FilterMode.DUPLICATES:
-			$ButtonDupe.text = "Protected"
+			$ButtonDupe.text = tr("Protected")
 		FilterMode.PROTECTED:
-			$ButtonDupe.text = "All"
+			$ButtonDupe.text = tr("All")
 
 	# Refresh the displayed cards
 	update_card_keys()
@@ -655,7 +654,7 @@ func _on_button_dupe_pressed():
 func _on_button_protect_pressed() -> void:
 	# Ensure we have the current card selected
 	if fullcard_id_set == null:
-		print("ERROR: No card selected for protection!")
+		print(tr("ERROR: No card selected for protection!"))
 		return
 
 	# Check if the card is already protected
@@ -674,11 +673,11 @@ func _on_button_protect_pressed() -> void:
 	if is_protected:
 		# Unprotect the card (with confirmation dialog)
 		var dialog = ConfirmationDialog.new()
-		dialog.dialog_text = "Are you sure you want to remove protection from this card?\nThe card will be available for duels again."
+		dialog.dialog_text = tr("Are you sure you want to remove protection from this card?\nThe card will be available for duels again.")
 		add_child(dialog)
 
-		dialog.get_ok_button().text = "Yes"
-		dialog.get_cancel_button().text = "No"
+		dialog.get_ok_button().text = tr("Yes")
+		dialog.get_cancel_button().text = tr("No")
 
 		# Make sure we remove any previous connections to avoid duplicates
 		if dialog.is_connected("confirmed", Callable(self, "_on_confirm_unprotect_card")):
@@ -696,11 +695,11 @@ func _on_button_protect_pressed() -> void:
 	else:
 		# Protect the card (with confirmation dialog and cost)
 		var dialog = ConfirmationDialog.new()
-		dialog.dialog_text = "Protecting will cost ¥100.\nWhen you protect a card, it won't be used in duels.\nDo you want to continue?"
+		dialog.dialog_text = tr("Protecting will cost ¥100.\nWhen you protect a card, it won't be used in duels.\nDo you want to continue?")
 		add_child(dialog)
 
-		dialog.get_ok_button().text = "Yes"
-		dialog.get_cancel_button().text = "No"
+		dialog.get_ok_button().text = tr("Yes")
+		dialog.get_cancel_button().text = tr("No")
 
 		# Make sure we remove any previous connections to avoid duplicates
 		if dialog.is_connected("confirmed", Callable(self, "_on_confirm_protect_card")):
@@ -723,13 +722,13 @@ func _cleanup_dialog(dialog):
 func _on_confirm_protect_card() -> void:
 	if Global.money < 100:
 		var notif = AcceptDialog.new()
-		notif.dialog_text = "You don't have enough money to protect this card!"
+		notif.dialog_text = tr("You don't have enough money to protect this card!")
 		add_child(notif)
 		notif.popup_centered()
 		return
 
 	if fullcard_id_set == null or not Global.collection.has(fullcard_id_set):
-		print("ERROR: Invalid card selected for protection")
+		print(tr("ERROR: Invalid card selected for protection"))
 		return
 
 	Global.money -= 100
@@ -763,17 +762,17 @@ func _on_confirm_protect_card() -> void:
 		update_card_keys()
 		populate_cards()
 		var notif = AcceptDialog.new()
-		notif.dialog_text = "This card is now protected!"
+		notif.dialog_text = tr("This card is now protected!")
 		add_child(notif)
 		notif.popup_centered()
 		# Refresh FullCard with the correct instance index!
 		show_full_card(fullcard_id_set, fullcard_effect, protected_index)
 	else:
-		print("ERROR: Failed to find specific card instance for protection")
+		print(tr("ERROR: Failed to find specific card instance for protection"))
 
 func _on_confirm_unprotect_card() -> void:
 	if fullcard_id_set == null or not Global.collection.has(fullcard_id_set):
-		print("ERROR: Invalid card selected for unprotection")
+		print(tr("ERROR: Invalid card selected for unprotection"))
 		return
 
 	var entry = Global.collection[fullcard_id_set]
@@ -804,24 +803,40 @@ func _on_confirm_unprotect_card() -> void:
 		update_card_keys()
 		populate_cards()
 		var notif = AcceptDialog.new()
-		notif.dialog_text = "This card is no longer protected!"
+		notif.dialog_text = tr("This card is no longer protected!")
 		add_child(notif)
 		notif.popup_centered()
 		# Refresh FullCard with the correct instance index!
 		show_full_card(fullcard_id_set, fullcard_effect, unprotected_index)
 	else:
-		print("ERROR: Failed to find specific card instance for unprotection")
+		print(tr("ERROR: Failed to find specific card instance for unprotection"))
 
 func _unlock() -> void:
 	if Global.unlock < 8:
 		$ButtonSell.disabled = true
-		$ButtonSell.text = "Sell (L)"
+		$ButtonSell.text = tr("Sell (L)")
+	else:
+		$ButtonSell.disabled = false
+		$ButtonSell.text = tr("Sell")
 	if Global.unlock < 9:
 		$ButtonProtect.disabled = true
-		$ButtonProtect.text = "Protect (L)"
+		$ButtonProtect.text = tr("Protect (L)")
+	else:
+		$ButtonProtect.disabled = false
+		$ButtonProtect.text = tr("Protect")
 	if Global.unlock < 10:
 		$ButtonSacrifice.disabled = true
-		$ButtonSacrifice.text = "Sacrifice (L)"
+		$ButtonSacrifice.text = tr("Sacrifice (L)")
+	else:
+		$ButtonSacrifice.disabled = false
+		$ButtonSacrifice.text = tr("Sacrifice")
+	# Set Locked/Unlocked text for card lock status if present
+	if has_node("ButtonLock"):
+		var btn = get_node("ButtonLock")
+		if btn.disabled:
+			btn.text = tr("Locked")
+		else:
+			btn.text = tr("Unlocked")
 
 func _on_button_sacrifice_pressed() -> void:
 	var full_card = get_node("FullCard")
@@ -831,10 +846,10 @@ func _on_button_sacrifice_pressed() -> void:
 
 	# Check if we have a valid card selected
 	if fullcard_id_set == null:
-		print("ERROR: No card selected for sacrifice!")
+		print(tr("ERROR: No card selected for sacrifice!"))
 		return
 	if not Global.collection.has(fullcard_id_set):
-		print("ERROR: Card not found in collection for sacrifice!")
+		print(tr("ERROR: Card not found in collection for sacrifice!"))
 		return
 
 	# After removing the card, before saving data
@@ -881,7 +896,7 @@ func _on_button_sacrifice_pressed() -> void:
 
 	# Final fallback: just match by effect (original behavior)
 	if found_card_index == -1:
-		print("DEBUG: Fallback to matching by effect only")
+		print(tr("DEBUG: Fallback to matching by effect only"))
 		for i in range(cards_array.size()):
 			if cards_array[i].get("effect", "") == fullcard_effect:
 				found_card_index = i
@@ -892,7 +907,7 @@ func _on_button_sacrifice_pressed() -> void:
 	if found_card_index != -1:
 		effect = cards_array[found_card_index].get("effect", "")
 	else:
-		print("ERROR: Could not find specific card to sacrifice!")
+		print(tr("ERROR: Could not find specific card to sacrifice!"))
 		return
 
 	# Calculate additional souls from effect
@@ -907,7 +922,7 @@ func _on_button_sacrifice_pressed() -> void:
 
 	# Add souls and remove the card
 	Global.souls += souls_gained
-	print("DEBUG: Sacrificed card at index", found_card_index, "with effect", effect, "- Souls gained:", souls_gained)
+	print(tr("DEBUG: Sacrificed card at index %s with effect %s - Souls gained: %s") % [str(found_card_index), effect, str(souls_gained)])
 
 	# Remove the card from collection
 	cards_array.remove_at(found_card_index)

@@ -241,26 +241,31 @@ func _on_card_pressed(id_set: String, card_instance: Dictionary) -> void:
 	if not full_card:
 		push_error("FullCard node not found!")
 		return
-	
+
+	# Find the card node in the grid with this id_set and restore its z_index if needed
+	for card_node in grid_container.get_children():
+		if card_node.has_meta("original_z_index") and card_node.z_index != card_node.get_meta("original_z_index"):
+			card_node.z_index = card_node.get_meta("original_z_index")
+
 	# Get card data from Global.cards
 	if not Global.cards.has(id_set):
 		push_error("Card data not found for id_set: " + id_set)
 		return
-	
+
 	var card_data = Global.cards[id_set]
-	
+
 	# Load card data into FullCard efficiently
 	_populate_full_card_data(full_card, card_data)
-	
+
 	# Load the texture for the card picture
 	_load_full_card_image(full_card, card_data)
-	
+
 	# Set the effect for the FullCard from card_instance
 	_apply_full_card_effect(full_card, card_instance)
-	
+
 	# Configure full card appearance
 	_configure_full_card_appearance(full_card)
-	
+
 	# Show the full card
 	full_card.visible = true
 

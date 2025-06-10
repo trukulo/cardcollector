@@ -17,6 +17,10 @@ var unlock: int = 0
 var info: bool = true  # Default value is true
 var savegame_name: String = ""
 
+var audio_on: bool = true
+
+var language: String = "en"
+
 # --------------------
 # SETS, EDITIONS, PRINTS
 # --------------------
@@ -348,15 +352,17 @@ func save_data():
 		"collection": collection,
 		"money": money,
 		"souls": souls,
-		"last_connection": Time.get_unix_time_from_system(),
+		"last_connection": int(Time.get_unix_time_from_system()),
 		"deck_names": deck_names,
 		"available_sets": available_sets,
 		"selected_set": selected_set,  # Save the selected set
 		"info": info,  # Save the info variable
 		"unlock": unlock,
 		"playtime": playtime,  # Save the playtime
-		"last_playtime_save": last_playtime_save,  # Save the last timestamp
-		"money_spent": money_spent
+		"last_playtime_save": int(last_playtime_save),  # Save the last timestamp
+		"money_spent": money_spent,
+		"audio_on": audio_on,
+		"language": language
 	}
 	f.store_var(data)
 	f.close()
@@ -370,15 +376,18 @@ func load_data():
 		collection = data.get("collection", {})
 		money = data.get("money", 10000)  # Changed default to 10000
 		souls = data.get("souls", 0)
-		last_connection = data.get("last_connection", Time.get_unix_time_from_system())
+		last_connection = int(data.get("last_connection", Time.get_unix_time_from_system()))
 		deck_names = data.get("deck_names", {0: "Out of deck"})
 		available_sets = data.get("available_sets", {})
 		selected_set = data.get("selected_set", 1)  # Cargar el set seleccionado o usar 1 por defecto
 		info = data.get("info", true)  # Load the info variable
 		unlock = data.get("unlock", 0)  # Load the unlock variable
-		playtime = data.get("playtime", 0)  # Load the playtime, default to 0
-		last_playtime_save = data.get("last_playtime_save", Time.get_unix_time_from_system())
+		playtime = int(data.get("playtime", 0))  # Load the playtime, default to 0
+		last_playtime_save = int(data.get("last_playtime_save", Time.get_unix_time_from_system()))
 		money_spent = data.get("money_spent", 0)  # Load the money spent
+		audio_on = data.get("audio_on", true)
+		language = data.get("language", "en")
+		TranslationServer.set_locale(language)
 	else:
 		collection = {}
 		money = 10000
@@ -620,7 +629,6 @@ func update_playtime():
 
 func format_playtime() -> String:
 	var seconds = playtime % 60
-	var minutes = (playtime / 60) % 60
-	var hours = (playtime / 3600)
-
+	var minutes = int(playtime / 60) % 60
+	var hours = int(playtime / 3600)
 	return "%02d:%02d" % [hours, minutes]

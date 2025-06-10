@@ -19,7 +19,7 @@ var card_counts = {}  # Declaramos card_counts como variable de clase
 func _ready() -> void:
 	# Verificar que los nodos de rodillos existen
 	if !is_instance_valid(reel1) or !is_instance_valid(reel2) or !is_instance_valid(reel3):
-		print("Error: One or more reel nodes are not properly initialized")
+		print(tr("Error: One or more reel nodes are not properly initialized"))
 		# Intentar encontrar los nodos manualmente si es posible
 		if !is_instance_valid(reel1) and has_node("ReelsContainer/Reel1"):
 			reel1 = get_node("ReelsContainer/Reel1")
@@ -34,7 +34,7 @@ func _ready() -> void:
 	# Seleccionar un set aleatorio
 	random_set = get_random_set()
 	if random_set == -1:
-		print("No hay sets disponibles.")
+		print(tr("No hay sets disponibles."))
 		return
 
 	# Mostrar la imagen del set en el header
@@ -61,9 +61,9 @@ func _ready() -> void:
 	# La función conectada en el editor probablemente es "_on_spin_button_pressed"
 	# Verificamos que el botón existe
 	if has_node("SpinButton"):
-		print("SpinButton found in scene")
+		print(tr("SpinButton found in scene"))
 	else:
-		print("Error: SpinButton node not found")
+		print(tr("Error: SpinButton node not found"))
 
 # Obtiene un set aleatorio disponible
 func get_random_set() -> int:
@@ -101,12 +101,12 @@ func update_reel_display() -> void:
 
 		# Verificar que el nodo no sea nulo
 		if reel_node == null:
-			print("Error: reel_node %d is null" % i)
+			print(tr("Error: reel_node %d is null") % i)
 			continue
 
 		# Verificar que el índice es válido
 		if card_index >= card_data.size() or card_index < 0:
-			print("Error: Invalid card_index %d" % card_index)
+			print(tr("Error: Invalid card_index %d") % card_index)
 			continue
 
 		if reel_node.has_node("Card/Panel/Picture"):
@@ -124,9 +124,9 @@ func update_money_display() -> void:
 	$Header/MoneyDisplay.text = "Money: ¥" + str(Global.money)
 
 func _on_spin_button_pressed() -> void:
-	print("Spin button pressed")  # Debug print
+	print(tr("Spin button pressed"))  # Debug print
 	if spinning or Global.money < spin_cost:
-		print("Cannot spin: spinning=", spinning, ", money=", Global.money)  # Debug print
+		print(tr("Cannot spin: spinning=%s, money=%d") % [str(spinning), Global.money])  # Debug print
 		return
 
 	# Reducir el dinero por la tirada
@@ -142,14 +142,14 @@ func _on_spin_button_pressed() -> void:
 
 # Realiza la animación de giro de los rodillos
 func spin_reels() -> void:
-	print("Starting spin animation")  # Debug print
+	print(tr("Starting spin animation"))  # Debug print
 	var spin_duration = 2.0
 	var reel_nodes = [reel1, reel2, reel3]
 
 	# Verificar que todos los nodos necesarios estén disponibles
 	for i in range(3):
 		if reel_nodes[i] == null:
-			print("Error: reel_node %d is null during spin" % i)
+			print(tr("Error: reel_node %d is null during spin") % i)
 			spinning = false
 			$SpinButton.disabled = false
 			return
@@ -196,27 +196,27 @@ func spin_reels() -> void:
 	# Finalizar el giro
 	spinning = false
 	$SpinButton.disabled = false
-	print("Spin completed")  # Debug print
+	print(tr("Spin completed"))  # Debug print
 
 # Crea una animación de flip para una carta
 func flip_card_animation(reel_node: Node, card_info: Dictionary) -> void:
 	$Flipcard.play()
 	if reel_node == null:
-		print("Error: Cannot flip a null reel_node")
+		print(tr("Error: Cannot flip a null reel_node"))
 		return
 
 	if !reel_node.has_node("Card"):
-		print("Error: reel_node does not have a Card child")
+		print(tr("Error: reel_node does not have a Card child"))
 		return
 
 	var card = reel_node.get_node("Card")
 	if card == null:
-		print("Error: Card node is null")
+		print(tr("Error: Card node is null"))
 		return
 
 	var tween = create_tween()
 	if tween == null:
-		print("Error: Failed to create tween")
+		print(tr("Error: Failed to create tween"))
 		return
 
 	# Primera mitad del flip (escala hacia 0 en X)
@@ -225,7 +225,7 @@ func flip_card_animation(reel_node: Node, card_info: Dictionary) -> void:
 	# Cambiar la imagen en el medio del flip
 	tween.tween_callback(func():
 		if card == null:
-			print("Error: Card reference became null during animation")
+			print(tr("Error: Card reference became null during animation"))
 			return
 
 		if card.has_node("Panel/Picture"):
@@ -278,11 +278,11 @@ func check_win() -> void:
 # Muestra la animación de victoria
 func show_win_animation(match_count: int) -> void:
 	if !has_node("WinDisplay"):
-		print("Error: WinDisplay node not found")
+		print(tr("Error: WinDisplay node not found"))
 		return
 
 	if !is_instance_valid($WinDisplay):
-		print("Error: WinDisplay node is invalid")
+		print(tr("Error: WinDisplay node is invalid"))
 		return
 
 	$WinDisplay.text = "WIN!\n¥" + str(money_won)
@@ -316,12 +316,12 @@ func show_win_animation(match_count: int) -> void:
 # Resalta una carta ganadora
 func highlight_winning_card(card_node: Node) -> void:
 	if !is_instance_valid(card_node):
-		print("Error: Cannot highlight an invalid card node")
+		print(tr("Error: Cannot highlight an invalid card node"))
 		return
 
 	var tween = create_tween()
 	if tween == null:
-		print("Error: Failed to create tween for highlighting")
+		print(tr("Error: Failed to create tween for highlighting"))
 		return
 
 	# Ciclo de parpadeo

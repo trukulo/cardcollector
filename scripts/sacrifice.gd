@@ -122,10 +122,8 @@ func _sacrifice_for_card(souls_cost):
 	var id_set = chosen_card.get("id_set", chosen_card.get("id", ""))
 	var base_price = Global.prices.get(id_set, 0.0)
 	var effect_multiplier = get_effect_multiplier(chosen_effect)
-
-	# Calculate price using the formula from your booster pack code
 	var price = base_price * effect_multiplier
-	price *= 0.2 * (2.7 ** (grading - 6))  # Using your exponential grading formula
+	price *= 0.2 * (1.3 ** (grading - 6))
 	price = int(max(1, round(price/2)))
 
 	# Show the card in $Card

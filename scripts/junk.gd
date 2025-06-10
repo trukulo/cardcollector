@@ -56,7 +56,7 @@ func _ready():
 				var multiplier: float = Global.get_effect_multiplier(effect)
 				var grading_modifier: float = 0.2 * (1.3 ** (c["grading"] - 6))
 				var sell_price: float = base_price * multiplier * grading_modifier
-				sell_price = int(max(1, round(sell_price)))
+				sell_price = int(max(1, round(sell_price/2)))
 				
 				# Store card reference instead of index
 				cards_to_sell.append({

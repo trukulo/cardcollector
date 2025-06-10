@@ -1,0 +1,129 @@
+[gd_scene load_steps=6 format=3 uid="uid://brm7l1riukwtw"]
+
+[ext_resource type="Script" uid="uid://cd4k1den3qa1h" path="res://scripts/settings.gd" id="1_es4n0"]
+[ext_resource type="Texture2D" uid="uid://kj811blknuv6" path="res://gui/background.jpg" id="2_gis3k"]
+[ext_resource type="Theme" uid="uid://mbsg4xqnedxi" path="res://gui/FlatUI4/kenneyUI-red.tres" id="3_83j8s"]
+[ext_resource type="FontFile" uid="uid://d0gaa71hjim87" path="res://gui/ProtestRevolution-Regular.ttf" id="4_gjs24"]
+[ext_resource type="Theme" uid="uid://bnhngmri4tfgr" path="res://gui/FlatUI4/kenneyUI-green.tres" id="5_am25x"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_es4n0")
+
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(540, 960)
+texture = ExtResource("2_gis3k")
+
+[node name="ButtonOk" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -197.0
+offset_top = -198.0
+offset_right = 203.0
+offset_bottom = -86.749
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_83j8s")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_gjs24")
+theme_override_font_sizes/font_size = 72
+text = "CLOSE"
+
+[node name="ButtonAudio" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -205.0
+offset_top = -1552.0
+offset_right = 195.0
+offset_bottom = -1440.75
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_am25x")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_gjs24")
+theme_override_font_sizes/font_size = 72
+text = "Audio OFF"
+
+[node name="ButtonReset" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -205.0
+offset_top = -1392.0
+offset_right = 195.0
+offset_bottom = -1280.75
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_am25x")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_gjs24")
+theme_override_font_sizes/font_size = 72
+text = "Reset Game"
+
+[node name="ButtonLanguage" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -205.0
+offset_top = -1232.0
+offset_right = 195.0
+offset_bottom = -1120.75
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_am25x")
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_gjs24")
+theme_override_font_sizes/font_size = 72
+text = "Language: EN
+"
+
+[node name="Briefing" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -1629.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 128
+text = "SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ButtonOk" to="." method="_on_button_ok_pressed"]
+[connection signal="pressed" from="ButtonAudio" to="." method="_on_button_audio_pressed"]
+[connection signal="pressed" from="ButtonReset" to="." method="_on_button_reset_pressed"]
+[connection signal="pressed" from="ButtonLanguage" to="." method="_on_button_language_pressed"]

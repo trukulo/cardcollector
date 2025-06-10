@@ -341,8 +341,8 @@ msgid "SELL JUNK"
 msgstr "VENDER BASURA"
 
 #: scenes/main.tscn
-msgid "Open Pack\n"
-msgstr "Abrir Paquete\n"
+msgid "Open Pack"
+msgstr "Abrir Paquete"
 
 #: scenes/main.tscn
 msgid "Auction"
@@ -500,199 +500,125 @@ msgstr ""
 "2 CARTAS IGUALES = ¥1000\n"
 "3 CARTAS IGUALES = ¥2500"
 
-#: scripts/auction.gd
-msgid "Bid in progress!"
-msgstr "¡Puja en progreso!"
+# --- SETTINGS SCENE ---
+#: scenes/settings.tscn
+msgid "CLOSE"
+msgstr "CERRAR"
 
-#: scripts/auction.gd
-msgid "You can't leave with an active bid!"
-msgstr "¡No puedes salir con una puja activa!"
+msgid "Audio OFF"
+msgstr "Audio: APAGADO"
 
-#: scripts/battle.gd
-msgid "Your turn: choose one!"
-msgstr "¡Tu turno: elige uno!"
+msgid "Audio ON"
+msgstr "Audio: ENCENDIDO"
 
-#: scripts/battle.gd
-msgid "Select your card to play!"
-msgstr "¡Selecciona tu carta para jugar!"
+msgid "Reset Game"
+msgstr "Reiniciar Juego"
 
-#: scripts/battle.gd
-msgid "Rival reveals their card..."
-msgstr "El rival revela su carta..."
+msgid "Language: EN"
+msgstr "Idioma: EN"
 
-#: scripts/battle.gd
-#: scripts/openbooster.gd
-msgid ""
-msgstr ""
+msgid "Language: ES"
+msgstr "Idioma: ES"
 
-#: scripts/decks.gd
-msgid "Sell"
-msgstr "Vender"
+msgid "SETTINGS"
+msgstr "AJUSTES"
 
-#: scripts/decks.gd
-msgid "Cancel"
-msgstr "Cancelar"
+# --- GENERAL ---
+msgid "Audio: ON"
+msgstr "Audio: ENCENDIDO"
 
-#: scripts/decks.gd
-msgid "Dupes"
-msgstr "Duplicados"
+msgid "Audio: OFF"
+msgstr "Audio: APAGADO"
 
-#: scripts/decks.gd
-msgid "No Sort"
-msgstr "Sin orden"
+msgid "Reset"
+msgstr "Reiniciar"
 
-#: scripts/decks.gd
-msgid "Price Asc"
-msgstr "Precio Asc"
+msgid "Settings"
+msgstr "Ajustes"
 
-#: scripts/decks.gd
-msgid "Price Desc"
-msgstr "Precio Desc"
+msgid "Quit"
+msgstr "Salir"
 
-#: scripts/decks.gd
-msgid "Rarity Asc"
-msgstr "Rareza Asc"
+msgid "Playtime: "
+msgstr "Tiempo jugado: "
 
-#: scripts/decks.gd
-msgid "Rarity Desc"
-msgstr "Rareza Desc"
+msgid "Money spent: ¥%d"
+msgstr "Dinero gastado: ¥%d"
 
-#: scripts/decks.gd
-msgid "Number Asc"
-msgstr "Número Asc"
+msgid "%d Cards"
+msgstr "%d Cartas"
 
-#: scripts/decks.gd
-msgid "Number Desc"
-msgstr "Número Desc"
+msgid "You need at least 21 cards\nin your collection to play Duels!"
+msgstr "¡Necesitas al menos 21 cartas\nen tu colección para jugar Duelo!"
 
-#: scripts/decks.gd
-msgid "Grading Asc"
-msgstr "Calificación Asc"
+msgid "You need at least 5 cards\nin your collection to play Duels!"
+msgstr "¡Necesitas al menos 5 cartas\nen tu colección para jugar Duelo!"
 
-#: scripts/decks.gd
-msgid "Grading Desc"
-msgstr "Calificación Desc"
-
-#: scripts/decks.gd
-msgid "UNPROTECT"
-msgstr "DESPROTEGER"
-
-#: scripts/decks.gd
-msgid "Protect (L)"
-msgstr "Proteger (L)"
-
-#: scripts/decks.gd
-msgid "Duplicates"
-msgstr "Duplicados"
-
-#: scripts/decks.gd
-msgid "Protected"
-msgstr "Protegidas"
-
-#: scripts/decks.gd
-#: scripts/main.gd
-msgid "Yes"
-msgstr "Sí"
-
-#: scripts/decks.gd
-#: scripts/main.gd
-msgid "No"
-msgstr "No"
-
-#: scripts/decks.gd
-msgid "Sell (L)"
-msgstr "Vender (L)"
-
-#: scripts/decks.gd
-#: scripts/main.gd
-msgid "Sacrifice (L)"
-msgstr "Sacrificio (L)"
-
-#: scripts/gravity.gd
-msgid ""
-"Winner!\n"
-"¥750"
-msgstr ""
-"¡Ganaste!\n"
-"¥750"
-
-#: scripts/gravity.gd
-#: scripts/memory.gd
-#: scripts/sequence.gd
-msgid ""
-"Game\n"
-"Over"
-msgstr ""
-"Juego\n"
-"Terminado"
-
-#: scripts/main.gd
 msgid "Collection (L)"
 msgstr "Colección (L)"
 
-#: scripts/main.gd
 msgid "Decks (L)"
 msgstr "Mazos (L)"
 
-#: scripts/main.gd
 msgid "Memory (L)"
 msgstr "Memoria (L)"
 
-#: scripts/main.gd
 msgid "Auction (L)"
 msgstr "Subasta (L)"
 
-#: scripts/main.gd
 msgid "Sequence (L)"
 msgstr "Secuencia (L)"
 
-#: scripts/main.gd
 msgid "Duel (L)"
 msgstr "Duelo (L)"
 
-#: scripts/main.gd
 msgid "Gravity (L)"
 msgstr "Gravedad (L)"
 
-#: scripts/main.gd
 msgid "Battle (L)"
 msgstr "Batalla (L)"
 
-#: scripts/main.gd
 msgid "Junk (L)"
 msgstr "Basura (L)"
 
-#: scripts/memory.gd
-msgid ""
-"Winner!\n"
-"¥500"
-msgstr ""
-"¡Ganaste!\n"
-"¥500"
+msgid "Sacrifice (L)"
+msgstr "Sacrificio (L)"
 
-#: scripts/openbooster.gd
-msgid "Reveal (L)"
-msgstr "Revelar (L)"
+msgid "Are you sure you want to reset your game?\nThis cannot be undone."
+msgstr "¿Estás seguro de que quieres reiniciar tu juego?\nEsto no se puede deshacer."
 
-#: scripts/openbooster.gd
-msgid "Reveal"
-msgstr "Revelar"
+msgid "Yes"
+msgstr "Sí"
 
-msgid "Playtime: "
-msgstr "Jugado: "
+msgid "No"
+msgstr "No"
 
-msgid "Money spent: ¥%d"
-msgstr "Gastado: ¥%d"
+msgid "In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation."
+msgstr "En los días en que la tierra era joven y los cielos aún susurraban secretos a los mortales, había cuatro dragones. Cada uno era soberano de su dominio, guardián del antiguo equilibrio, y sus historias estaban tejidas en el propio tejido de la creación."
 
-# Unlock narration messages
+msgid "Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born."
+msgstr "Tsuchi, el gran gusano alado, que dormía en las grietas más profundas del mundo. Cuando se agitaba, la tierra misma temblaba bajo su poder. Del abismo surgió, criatura de piedra, su aliento el retumbar de montañas naciendo."
+
+msgid "Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name."
+msgstr "Mizu, el espíritu de las aguas que fluyen, cuyos lazos abrazaban los ríos y cuyo dominio se extendía por los océanos sin fin. Donde pasaba, las mareas obedecían y las lluvias cantaban su nombre."
+
+msgid "Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction."
+msgstr "Hi, nacido del propio fuego del Sol, un hijo radiante y colérico de la llama. Sus alas ardían con la furia del mediodía y sus ojos contenían el resplandor implacable del infierno. Mirarlo era conocer tanto el calor como la destrucción."
+
+msgid "Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds."
+msgstr "Kaze, la siempre vigilante, cuyo dominio era el cielo sin límites. Se elevaba sobre todas las cosas, su forma tan fugaz como el viento, pero su presencia era eterna. Nada podía ocultarse de su vista, pues cabalgaba las corrientes del aire, susurrando secretos a las nubes."
+
+msgid "This is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack. The type of the booster means the type of cards you will get more frequently."
+msgstr "Este es un juego de cartas. ¿Podrías intentar abrir un paquete? Allí, donde dice Abrir Paquete. El tipo de sobre indica el tipo de cartas que obtendrás con mayor frecuencia."
+
 msgid "You have unlocked the Collection!"
 msgstr "¡Has desbloqueado la Colección!"
 
 msgid "You have unlocked Decks!"
-msgstr "¡Has desbloqueado los Mazos!"
+msgstr "¡Has desbloqueado Mazos!"
 
 msgid "You have unlocked the Memory Game!"
-msgstr "¡Has desbloqueado el juego de Memoria!"
+msgstr "¡Has desbloqueado el Juego de Memoria!"
 
 msgid "You have unlocked Gravity, Duels, and a new set!"
 msgstr "¡Has desbloqueado Gravedad, Duelos y un nuevo set!"
@@ -721,33 +647,140 @@ msgstr "¡Has desbloqueado Tragaperras y un nuevo set!"
 msgid "You have unlocked a new set!"
 msgstr "¡Has desbloqueado un nuevo set!"
 
-# Button texts (already present, but ensure they're correct)
-msgid "Collection (L)"
-msgstr "Colección (L)"
+msgid "New"
+msgstr "Nuevo"
 
-msgid "Decks (L)"
-msgstr "Mazos (L)"
+msgid "Cards"
+msgstr "Cartas"
 
-msgid "Memory (L)"
-msgstr "Memoria (L)"
+msgid "Rarity"
+msgstr "Rareza"
 
-msgid "Auction (L)"
-msgstr "Subasta (L)"
+msgid "Grading"
+msgstr "Calificación"
 
-msgid "Sequence (L)"
-msgstr "Secuencia (L)"
+msgid "Gradings"
+msgstr "Calificaciones"
 
-msgid "Duel (L)"
-msgstr "Duelo (L)"
+msgid "Card"
+msgstr "Carta"
 
-msgid "Gravity (L)"
-msgstr "Gravedad (L)"
+msgid "Set"
+msgstr "Set"
 
-msgid "Battle (L)"
-msgstr "Batalla (L)"
+msgid "Type"
+msgstr "Tipo"
 
-msgid "Junk (L)"
-msgstr "Basura (L)"
+msgid "Filter"
+msgstr "Filtro"
 
-msgid "Sacrifice (L)"
-msgstr "Sacrificio (L)"
+msgid "Filters"
+msgstr "Filtros"
+
+msgid "Sort"
+msgstr "Ordenar"
+
+msgid "Sorting"
+msgstr "Ordenando"
+
+msgid "All Cards"
+msgstr "Todas las cartas"
+
+msgid "Owned"
+msgstr "En posesión"
+
+msgid "Missing"
+msgstr "Faltantes"
+
+msgid "Duplicates"
+msgstr "Duplicados"
+
+msgid "Protected"
+msgstr "Protegidas"
+
+msgid "Unprotected"
+msgstr "Sin proteger"
+
+msgid "New Card!"
+msgstr "¡Nueva carta!"
+
+msgid "No cards found"
+msgstr "No se encontraron cartas"
+
+msgid "No Sort"
+msgstr "Sin orden"
+
+msgid "Price Asc"
+msgstr "Precio ascendente"
+
+msgid "Price Desc"
+msgstr "Precio descendente"
+
+msgid "Rarity Asc"
+msgstr "Rareza ascendente"
+
+msgid "Rarity Desc"
+msgstr "Rareza descendente"
+
+msgid "Number Asc"
+msgstr "Número ascendente"
+
+msgid "Number Desc"
+msgstr "Número descendente"
+
+msgid "Grading Asc"
+msgstr "Calificación ascendente"
+
+msgid "Grading Desc"
+msgstr "Calificación descendente"
+
+msgid "unknown"
+msgstr "desconocido"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Grading: %s\nSet: %s\nRarity: %s\nEffect: %s\nPrice: %s"
+msgstr "Calificación: %s\nSet: %s\nRareza: %s\nEfecto: %s\nPrecio: %s"
+
+msgid "Set: %s\nRarity: %s\nPrice: %s"
+msgstr "Set: %s\nRareza: %s\nPrecio: %s"
+
+msgid "Price: %s"
+msgstr "Precio: %s"
+
+msgid "Effect"
+msgstr "Efecto"
+
+msgid "Protection"
+msgstr "Protección"
+
+msgid "DEBUG: FullCard price label updated: %s"
+msgstr "DEPURACIÓN: Etiqueta de precio de FullCard actualizada: %s"
+
+msgid "DEBUG: Scene has node 'Price'"
+msgstr "DEPURACIÓN: La escena tiene el nodo 'Price'"
+
+msgid "Sell (L)"
+msgstr "Vender (L)"
+
+msgid "Protect (L)"
+msgstr "Proteger (L)"
+
+msgid "Sell"
+msgstr "Vender"
+
+msgid "Protect"
+msgstr "Proteger"
+
+msgid "UNPROTECT"
+msgstr "DESPROTEGER"
+
+msgid "Locked"
+msgstr "Bloqueado"
+
+msgid "Unlocked"
+msgstr "Desbloqueado"

@@ -181,7 +181,7 @@ func _on_bid_2_pressed():
 func finish_auction():
 	$Notif.visible = true
 	if player_is_winner and Global.money >= bid_price:
-		$Notif/Label.text = "Congratulations! You won the auction!\nFinal Price: ¥%d" % bid_price
+		$Notif/Label.text = "Congratulations!\nYou won the auction!\nFinal Price: ¥%d" % bid_price
 		Global.money -= bid_price
 		Global.money_spent += bid_price
 		# Add to collection with grading and effect!

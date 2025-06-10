@@ -1,7 +1,5 @@
 extends Control
 
-var reset_dialog: ConfirmationDialog
-
 var scene_choose_booster := preload("res://scenes/choose_booster.tscn")
 var scene_collection := preload("res://scenes/collection.tscn")
 var scene_decks := preload("res://scenes/decks.tscn")
@@ -15,9 +13,25 @@ var scene_cardview := preload("res://scenes/cardview.tscn")
 var scene_gravity := preload("res://scenes/gravity.tscn")
 var scene_sequence := preload("res://scenes/sequence.tscn")
 var scene_slots := preload("res://scenes/slots.tscn")
+var scene_settings := preload("res://scenes/settings.tscn")
 
 func _ready() -> void:
-	print(Global.collection.size())
+	$VBoxContainer/OpenBooster.text = tr("Open Pack")
+	$VBoxContainer/ButtonAuction.text = tr("Auction")
+	$VBoxContainer/ButtonCollection.text = tr("Collection")
+	$VBoxContainer/ButtonDecks.text = tr("Decks")
+	$VBoxContainer/ButtonJunk.text = tr("Junk")
+	$VBoxContainer/ButtonSacrifice.text = tr("Sacrifice")
+	$VBoxContainer2/ButtonPlay.text = tr("Memory")
+	$VBoxContainer2/ButtonGravity.text = tr("Gravity Mem")
+	$VBoxContainer2/ButtonSequence.text = tr("Sequence")
+	$VBoxContainer2/ButtonShortDuel.text = tr("Duel")
+	$VBoxContainer2/ButtonDuels.text = tr("Battle")
+	$VBoxContainer2/ButtonSlots.text = tr("Slots")
+	$ButtonSettings.text = tr("Settings")
+	$ButtonQuit.text = tr("Quit")
+
+	print(tr("Colección size: %d") % Global.collection.size())
 	# Make sure Global data is loaded
 	if not Global.cards.size():
 		Global.generate_cards_with_seed(42)
@@ -39,21 +53,9 @@ func _ready() -> void:
 	update_money_label()
 
 	_unlock()
-	$CardsAccount.text = "%d Cards" % get_total_card_count()
+	$CardsAccount.text = tr("%d Cards") % get_total_card_count()
 
 	Global.save_data()
-	# Create the confirmation dialog if not already in the scene
-	if not has_node("ResetDialog"):
-		reset_dialog = ConfirmationDialog.new()
-		reset_dialog.name = "ResetDialog"
-		reset_dialog.dialog_text = "\nAre you sure you want to reset your game?\nThis cannot be undone.\n"
-		reset_dialog.get_ok_button().text = "Yes"
-		reset_dialog.get_cancel_button().text = "No"
-		add_child(reset_dialog)
-	else:
-		reset_dialog = $ResetDialog
-
-	reset_dialog.connect("confirmed", _on_reset_confirmed)
 
 	if Global.unlock == 2 or Global.info == false:
 		%ButtonShortDuel.visible = false
@@ -64,7 +66,6 @@ func _ready() -> void:
 		%ButtonDuels.visible = false
 	else:
 		%ButtonDuels.visible = true
-
 
 	$Playtime.text = tr("Playtime: ") + Global.format_playtime()
 	$MoneySpent.text = tr("Money spent: ¥%d") % Global.money_spent
@@ -95,20 +96,12 @@ func _on_open_booster_pressed() -> void:
 func _on_button_collection_pressed() -> void:
 	get_tree().change_scene_to_packed(scene_collection)
 
-func _on_button_reset_pressed() -> void:
-	reset_dialog.popup_centered()
-	_ready()
-
-func _on_reset_confirmed() -> void:
-	Global.reset_game()
-	update_money_label()
-
 func _on_button_decks_pressed() -> void:
 	get_tree().change_scene_to_packed(scene_decks)
 
 func _on_button_duels_pressed() -> void:
 	if Global.collection.size() < 21:
-		show_notification("You need at least 21 cards\nin your collection to play Duels!")
+		show_notification(tr("You need at least 21 cards\nin your collection to play Duels!"))
 	else:
 		Global.train = 0
 		Global.rounds = 4
@@ -134,7 +127,7 @@ func _on_button_auction_pressed() -> void:
 
 func _on_button_short_duel_pressed() -> void:
 	if Global.collection.size() < 5:
-		show_notification("You need at least 5 cards\nin your collection to play Duels!")
+		show_notification(tr("You need at least 5 cards\nin your collection to play Duels!"))
 	else:
 		Global.train = 1
 		Global.rounds = 5
@@ -150,7 +143,7 @@ func _narrator(message: String) -> void:
 	$Message.visible = false
 
 func _enarrator(message: String) -> void:
-	$Message/Label.text = message
+	$Message/Label.text = tr(message)
 	$Message/Narrator.texture = load("res://gui/enarrador.png")
 	$Message.visible = true
 	await $Message/NoNarrator.pressed
@@ -226,7 +219,7 @@ func _unlock() -> void:
 		$VBoxContainer2/ButtonDuels.text = tr("Battle (L)")
 	if Global.unlock < 8:
 		$VBoxContainer/ButtonJunk.disabled = true
-		$VBoxContainer/ButtonJunk.text = tr("Junk (L)")  # Updated text for ButtonJunk
+		$VBoxContainer/ButtonJunk.text = tr("Junk (L)")
 	if Global.unlock < 10:
 		$VBoxContainer/ButtonSacrifice.disabled = true
 		$VBoxContainer/ButtonSacrifice.text = tr("Sacrifice (L)")
@@ -269,3 +262,7 @@ func _on_button_sequence_pressed() -> void:
 
 func _on_button_slots_pressed() -> void:
 	get_tree().change_scene_to_packed(scene_slots)
+
+
+func _on_button_settings_pressed() -> void:
+	get_tree().change_scene_to_packed(scene_settings)

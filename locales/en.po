@@ -1,0 +1,114 @@
+# English translations for Nakama TCG Phone
+# Copyright (C) 2025
+# This file is distributed under the same license as the Nakama TCG Phone project.
+msgid ""
+msgstr ""
+"Project-Id-Version: Nakama TCG Phone 0.52\n"
+"POT-Creation-Date: 2025-06-10\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Example translations (add more as needed)
+msgid "Playtime: "
+msgstr "Playtime: "
+
+msgid "Money spent: ¥%d"
+msgstr "Money spent: ¥%d"
+
+msgid "In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation."
+msgstr "In the days when the earth was young and the heavens still whispered secrets to the mortals below, there were four dragons. Each was a sovereign of their domain, a keeper of the ancient balance, and their tales were woven into the very fabric of creation."
+
+msgid "Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born."
+msgstr "Tsuchi, the great worm with wings, who slumbered in the deepest chasms of the world. When he stirred, the earth itself trembled beneath his might. From the abyss he came, a creature of stone, his breath the rumble of mountains being born."
+
+msgid "Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name."
+msgstr "Mizu, the spirit of the flowing waters, whose coils embraced the rivers and whose dominion stretched across the endless oceans. Where she passed, the tides obeyed, and the rains sang her name."
+
+msgid "Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction."
+msgstr "Hi, born of the Sun’s own fire, a radiant and wrathful child of flame. His wings burned with the fury of noon, and his eyes held the unrelenting glare of the inferno. To gaze upon him was to know both warmth and destruction."
+
+msgid "Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds."
+msgstr "Kaze, the ever-watchful, whose domain was the boundless sky. She soared above all things, her form as fleeting as the wind, yet her presence was eternal. None could hide from her sight, for she rode the currents of the air, whispering secrets to the clouds."
+
+msgid "This is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack. The type of the booster means the type of cards you will get more frequently."
+msgstr "This is a cards game. Could you try opening a Booster Pack? There, where it says Open Pack. The type of the booster means the type of cards you will get more frequently."
+
+msgid "Are you sure you want to reset your game?\nThis cannot be undone."
+msgstr "Are you sure you want to reset your game?\nThis cannot be undone."
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Audio: ON"
+msgstr "Audio: ON"
+
+msgid "Audio: OFF"
+msgstr "Audio: OFF"
+
+msgid "Idioma: Español"
+msgstr "Language: English"
+
+msgid "Language: English"
+msgstr "Language: English"
+
+msgid "Collection (L)"
+msgstr "Collection (L)"
+
+msgid "Decks (L)"
+msgstr "Decks (L)"
+
+msgid "Memory (L)"
+msgstr "Memory (L)"
+
+msgid "Auction (L)"
+msgstr "Auction (L)"
+
+msgid "Sequence (L)"
+msgstr "Sequence (L)"
+
+msgid "Duel (L)"
+msgstr "Duel (L)"
+
+msgid "Gravity (L)"
+msgstr "Gravity (L)"
+
+msgid "Battle (L)"
+msgstr "Battle (L)"
+
+msgid "Junk (L)"
+msgstr "Junk (L)"
+
+msgid "Sacrifice (L)"
+msgstr "Sacrifice (L)"
+
+msgid "Set #%d"
+msgstr "Set #%d"
+
+msgid "You need at least 21 cards\nin your collection to play Duels!"
+msgstr "You need at least 21 cards\nin your collection to play Duels!"
+
+msgid "You need at least 5 cards\nin your collection to play Duels!"
+msgstr "You need at least 5 cards\nin your collection to play Duels!"
+
+msgid "Ready to sell\n%d duplicates\n for %d coins?"
+msgstr "Ready to sell\n%d duplicates\n for %d coins?"
+
+msgid "WINNER!!!"
+msgstr "WINNER!!!"
+
+msgid "Reveal (L)"
+msgstr "Reveal (L)"
+
+msgid "Reveal"
+msgstr "Reveal"
+
+msgid "Playtime: "
+msgstr "Playtime: "
+
+msgid "Money spent: ¥%d"
+msgstr "Money spent: ¥%d"
