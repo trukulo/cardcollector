@@ -122,18 +122,18 @@ func generate_booster_pack(set_id: int) -> void:
 			var card_copy = first_rare_card.duplicate()
 			apply_card_properties(card_copy)
 			booster_pack.append(card_copy)
-			
+
 			# Get second rare card - make sure it's different from the first
 			var second_rare_card = null
 			var attempts = 0
 			var max_attempts = 50  # Prevent infinite loop
-			
+
 			while attempts < max_attempts:
 				second_rare_card = weighted_random_selection(rare_pool)
 				if second_rare_card and second_rare_card["id"] != first_rare_card["id"]:
 					break
 				attempts += 1
-			
+
 			# If we couldn't find a different card after max attempts, use any available card
 			if not second_rare_card or second_rare_card["id"] == first_rare_card["id"]:
 				# Try to find any different card in the pool
@@ -141,7 +141,7 @@ func generate_booster_pack(set_id: int) -> void:
 					if item["card"]["id"] != first_rare_card["id"]:
 						second_rare_card = item["card"]
 						break
-			
+
 			# Add the second card (will be different if possible)
 			if second_rare_card:
 				var second_card_copy = second_rare_card.duplicate()
@@ -151,7 +151,7 @@ func generate_booster_pack(set_id: int) -> void:
 	# 7. Sort and debug
 	booster_pack.sort_custom(Callable(self, "_sort_by_rarity"))
 	print("Booster Pack: Generated with " + str(booster_pack.size()) + " cards (Type: " + booster_type + ")")
-	
+
 	# Debug: Check if last two cards are different
 	if booster_pack.size() >= 2:
 		var last_card = booster_pack[booster_pack.size() - 1]
@@ -304,22 +304,8 @@ func reveal_card(index: int):
 				price_label.visible = true
 				var id_set = card["id_set"]
 				var effect = card.get("effect", "")
-				if effect == "Full Holo":
-					$Holo.play()
-				var base_price = Global.prices.get(id_set, 0.0)
-
-				# Get the card's actual grading
 				var card_grading = card.get("grading", 1.0)
-
-				# Calculate effect modifier
-				var effect_modifier = 1.0
-				if effect != "":
-					effect_modifier = get_effect_multiplier(effect)
-
-				# Calculate price using grading and effect
-				var price = base_price * effect_modifier
-				price *= 0.2 * (1.3 ** (card_grading - 6))  # Tuned base (1.7)
-				price = int(max(1, round(price/2)))
+				var price = Global.get_card_price(id_set, effect, card_grading)
 
 				# Display in the label
 				var new_prefix = ""

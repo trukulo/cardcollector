@@ -69,22 +69,12 @@ func pick_auction_card():
 	if card_node.has_node("Grading"):
 		card_node.get_node("Grading").text = "Grade: %d" % auction_grading
 
-func get_effect_multiplier(effect):
-	match effect:
-		"Silver": return 2.0
-		"Gold": return 3.0
-		"Holo": return 4.0
-		"Full Art": return 5.0
-		"Full Silver": return 6.0
-		"Full Gold": return 8.0
-		"Full Holo": return 10.0
-		_: return 1.0
-
 func update_prices():
 	var id_set = auction_card["id_set"]
-	var base_price = Global.prices.get(id_set, 100)
-	var effect_multiplier = get_effect_multiplier(auction_effect)
-	market_price = int(base_price * effect_multiplier * (0.2 * (1.3 ** (auction_grading - 6))))
+	var effect = auction_effect
+	var grading = auction_grading
+	# Use the canonical price calculation from decks.gd
+	market_price = get_card_price(id_set, effect, grading)
 	bid_price = int(market_price * (0.5 + randf() * 0.2)) # Start at 50-70% of market price
 
 func update_ui():
@@ -206,3 +196,14 @@ func _on_button_home_pressed():
 func reset_player_bid_active():
 	await get_tree().create_timer(1.0).timeout
 	player_bid_active = false
+
+# Canonical price calculation for auctions, matching decks.gd
+func get_card_price(id_set, effect, grading = 8):
+	var price = Global.prices.get(id_set, null)
+	if price == null:
+		return null
+	var multiplier = Global.get_effect_multiplier(effect)
+	price *= multiplier
+	price *= 0.2 * (1.3 ** (grading - 6))
+	price = int(max(1, round(price/2)))
+	return price

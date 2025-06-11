@@ -466,7 +466,7 @@ msgstr "31"
 
 #: scenes/sacrifice.tscn
 msgid "NOT ENOUGH SOULS"
-msgstr "ALMAS INSUFICIENTES"
+msgstr "ALMAS\nINSUFICIENTES"
 
 #: scenes/sequence.tscn
 msgid "Repeat Sequence "

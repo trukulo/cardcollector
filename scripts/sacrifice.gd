@@ -118,13 +118,9 @@ func _sacrifice_for_card(souls_cost):
 	# Get random grading from Global
 	var grading = Global.get_random_grading()
 
-	# Calculate price based on card's base price, effect and grading
+	# Calculate price using the canonical decks.gd formula
 	var id_set = chosen_card.get("id_set", chosen_card.get("id", ""))
-	var base_price = Global.prices.get(id_set, 0.0)
-	var effect_multiplier = get_effect_multiplier(chosen_effect)
-	var price = base_price * effect_multiplier
-	price *= 0.2 * (1.3 ** (grading - 6))
-	price = int(max(1, round(price/2)))
+	var price = get_card_price(id_set, chosen_effect, grading)
 
 	# Show the card in $Card
 	if $Card.has_node("Panel/Picture"):
@@ -183,6 +179,17 @@ func get_effect_multiplier(effect: String) -> float:
 			return 10.0  # x10
 		_:
 			return 1.0  # No multiplier for other effects
+
+# Canonical price calculation (copied from decks.gd)
+func get_card_price(id_set, effect, grading = 8):
+	var price = Global.prices.get(id_set, null)
+	if price == null:
+		return null
+	var multiplier = Global.get_effect_multiplier(effect)
+	price *= multiplier
+	price *= 0.2 * (1.3 ** (grading - 6))
+	price = int(max(1, round(price/2)))
+	return price
 
 # Calculate rarity boost factor based on souls spent - IMPROVED
 func calculate_rarity_boost(souls_cost):

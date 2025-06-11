@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Nakama TCG Phone"
-config/version="0.53"
+config/version="0.56"
 run/main_scene="uid://by66laxewwc5j"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0.197937, 0.197937, 0.197937, 1)

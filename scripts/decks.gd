@@ -410,13 +410,6 @@ func show_full_card(id_set, effect = "", card_instance_index = -1):
 			else:
 				get_node("ButtonProtect").disabled = false
 				get_node("ButtonProtect").text = tr("Protect")
-	# Update Locked/Unlocked button if present
-	if has_node("ButtonLock"):
-		var btn = get_node("ButtonLock")
-		if btn.disabled:
-			btn.text = tr("Locked")
-		else:
-			btn.text = tr("Unlocked")
 
 	# 1. Show and update FullCard popup (if present)
 	if card_data and has_node("FullCard"):
@@ -815,28 +808,12 @@ func _unlock() -> void:
 	if Global.unlock < 8:
 		$ButtonSell.disabled = true
 		$ButtonSell.text = tr("Sell (L)")
-	else:
-		$ButtonSell.disabled = false
-		$ButtonSell.text = tr("Sell")
 	if Global.unlock < 9:
 		$ButtonProtect.disabled = true
 		$ButtonProtect.text = tr("Protect (L)")
-	else:
-		$ButtonProtect.disabled = false
-		$ButtonProtect.text = tr("Protect")
 	if Global.unlock < 10:
 		$ButtonSacrifice.disabled = true
 		$ButtonSacrifice.text = tr("Sacrifice (L)")
-	else:
-		$ButtonSacrifice.disabled = false
-		$ButtonSacrifice.text = tr("Sacrifice")
-	# Set Locked/Unlocked text for card lock status if present
-	if has_node("ButtonLock"):
-		var btn = get_node("ButtonLock")
-		if btn.disabled:
-			btn.text = tr("Locked")
-		else:
-			btn.text = tr("Unlocked")
 
 func _on_button_sacrifice_pressed() -> void:
 	var full_card = get_node("FullCard")

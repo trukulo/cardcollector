@@ -57,16 +57,6 @@ func _ready() -> void:
 
 	Global.save_data()
 
-	if Global.unlock == 2 or Global.info == false:
-		%ButtonShortDuel.visible = false
-	else:
-		%ButtonShortDuel.visible = true
-
-	if Global.unlock == 3 or Global.info == false:
-		%ButtonDuels.visible = false
-	else:
-		%ButtonDuels.visible = true
-
 	$Playtime.text = tr("Playtime: ") + Global.format_playtime()
 	$MoneySpent.text = tr("Money spent: ¥%d") % Global.money_spent
 

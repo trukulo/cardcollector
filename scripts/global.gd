@@ -604,21 +604,31 @@ func protect_card_instance(id_set: String, grading: int = -1, effect: String = "
 func get_effect_multiplier(effect: String) -> float:
 	match effect:
 		"Silver":
-			return 1.5
-		"Gold":
 			return 2.0
-		"Holo":
-			return 2.5
-		"Full Art":
+		"Gold":
 			return 3.0
-		"Full Silver":
+		"Holo":
+			return 4.0
+		"Full Art":
 			return 5.0
+		"Full Silver":
+			return 6.0
 		"Full Gold":
-			return 7.0
+			return 8.0
 		"Full Holo":
 			return 10.0
 		_:
 			return 1.0
+
+func get_card_price(id_set, effect, grading = 8):
+	var price = prices.get(id_set, null)
+	if price == null:
+		return null
+	var multiplier = get_effect_multiplier(effect)
+	price *= multiplier
+	price *= 0.2 * (1.3 ** (grading - 6))
+	price = int(max(1, round(price/2)))
+	return price
 
 
 func update_playtime():
